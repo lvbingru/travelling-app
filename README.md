@@ -26,7 +26,7 @@ $ npm install
 安装 Pods（iOS 原生组件依赖）：
 
 ```sh
-$ cd ios && pods install --verbose
+$ cd ios && pod install --verbose
 ```
 
 使用 xcode 打开 `ios/AwesomeProject.xcworkspace`，编译运行。
