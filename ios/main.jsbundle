@@ -1358,7 +1358,7 @@ throw new TypeError(
 
 var index=findIndex.call(this,predicate,context);
 return index === -1?undefined:this[index];}});}})();
-__d('AwesomeProject/index.ios.js',["react-native/Libraries/react-native/react-native.js","AwesomeProject/Root.js","AwesomeProject/src/config.js"],function(global, require, module, exports) {  'use strict';
+__d('AwesomeProject/index.ios.js',["react-native/Libraries/react-native/react-native.js","AwesomeProject/src/config.js","AwesomeProject/Root.js"],function(global, require, module, exports) {  'use strict';
 
 var React=require('react-native/Libraries/react-native/react-native.js');
 var AppRegistry=React.AppRegistry;
@@ -5083,7 +5083,7 @@ NodeHandle.injection.injectImplementation(UniversalWorkerNodeHandle);}
 module.exports = {
 inject:inject};
 });
-__d('InitializeJavaScriptAppEngine',["RCTDebugComponentOwnership","RCTDeviceEventEmitter","PerformanceLogger","ExceptionsManager","ErrorUtils","ExceptionsManager","Platform","checkFlowAtRuntime","JSTimers","NativeModules","Promise","XMLHttpRequest","FormData","fetch","Geolocation","WebSocket","BridgeProfiling","regenerator/runtime.js"],function(global, require, module, exports) {  require(
+__d('InitializeJavaScriptAppEngine',["RCTDebugComponentOwnership","RCTDeviceEventEmitter","PerformanceLogger","regenerator/runtime.js","ExceptionsManager","ErrorUtils","ExceptionsManager","Platform","checkFlowAtRuntime","JSTimers","NativeModules","Promise","XMLHttpRequest","FormData","fetch","Geolocation","WebSocket","BridgeProfiling"],function(global, require, module, exports) {  require(
 
 
 
@@ -24459,7 +24459,7 @@ return dimensions[dim];}}]);return Dimensions;})();
 
 module.exports = Dimensions;
 });
-__d('ListView',["ListViewDataSource","React","NativeModules","NativeModules","ScrollView","ScrollResponder","StaticRenderer","isEmpty","logError","merge","react-timer-mixin/TimerMixin.js"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};function _objectWithoutProperties(obj,keys){var target={};for(var i in obj) {if(keys.indexOf(i) >= 0)continue;if(!Object.prototype.hasOwnProperty.call(obj,i))continue;target[i] = obj[i];}return target;}
+__d('ListView',["ListViewDataSource","React","NativeModules","NativeModules","ScrollView","ScrollResponder","StaticRenderer","react-timer-mixin/TimerMixin.js","isEmpty","logError","merge"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};function _objectWithoutProperties(obj,keys){var target={};for(var i in obj) {if(keys.indexOf(i) >= 0)continue;if(!Object.prototype.hasOwnProperty.call(obj,i))continue;target[i] = obj[i];}return target;}
 
 
 
@@ -28498,7 +28498,7 @@ this.emit(arg.eventType,arg.data,arg.didEmitCallback);}}}]);return NavigationEve
 
 module.exports = NavigationEventEmitter;
 });
-__d('NavigatorBreadcrumbNavigationBar',["NavigatorBreadcrumbNavigationBarStyles","NavigatorNavigationBarStyles","React","StaticContainer.react","StyleSheet","View","invariant","immutable/dist/immutable.js"],function(global, require, module, exports) {  'use strict';
+__d('NavigatorBreadcrumbNavigationBar',["NavigatorBreadcrumbNavigationBarStyles","NavigatorNavigationBarStyles","React","StaticContainer.react","StyleSheet","View","immutable/dist/immutable.js","invariant"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -51795,7 +51795,7 @@ Object.keys(componentOrElement));}
 
 module.exports = findDOMNode;
 });
-__d('AwesomeProject/Root.js',["react-native/Libraries/react-native/react-native.js","cssVar","AwesomeProject/src/config.js","AwesomeProject/src/SignInView.js","AwesomeProject/src/SignUpView.js","AwesomeProject/Hello.js","AwesomeProject/ModalExample.js","AwesomeProject/src/Onboarding.js","AwesomeProject/src/MainTabPage.js","AwesomeProject/src/api/index.js","AwesomeProject/src/Navbars.js","AwesomeProject/style.js","AwesomeProject/styleListView.js","react-native-refresher/lib/index.js"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
+__d('AwesomeProject/Root.js',["react-native/Libraries/react-native/react-native.js","cssVar","AwesomeProject/src/SignInView.js","AwesomeProject/src/SignUpView.js","AwesomeProject/ModalExample.js","AwesomeProject/src/Onboarding.js","AwesomeProject/src/config.js","AwesomeProject/src/MainTabPage.js","AwesomeProject/src/api/index.js","AwesomeProject/src/Navbars.js","react-native-refresher/lib/index.js","AwesomeProject/style.js","AwesomeProject/styleListView.js"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
 
 var React=require('react-native/Libraries/react-native/react-native.js');
 var cssVar=require('cssVar');
@@ -51803,7 +51803,6 @@ var cssVar=require('cssVar');
 var SignInView=require('AwesomeProject/src/SignInView.js');
 var SignUpView=require('AwesomeProject/src/SignUpView.js');
 
-var Hello=require('AwesomeProject/Hello.js');
 var ModalExample=require('AwesomeProject/ModalExample.js');
 var Onboarding=require('AwesomeProject/src/Onboarding.js');
 var config=require('AwesomeProject/src/config.js');
@@ -52141,7 +52140,7 @@ module.exports = {
 'x-mobile-light-text':'#9197a3',
 'x-mobile-base-wash':'#dcdee3'};
 });
-__d('AwesomeProject/src/SignInView.js',["image!signin-bg","image!user-icon","image!password-icon","image!wechat-icon","react-native/Libraries/react-native/react-native.js","AwesomeProject/src/api/index.js","AwesomeProject/src/styleUtils.js","underscore/underscore.js"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
+__d('AwesomeProject/src/SignInView.js',["image!signin-bg","image!user-icon","image!password-icon","image!wechat-icon","underscore/underscore.js","react-native/Libraries/react-native/react-native.js","AwesomeProject/src/api/index.js","AwesomeProject/src/styleUtils.js"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
 
 var _=require('underscore/underscore.js');
 var React=require('react-native/Libraries/react-native/react-native.js');var 
@@ -53907,7 +53906,7 @@ return _;});}}).
 
 call(this);
 });
-__d('AwesomeProject/src/api/index.js',["AwesomeProject/src/api/user.js","moment/moment.js"],function(global, require, module, exports) {  var moment=require('moment/moment.js');
+__d('AwesomeProject/src/api/index.js',["moment/moment.js","AwesomeProject/src/api/user.js"],function(global, require, module, exports) {  var moment=require('moment/moment.js');
 var user=require('AwesomeProject/src/api/user.js');
 
 var commonHeaders={
@@ -57415,15 +57414,15 @@ margin:margin,
 padding:padding,
 size:size};
 });
-__d('image!signin-bg',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/signin-bg.imageset/signin-bg.png","uri":"signin-bg","width":750,"height":1334,"deprecated":true};
+__d('image!signin-bg',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/signin-bg.imageset/signin-bg.png","uri":"signin-bg","width":750,"height":1334,"deprecated":true};
 });
-__d('image!user-icon',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/user-icon.imageset/user-icon.png","uri":"user-icon","width":30,"height":30,"deprecated":true};
+__d('image!user-icon',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/user-icon.imageset/user-icon.png","uri":"user-icon","width":30,"height":30,"deprecated":true};
 });
-__d('image!password-icon',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/password-icon.imageset/password-icon.png","uri":"password-icon","width":24,"height":35,"deprecated":true};
+__d('image!password-icon',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/password-icon.imageset/password-icon.png","uri":"password-icon","width":24,"height":35,"deprecated":true};
 });
-__d('image!wechat-icon',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/wechat-icon.imageset/wechat-icon.png","uri":"wechat-icon","width":120,"height":120,"deprecated":true};
+__d('image!wechat-icon',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/wechat-icon.imageset/wechat-icon.png","uri":"wechat-icon","width":120,"height":120,"deprecated":true};
 });
-__d('AwesomeProject/src/SignUpView.js',["underscore/underscore.js","react-native/Libraries/react-native/react-native.js","AwesomeProject/src/styleUtils.js","AwesomeProject/src/api/index.js","color/index.js","react-timer-mixin/TimerMixin.js"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
+__d('AwesomeProject/src/SignUpView.js',["underscore/underscore.js","color/index.js","react-native/Libraries/react-native/react-native.js","react-timer-mixin/TimerMixin.js","AwesomeProject/src/styleUtils.js","AwesomeProject/src/api/index.js"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
 
 var _=require('underscore/underscore.js');
 var Color=require('color/index.js');
@@ -59273,799 +59272,6 @@ __d('color-name/index.json',[],function(global, require, module, exports) {  mod
 	"yellowgreen": [154, 205, 50]
 };
 });
-__d('react-timer-mixin/TimerMixin.js',[],function(global, require, module, exports) {  'use strict';
-
-
-
-
-
-
-
-
-
-
-var GLOBAL=typeof window === 'undefined'?global:window;
-
-var setter=function(_setter,_clearer,array){
-return function(callback,delta){
-var id=_setter((function(){
-_clearer.call(this,id);
-callback.apply(this,arguments);}).
-bind(this),delta);
-
-if(!this[array]){
-this[array] = [id];}else 
-{
-this[array].push(id);}
-
-return id;};};
-
-
-
-var clearer=function(_clearer,array){
-return function(id){
-if(this[array]){
-var index=this[array].indexOf(id);
-if(index !== -1){
-this[array].splice(index,1);}}
-
-
-_clearer(id);};};
-
-
-
-var _timeouts='TimerMixin_timeouts';
-var _clearTimeout=clearer(GLOBAL.clearTimeout,_timeouts);
-var _setTimeout=setter(GLOBAL.setTimeout,_clearTimeout,_timeouts);
-
-var _intervals='TimerMixin_intervals';
-var _clearInterval=clearer(GLOBAL.clearInterval,_intervals);
-var _setInterval=setter(GLOBAL.setInterval,function(){},_intervals);
-
-var _immediates='TimerMixin_immediates';
-var _clearImmediate=clearer(GLOBAL.clearImmediate,_immediates);
-var _setImmediate=setter(GLOBAL.setImmediate,_clearImmediate,_immediates);
-
-var _rafs='TimerMixin_rafs';
-var _cancelAnimationFrame=clearer(GLOBAL.cancelAnimationFrame,_rafs);
-var _requestAnimationFrame=setter(GLOBAL.requestAnimationFrame,_cancelAnimationFrame,_rafs);
-
-var TimerMixin={
-componentWillUnmount:function(){
-this[_timeouts] && this[_timeouts].forEach(function(id){
-GLOBAL.clearTimeout(id);});
-
-this[_timeouts] = null;
-this[_intervals] && this[_intervals].forEach(function(id){
-GLOBAL.clearInterval(id);});
-
-this[_intervals] = null;
-this[_immediates] && this[_immediates].forEach(function(id){
-GLOBAL.clearImmediate(id);});
-
-this[_immediates] = null;
-this[_rafs] && this[_rafs].forEach(function(id){
-GLOBAL.cancelAnimationFrame(id);});
-
-this[_rafs] = null;},
-
-
-setTimeout:_setTimeout,
-clearTimeout:_clearTimeout,
-
-setInterval:_setInterval,
-clearInterval:_clearInterval,
-
-setImmediate:_setImmediate,
-clearImmediate:_clearImmediate,
-
-requestAnimationFrame:_requestAnimationFrame,
-cancelAnimationFrame:_cancelAnimationFrame};
-
-
-module.exports = TimerMixin;
-});
-__d('AwesomeProject/Hello.js',["react-native/Libraries/react-native/react-native.js","react-native-refresher/lib/index.js","AwesomeProject/style.js","AwesomeProject/NextPage.js"],function(global, require, module, exports) {  'use strict';
-
-var React=require('react-native/Libraries/react-native/react-native.js');
-var NextPage=require('AwesomeProject/NextPage.js');var _require=
-
-
-
-require('react-native-refresher/lib/index.js');var RefresherListView=_require.RefresherListView;var LoadingBarIndicator=_require.LoadingBarIndicator;var 
-
-AppRegistry=
-
-
-
-
-
-
-React.AppRegistry;var StyleSheet=React.StyleSheet;var Text=React.Text;var Image=React.Image;var View=React.View;var TouchableHighlight=React.TouchableHighlight;var ListView=React.ListView;
-
-var Button=React.createClass({displayName:'Button',
-handlePress:function(){
-this.props.onClick();},
-
-render:function(){
-return (
-React.createElement(View,{style:style.container},
-React.createElement(TouchableHighlight,{onPress:this.handlePress,underlayColor:'#efefef'},
-React.createElement(Text,{style:style.button},this.props.children))));}});
-
-
-
-
-
-
-var Hello=React.createClass({displayName:'Hello',
-getInitialState:function(){
-return {
-dataSource:new ListView.DataSource({
-rowHasChanged:function(row1,row2){return row1 !== row2;}})};},
-
-
-
-
-componentDidMount:function(){
-this.fetchData();},
-
-
-fetchData:function(){
-fetch("https://api.leancloud.cn/1.1/classes/Post",{
-headers:{
-'Content-Type':'application/json',
-'X-LC-Id':'vGdoWipkgLukG49FCz6beS1D',
-'X-LC-Key':'5LubapRJJIphAkmklcQw8zx2'}}).
-
-then((function(response){
-var data=JSON.parse(response._bodyInit);
-
-var dataSource=this.state.dataSource.cloneWithRows(data.results);
-
-this.setState({
-dataSource:dataSource,
-loaded:true});}).
-
-
-bind(this),function(){
-console.error("fail");});},
-
-
-
-addItem:function(){
-fetch("https://api.leancloud.cn/1.1/classes/Post",{
-method:"POST",
-headers:{
-'X-LC-Id':'vGdoWipkgLukG49FCz6beS1D',
-'X-LC-Key':'5LubapRJJIphAkmklcQw8zx2',
-'Content-Type':'application/json'},
-
-body:JSON.stringify({
-content:"hello",
-id:Math.ceil(Math.random() * 10000)})}).
-
-then((function(){
-this.fetchData();}).
-bind(this),function(){
-console.error("fail");});},
-
-
-
-renderHeader:function(title){
-return (
-React.createElement(View,{style:style.headerContainer},
-React.createElement(Text,{style:style.header},title)));},
-
-
-
-
-render:function(){
-return (
-React.createElement(View,{style:style.rootContainer},
-this.renderHeader('游记'),
-React.createElement(View,null,
-React.createElement(Button,{onClick:this.addItem,style:styles1.toolbar},'添加')),
-
-React.createElement(RefresherListView,{
-dataSource:this.state.dataSource,
-renderRow:this.renderList,
-onRefresh:this.onRefresh,
-minTime:50,
-style:styles1.listView})));},
-
-
-
-
-onRefresh:function(){
-
-this.fetchData();},
-
-onTouch:function(data){
-this.props.navigator.push({
-name:'NextPage',
-index:1,
-id:data.id,
-content:data.content,
-component:NextPage});},
-
-
-renderList:function(data){var _this=this;
-return (
-React.createElement(TouchableHighlight,{onPress:function(){return _this.onTouch(data);},underlayColor:'#efefef'},
-React.createElement(View,{style:styles1.container},
-React.createElement(Text,{style:styles1.title},data.id,'#',data.content))));}});
-
-
-
-
-
-
-
-var style=require("AwesomeProject/style.js");
-
-var styles1=StyleSheet.create({
-container:{
-flex:1,
-flexDirection:'row',
-justifyContent:'center',
-alignItems:'center',
-height:50,
-borderBottomWidth:0.5},
-
-
-toolbar:{
-backgroundColor:'#F5FCFF',
-height:50},
-
-
-title:{
-fontSize:20,
-textAlign:'center'},
-
-listView:{
-flex:1,
-backgroundColor:'white'}});
-
-
-
-module.exports = Hello;
-});
-__d('AwesomeProject/NextPage.js',["react-native/Libraries/react-native/react-native.js","AwesomeProject/style.js"],function(global, require, module, exports) {  'use strict';
-
-var React=require('react-native/Libraries/react-native/react-native.js');var 
-
-AppRegistry=
-
-
-
-
-
-React.AppRegistry;var StyleSheet=React.StyleSheet;var Text=React.Text;var Image=React.Image;var View=React.View;var TouchableHighlight=React.TouchableHighlight;
-
-var Button=React.createClass({displayName:'Button',
-handlePress:function(){
-this.props.onClick();},
-
-render:function(){
-return (
-React.createElement(View,{style:styles.container},
-React.createElement(TouchableHighlight,{onPress:this.handlePress,underlayColor:'#1965d8'},
-React.createElement(Text,{style:styles.button},this.props.children))));}});
-
-
-
-
-
-
-var NextPage=React.createClass({displayName:'NextPage',
-onBack:function(){
-this.props.navigator.pop();},
-
-
-renderHeader:function(title){
-return (
-React.createElement(View,{style:styleHeader.headerContainer},
-React.createElement(Button,{style:styles.headerBtn,onClick:this.onBack},'返回'),
-React.createElement(Text,{style:styles.header},title)));},
-
-
-
-
-render:function(){
-return (
-
-React.createElement(View,{style:styleHeader.rootContainer},
-this.renderHeader('详情'),
-React.createElement(View,null,
-React.createElement(Text,{style:styles.description},'传递过来的参数'),
-
-
-React.createElement(Image,{
-style:styles.logo,
-source:{uri:'http://facebook.github.io/react/img/logo_og.png'}}),
-React.createElement(Text,{style:styles.description},'route: ',
-this.props.route),
-
-React.createElement(Text,{style:styles.description},'id: ',
-this.props.route.id),
-
-React.createElement(Text,{style:styles.description},'title: ',
-this.props.route.title),
-
-React.createElement(Text,{style:styles.description},'content: ',
-this.props.route.content),
-
-React.createElement(Text,{style:styles.description},'name: ',
-this.props.route.name))));}});
-
-
-
-
-
-
-
-var styleHeader=require("AwesomeProject/style.js");
-
-var styles=StyleSheet.create({
-
-logo:{
-width:200,
-height:100},
-
-
-description:{
-marginBottom:20,
-fontSize:18,
-textAlign:'center',
-color:'#656565'},
-
-container:{
-alignItems:'center'},
-
-header:{
-flex:1,
-justifyContent:'center',
-alignItems:'center',
-color:'white',
-fontSize:20,
-margin:120},
-
-button:{
-flex:2,
-margin:10,
-flexDirection:'row',
-color:'white'}});
-
-
-
-module.exports = NextPage;
-});
-__d('AwesomeProject/style.js',["react-native/Libraries/react-native/react-native.js"],function(global, require, module, exports) {  'use strict';
-
-var React=require('react-native/Libraries/react-native/react-native.js');var 
-
-
-StyleSheet=
-React.StyleSheet;
-
-module.exports = StyleSheet.create({
-rootContainer:{
-flex:1,
-backgroundColor:'white'},
-
-
-headerContainer:{
-paddingTop:20,
-height:64,
-backgroundColor:'#0087fa',
-alignItems:'center',
-justifyContent:'center',
-flexDirection:'row'},
-
-
-header:{
-color:'white',
-fontSize:20},
-
-
-text:{
-color:'black',
-fontSize:30},
-
-button:{
-borderColor:'#696969',
-borderRadius:8,
-borderWidth:1,
-padding:10,
-margin:5,
-alignItems:'center',
-justifyContent:'center'},
-
-container:{
-flex:1}});
-});
-__d('react-native-refresher/lib/index.js',["react-native-refresher/lib/RefresherListView.js","react-native-refresher/lib/indicators/LoadingActivityIndicatorIOS.js","react-native-refresher/lib/indicators/LoadingBarIndicator.js"],function(global, require, module, exports) {  var RefresherListView=require('react-native-refresher/lib/RefresherListView.js');
-var LoadingActivityIndicatorIOS=require('react-native-refresher/lib/indicators/LoadingActivityIndicatorIOS.js');
-var LoadingBarIndicator=require('react-native-refresher/lib/indicators/LoadingBarIndicator.js');
-
-module.exports = {
-RefresherListView:RefresherListView,
-LoadingActivityIndicatorIOS:LoadingActivityIndicatorIOS,
-LoadingBarIndicator:LoadingBarIndicator};
-});
-__d('react-native-refresher/lib/RefresherListView.js',["react-native/Libraries/react-native/react-native.js","react-native-refresher/lib/indicators/LoadingActivityIndicatorIOS.js","is-promise/index.js"],function(global, require, module, exports) {  var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();var _get=function get(object,property,receiver){if(object === null)object = Function.prototype;var desc=Object.getOwnPropertyDescriptor(object,property);if(desc === undefined){var parent=Object.getPrototypeOf(object);if(parent === null){return undefined;}else {return get(parent,property,receiver);}}else if('value' in desc){return desc.value;}else {var getter=desc.get;if(getter === undefined){return undefined;}return getter.call(receiver);}};function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}function _inherits(subClass,superClass){if(typeof superClass !== 'function' && superClass !== null){throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__ = superClass;}var React=require('react-native/Libraries/react-native/react-native.js');
-var precomputeStyle=require('precomputeStyle');
-var logError=require('logError');
-var LoadingActivityIndicatorIOS=require('react-native-refresher/lib/indicators/LoadingActivityIndicatorIOS.js');
-var isPromise=require('is-promise/index.js');var 
-
-
-ListView=
-
-
-
-
-
-React.ListView;var View=React.View;var Text=React.Text;var ActivityIndicatorIOS=React.ActivityIndicatorIOS;var StyleSheet=React.StyleSheet;var cloneElement=React.cloneElement;
-
-var FIXED='fixed';
-var TOP='top';
-
-changeProps = function(instance,props){
-if(!instance)return;
-Object.keys(props).forEach(function(key){
-instance.props[key] = props[key];});
-
-instance.forceUpdate();};var 
-
-
-RefresherListView=(function(_React$Component){_inherits(RefresherListView,_React$Component);
-function RefresherListView(){_classCallCheck(this,RefresherListView);
-_get(Object.getPrototypeOf(RefresherListView.prototype),'constructor',this).call(this);
-this.state = {
-threshold:0,
-top:0};}_createClass(RefresherListView,[{key:'onResponderGrant',value:
-
-
-
-function onResponderGrant(e){var _props;
-this.props.onResponderGrant && (_props = this.props).onResponderGrant.apply(_props,arguments);
-if(!this.top){
-this.top = this.top || e.nativeEvent.contentInset && e.nativeEvent.contentInset.top;
-this.setState({top:this.top});}
-
-this.state.threshold = 0;
-this.scrolling = true;}},{key:'onResponderRelease',value:
-
-
-function onResponderRelease(){var _props2;
-this.props.onResponderRelease && (_props2 = this.props).onResponderRelease.apply(_props2,arguments);
-this.scrolling = false;
-if(!this.props.refreshOnRelease && !this.scrolling)return;
-this._doLoading();}},{key:'getScrollResponder',value:
-
-
-function getScrollResponder(){
-return this.refs.listview.getScrollResponder();}},{key:'setNativeProps',value:
-
-
-function setNativeProps(props){
-this.refs.listview.setNativeProps(props);}},{key:'handleRefresh',value:
-
-
-function handleRefresh(){var _this=this;
-
-
-
-
-if(this.willRefresh)return;
-
-this.willRefresh = true;
-
-var loadingPromise=new Promise(function(resolve){
-var refreshReturnValue=_this.props.onRefresh(resolve);
-
-if(isPromise(refreshReturnValue)){
-loadingPromise = refreshReturnValue;}
-
-
-var delay=function(time){return new Promise(function(resolve){return setTimeout(resolve,time);});};
-
-Promise.all([
-loadingPromise,
-new Promise(function(resolve){
-_this.isLoading = true;
-_this.setState(resolve);}),
-
-delay(_this.props.minTime)]).
-
-then(function(){
-_this.willRefresh = false;
-_this.isLoading = false;
-_this._hideLoading();});});}},{key:'onScroll',value:
-
-
-
-
-function onScroll(e){
-this.props.onScroll && this.props.onScroll();
-
-var offsetY=e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
-if(this.isLoading || this.lastOffsetY == offsetY)return;
-
-var listviewscroll=this.getScrollResponder();
-var threshold=Math.max(Math.min(-offsetY / this.getIndicatorHeight(),1),0);
-var status=threshold >= this.state.threshold && !listviewscroll.scrollResponderIsAnimating() || this.scrolling?'pull':null;
-
-this.state.loadingStatus = status;
-this.state.threshold = threshold;
-changeProps(this.refs.indicator,{threshold:threshold,status:status});
-
-this.lastOffsetY = offsetY;
-
-if(!this.scrolling)return;
-if(!this.props.refreshOnRelease && this.state.threshold >= 1){
-this._doLoading();
-return;}}},{key:'requestAnimationFrame',value:
-
-
-
-function requestAnimationFrame(){var _refs$listview;
-(_refs$listview = this.refs.listview).requestAnimationFrame.apply(_refs$listview,arguments);}},{key:'_hideLoading',value:
-
-
-function _hideLoading(){var _this2=this;
-var listviewscroll=this.getScrollResponder();
-
-setTimeout(function(){
-_this2.updateUIThreshold(0);},
-300);
-
-setTimeout(function(){
-_this2.requestAnimationFrame(function(){
-if(!_this2.scrolling && !listviewscroll.scrollResponderIsAnimating() && _this2.lastOffsetY < _this2.top){
-listviewscroll.scrollTo(-_this2.top);}});},
-
-
-50);}},{key:'updateUIThreshold',value:
-
-
-function updateUIThreshold(threshold){
-var listview=this.refs.listview;
-var listviewscroll=listview.getScrollResponder();
-this.requestAnimationFrame(function(){
-listviewscroll.setNativeProps(precomputeStyle({contentInset:{top:threshold}}));
-listviewscroll.refs.InnerScrollView.setNativeProps(precomputeStyle({paddingTop:threshold}));
-listview.setNativeProps(precomputeStyle({top:-threshold,bottom:0}));});}},{key:'_doLoading',value:
-
-
-
-function _doLoading(){
-if(this.willRefresh || this.isLoading || this.state.threshold < 1)return;
-
-this.updateUIThreshold(this.getIndicatorHeight());
-
-this.state.loadingStatus = 'loading';
-this.state.threshold = 1;
-
-changeProps(this.refs.indicator,{status:this.state.loadingStatus,threshold:this.state.threshold});
-
-this.handleRefresh();}},{key:'_getIndicatorPosition',value:
-
-
-function _getIndicatorPosition(){
-return this.props.indicatorPosition || this.props.indicator.props.position || this.props.indicator.position || FIXED;}},{key:'_isIndicatorFixed',value:
-
-
-function _isIndicatorFixed(){
-return this._getIndicatorPosition() == FIXED;}},{key:'getIndicatorHeight',value:
-
-function getIndicatorHeight(){
-return this.props.threshold == 'auto'?
-this.refs.indicator && this.refs.indicator.props.height || this.props.indicator.props.height:
-parseInt(this.props.threshold);}},{key:'renderHeader',value:
-
-function renderHeader(){
-if(this._isIndicatorFixed()){
-
-return this.props.renderHeader && this.props.renderHeader();}
-
-return React.createElement(View,{style:{height:this.getIndicatorHeight(),flex:1,alignItems:'flex-end',flexDirection:'row',marginTop:-this.getIndicatorHeight()}},
-React.createElement(View,{style:{flex:1}},
-this.renderIndicator()));}},{key:'renderIndicator',value:
-
-
-
-
-function renderIndicator(){var _this3=this;
-var Indicator=this.props.indicator;
-return cloneElement(Indicator,{
-ref:(function(indicator){_this3.refs.indicator = indicator || _this3.refs.indicator;}).bind(this),
-status:this.state.loadingStatus,
-height:this.getIndicatorHeight(),
-threshold:this.state.threshold});}},{key:'render',value:
-
-
-
-function render(){
-var Component=this.props.component;
-return React.createElement(View,{style:[{flex:1},this.props.style]},
-React.createElement(View,{style:[styles.fixedLoaderWrapper,{marginTop:this.top || 0}]},
-this._isIndicatorFixed()?this.renderIndicator():null),
-
-React.createElement(Component,_extends({},this.props,{
-style:this.props.listStyle,
-onResponderRelease:this.onResponderRelease.bind(this),
-onResponderGrant:this.onResponderGrant.bind(this),
-renderHeader:this.renderHeader.bind(this),
-ref:'listview',
-onScroll:this.onScroll.bind(this)})));}}]);return RefresherListView;})(React.Component);
-
-
-
-
-
-var styles=StyleSheet.create({
-fixedLoaderWrapper:{
-position:'absolute',
-flex:1,
-top:0,
-marginTop:0,
-left:0,
-right:0},
-
-list:{
-backgroundColor:'transparent',
-position:'absolute',
-top:0,
-bottom:0,
-left:0,
-right:0}});
-
-
-
-
-RefresherListView.defaultProps = {
-threshold:'auto',
-component:ListView,
-minTime:320,
-indicator:React.createElement(LoadingActivityIndicatorIOS,null),
-refreshOnRelease:false,
-listStyle:styles.list};
-
-
-RefresherListView.DataSource = ListView.DataSource;
-
-module.exports = RefresherListView;
-});
-__d('react-native-refresher/lib/indicators/LoadingActivityIndicatorIOS.js',["react-native/Libraries/react-native/react-native.js"],function(global, require, module, exports) {  var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();var _get=function get(object,property,receiver){if(object === null)object = Function.prototype;var desc=Object.getOwnPropertyDescriptor(object,property);if(desc === undefined){var parent=Object.getPrototypeOf(object);if(parent === null){return undefined;}else {return get(parent,property,receiver);}}else if('value' in desc){return desc.value;}else {var getter=desc.get;if(getter === undefined){return undefined;}return getter.call(receiver);}};function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}function _inherits(subClass,superClass){if(typeof superClass !== 'function' && superClass !== null){throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__ = superClass;}var React=require('react-native/Libraries/react-native/react-native.js');var 
-
-View=
-
-
-React.View;var ActivityIndicatorIOS=React.ActivityIndicatorIOS;var StyleSheet=React.StyleSheet;var 
-
-LoadingActivityIndicatorIOS=(function(_React$Component){_inherits(LoadingActivityIndicatorIOS,_React$Component);function LoadingActivityIndicatorIOS(){_classCallCheck(this,LoadingActivityIndicatorIOS);_get(Object.getPrototypeOf(LoadingActivityIndicatorIOS.prototype),'constructor',this).apply(this,arguments);}_createClass(LoadingActivityIndicatorIOS,[{key:'render',value:
-function render(){var _props=
-this.props;var threshold=_props.threshold;var height=_props.height;var status=_props.status;
-if(!status)return null;
-return React.createElement(View,{style:[{height:height},styles.main,this.props.style]},
-React.createElement(ActivityIndicatorIOS,{
-style:{transform:[{scaleX:threshold * 0.75},{scaleY:threshold * 0.75},{translateY:parseInt((1 - threshold) * -10)},{rotate:parseInt(threshold * 12) * 30 + "deg"}]},
-size:'large',
-animating:status == 'loading',
-hidesWhenStopped:false}));}}]);return LoadingActivityIndicatorIOS;})(React.Component);
-
-
-
-
-LoadingActivityIndicatorIOS.defaultProps = {
-threshold:0,
-height:60,
-position:'fixed'};
-
-
-var styles=StyleSheet.create({
-main:{
-flex:1,
-alignItems:'center',
-justifyContent:'center'}});
-
-
-
-LoadingActivityIndicatorIOS.position = 'fixed';
-
-module.exports = LoadingActivityIndicatorIOS;
-});
-__d('is-promise/index.js',[],function(global, require, module, exports) {  module.exports = isPromise;
-
-function isPromise(obj){
-return obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';}
-});
-__d('react-native-refresher/lib/indicators/LoadingBarIndicator.js',["react-native/Libraries/react-native/react-native.js"],function(global, require, module, exports) {  var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();var _get=function get(object,property,receiver){if(object === null)object = Function.prototype;var desc=Object.getOwnPropertyDescriptor(object,property);if(desc === undefined){var parent=Object.getPrototypeOf(object);if(parent === null){return undefined;}else {return get(parent,property,receiver);}}else if('value' in desc){return desc.value;}else {var getter=desc.get;if(getter === undefined){return undefined;}return getter.call(receiver);}};function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}function _inherits(subClass,superClass){if(typeof superClass !== 'function' && superClass !== null){throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__ = superClass;}var React=require('react-native/Libraries/react-native/react-native.js');
-var NativeMethodsMixin=require('NativeMethodsMixin');var 
-
-View=
-
-
-React.View;var StyleSheet=React.StyleSheet;var Text=React.Text;var 
-
-LoadingBarIndicator=(function(_React$Component){_inherits(LoadingBarIndicator,_React$Component);
-function LoadingBarIndicator(){_classCallCheck(this,LoadingBarIndicator);
-_get(Object.getPrototypeOf(LoadingBarIndicator.prototype),'constructor',this).call(this);
-this.state = {
-width:320,
-height:60};}_createClass(LoadingBarIndicator,[{key:'measure',value:
-
-
-function measure(){
-NativeMethodsMixin.measure.bind(this).apply(undefined,arguments);}},{key:'getText',value:
-
-function getText(){
-switch(this.props.status){
-case 'pull':
-if(this.props.threshold > 1){
-return 'Release to refresh';}
-
-return 'Pull to refresh';
-break;
-case 'loading':
-return 'Loading...';
-break;}
-
-return null;}},{key:'componentDidMount',value:
-
-function componentDidMount(){
-setTimeout(this.measureDimensions.bind(this));}},{key:'measureDimensions',value:
-
-function measureDimensions(){var _this=this;
-this.measure(function(ox,oy,width,height){
-_this.setState({width:width,height:height});});}},{key:'render',value:
-
-
-function render(){
-if(!this.props.status)return null;
-var maxWidth=this.state.width;
-return React.createElement(View,{style:[styles.main,{height:this.props.height}]},
-React.createElement(View,{style:styles.textWrapper},
-React.createElement(Text,{style:styles.text},
-this.getText())),
-
-
-React.createElement(View,{style:[{backgroundColor:this.props.barColor,width:this.props.threshold * maxWidth},styles.bar]}));}}]);return LoadingBarIndicator;})(React.Component);
-
-
-
-
-LoadingBarIndicator.defaultProps = {
-barColor:'#00CC33',
-height:40,
-position:'top'};
-
-
-var styles=StyleSheet.create({
-main:{
-flex:1},
-
-textWrapper:{
-flex:1,
-alignItems:"center",
-flexDirection:"row"},
-
-bar:{
-height:3},
-
-text:{
-flex:1,
-textAlign:'center',
-fontSize:15,
-fontWeight:'500'}});
-
-
-
-module.exports = LoadingBarIndicator;
-});
 __d('AwesomeProject/ModalExample.js',["react-native/Libraries/react-native/react-native.js"],function(global, require, module, exports) {  'use strict';
 
 var React=require('react-native/Libraries/react-native/react-native.js');var 
@@ -60214,7 +59420,7 @@ marginTop:10}});
 
 module.exports = ModalExample;
 });
-__d('AwesomeProject/src/Onboarding.js',["image!page1","image!page2","image!page3","react-native/Libraries/react-native/react-native.js","AwesomeProject/src/widgets/index.js","react-native-viewpager/ViewPager.js"],function(global, require, module, exports) {  var React=require('react-native/Libraries/react-native/react-native.js');var 
+__d('AwesomeProject/src/Onboarding.js',["image!page1","image!page2","image!page3","react-native/Libraries/react-native/react-native.js","react-native-viewpager/ViewPager.js","AwesomeProject/src/widgets/index.js"],function(global, require, module, exports) {  var React=require('react-native/Libraries/react-native/react-native.js');var 
 
 StyleSheet=
 
@@ -60867,15 +60073,15 @@ fontSize:20})});
 
 module.exports = Button;
 });
-__d('image!page1',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/page1.imageset/page1.png","uri":"page1","width":750,"height":1334,"deprecated":true};
+__d('image!page1',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/page1.imageset/page1.png","uri":"page1","width":750,"height":1334,"deprecated":true};
 });
-__d('image!page2',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/page2.imageset/page2.png","uri":"page2","width":750,"height":1334,"deprecated":true};
+__d('image!page2',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/page2.imageset/page2.png","uri":"page2","width":750,"height":1334,"deprecated":true};
 });
-__d('image!page3',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/page3.imageset/page3.png","uri":"page3","width":750,"height":1334,"deprecated":true};
+__d('image!page3',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/page3.imageset/page3.png","uri":"page3","width":750,"height":1334,"deprecated":true};
 });
 __d('AwesomeProject/src/config.js',[],function(global, require, module, exports) {  module.exports = {};
 });
-__d('AwesomeProject/src/MainTabPage.js',["react-native/Libraries/react-native/react-native.js","AwesomeProject/src/Navbars.js","Ionicons","AwesomeProject/src/Activity.js","AwesomeProject/src/Space.js","AwesomeProject/src/JourneyTab.js"],function(global, require, module, exports) {  var React=require('react-native/Libraries/react-native/react-native.js');var 
+__d('AwesomeProject/src/MainTabPage.js',["react-native/Libraries/react-native/react-native.js","Ionicons","AwesomeProject/src/Navbars.js","AwesomeProject/src/Activity.js","AwesomeProject/src/Space.js","AwesomeProject/src/JourneyTab.js"],function(global, require, module, exports) {  var React=require('react-native/Libraries/react-native/react-native.js');var 
 
 StyleSheet=
 
@@ -61840,7 +61046,7 @@ var Ionicons=createIconSet(glyphMap,'Ionicons','Fonts/Ionicons.ttf');
 module.exports = Ionicons;
 module.exports.glyphMap = glyphMap;
 });
-__d('createIconSet',["react-native/Libraries/react-native/react-native.js","StyleSheetPropType","flattenStyle","ViewStylePropTypes","TextStylePropTypes","TypefaceTextView","lodash/index.js"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
+__d('createIconSet',["lodash/index.js","react-native/Libraries/react-native/react-native.js","StyleSheetPropType","flattenStyle","ViewStylePropTypes","TextStylePropTypes","TypefaceTextView"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
 
 
 
@@ -74484,7 +73690,7 @@ None:None,
 NormalRouteMapper:NormalRouteMapper,
 styles:styles};
 });
-__d('image!back-icon',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/back-icon.imageset/back-icon.png","uri":"back-icon","width":34,"height":30,"deprecated":true};
+__d('image!back-icon',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/back-icon.imageset/back-icon.png","uri":"back-icon","width":34,"height":30,"deprecated":true};
 });
 __d('AwesomeProject/src/Activity.js',["image!icon-region-shanxi","image!icon-region-beijing","image!icon-region-hebei","image!icon-region-shandong","image!icon-region-tianjin","image!icon-region-neimenggu","image!icon-annotation","image!icon-calendar","image!avatar-placeholder","image!icon-mark","image!icon-star","moment/moment.js","react-native/Libraries/react-native/react-native.js","react-native-refresher/lib/index.js","react-native-blur/index.js","react-native-refreshable-listview/index.js","AwesomeProject/src/styleUtils.js","AwesomeProject/src/Navbars.js","AwesomeProject/src/api/index.js"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
 
@@ -75055,6 +74261,387 @@ color:'#fff'}});
 
 module.exports = ActivityList;
 });
+__d('react-native-refresher/lib/index.js',["react-native-refresher/lib/RefresherListView.js","react-native-refresher/lib/indicators/LoadingActivityIndicatorIOS.js","react-native-refresher/lib/indicators/LoadingBarIndicator.js"],function(global, require, module, exports) {  var RefresherListView=require('react-native-refresher/lib/RefresherListView.js');
+var LoadingActivityIndicatorIOS=require('react-native-refresher/lib/indicators/LoadingActivityIndicatorIOS.js');
+var LoadingBarIndicator=require('react-native-refresher/lib/indicators/LoadingBarIndicator.js');
+
+module.exports = {
+RefresherListView:RefresherListView,
+LoadingActivityIndicatorIOS:LoadingActivityIndicatorIOS,
+LoadingBarIndicator:LoadingBarIndicator};
+});
+__d('react-native-refresher/lib/RefresherListView.js',["react-native/Libraries/react-native/react-native.js","react-native-refresher/lib/indicators/LoadingActivityIndicatorIOS.js","is-promise/index.js"],function(global, require, module, exports) {  var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();var _get=function get(object,property,receiver){if(object === null)object = Function.prototype;var desc=Object.getOwnPropertyDescriptor(object,property);if(desc === undefined){var parent=Object.getPrototypeOf(object);if(parent === null){return undefined;}else {return get(parent,property,receiver);}}else if('value' in desc){return desc.value;}else {var getter=desc.get;if(getter === undefined){return undefined;}return getter.call(receiver);}};function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}function _inherits(subClass,superClass){if(typeof superClass !== 'function' && superClass !== null){throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__ = superClass;}var React=require('react-native/Libraries/react-native/react-native.js');
+var precomputeStyle=require('precomputeStyle');
+var logError=require('logError');
+var LoadingActivityIndicatorIOS=require('react-native-refresher/lib/indicators/LoadingActivityIndicatorIOS.js');
+var isPromise=require('is-promise/index.js');var 
+
+
+ListView=
+
+
+
+
+
+React.ListView;var View=React.View;var Text=React.Text;var ActivityIndicatorIOS=React.ActivityIndicatorIOS;var StyleSheet=React.StyleSheet;var cloneElement=React.cloneElement;
+
+var FIXED='fixed';
+var TOP='top';
+
+changeProps = function(instance,props){
+if(!instance)return;
+Object.keys(props).forEach(function(key){
+instance.props[key] = props[key];});
+
+instance.forceUpdate();};var 
+
+
+RefresherListView=(function(_React$Component){_inherits(RefresherListView,_React$Component);
+function RefresherListView(){_classCallCheck(this,RefresherListView);
+_get(Object.getPrototypeOf(RefresherListView.prototype),'constructor',this).call(this);
+this.state = {
+threshold:0,
+top:0};}_createClass(RefresherListView,[{key:'onResponderGrant',value:
+
+
+
+function onResponderGrant(e){var _props;
+this.props.onResponderGrant && (_props = this.props).onResponderGrant.apply(_props,arguments);
+if(!this.top){
+this.top = this.top || e.nativeEvent.contentInset && e.nativeEvent.contentInset.top;
+this.setState({top:this.top});}
+
+this.state.threshold = 0;
+this.scrolling = true;}},{key:'onResponderRelease',value:
+
+
+function onResponderRelease(){var _props2;
+this.props.onResponderRelease && (_props2 = this.props).onResponderRelease.apply(_props2,arguments);
+this.scrolling = false;
+if(!this.props.refreshOnRelease && !this.scrolling)return;
+this._doLoading();}},{key:'getScrollResponder',value:
+
+
+function getScrollResponder(){
+return this.refs.listview.getScrollResponder();}},{key:'setNativeProps',value:
+
+
+function setNativeProps(props){
+this.refs.listview.setNativeProps(props);}},{key:'handleRefresh',value:
+
+
+function handleRefresh(){var _this=this;
+
+
+
+
+if(this.willRefresh)return;
+
+this.willRefresh = true;
+
+var loadingPromise=new Promise(function(resolve){
+var refreshReturnValue=_this.props.onRefresh(resolve);
+
+if(isPromise(refreshReturnValue)){
+loadingPromise = refreshReturnValue;}
+
+
+var delay=function(time){return new Promise(function(resolve){return setTimeout(resolve,time);});};
+
+Promise.all([
+loadingPromise,
+new Promise(function(resolve){
+_this.isLoading = true;
+_this.setState(resolve);}),
+
+delay(_this.props.minTime)]).
+
+then(function(){
+_this.willRefresh = false;
+_this.isLoading = false;
+_this._hideLoading();});});}},{key:'onScroll',value:
+
+
+
+
+function onScroll(e){
+this.props.onScroll && this.props.onScroll();
+
+var offsetY=e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
+if(this.isLoading || this.lastOffsetY == offsetY)return;
+
+var listviewscroll=this.getScrollResponder();
+var threshold=Math.max(Math.min(-offsetY / this.getIndicatorHeight(),1),0);
+var status=threshold >= this.state.threshold && !listviewscroll.scrollResponderIsAnimating() || this.scrolling?'pull':null;
+
+this.state.loadingStatus = status;
+this.state.threshold = threshold;
+changeProps(this.refs.indicator,{threshold:threshold,status:status});
+
+this.lastOffsetY = offsetY;
+
+if(!this.scrolling)return;
+if(!this.props.refreshOnRelease && this.state.threshold >= 1){
+this._doLoading();
+return;}}},{key:'requestAnimationFrame',value:
+
+
+
+function requestAnimationFrame(){var _refs$listview;
+(_refs$listview = this.refs.listview).requestAnimationFrame.apply(_refs$listview,arguments);}},{key:'_hideLoading',value:
+
+
+function _hideLoading(){var _this2=this;
+var listviewscroll=this.getScrollResponder();
+
+setTimeout(function(){
+_this2.updateUIThreshold(0);},
+300);
+
+setTimeout(function(){
+_this2.requestAnimationFrame(function(){
+if(!_this2.scrolling && !listviewscroll.scrollResponderIsAnimating() && _this2.lastOffsetY < _this2.top){
+listviewscroll.scrollTo(-_this2.top);}});},
+
+
+50);}},{key:'updateUIThreshold',value:
+
+
+function updateUIThreshold(threshold){
+var listview=this.refs.listview;
+var listviewscroll=listview.getScrollResponder();
+this.requestAnimationFrame(function(){
+listviewscroll.setNativeProps(precomputeStyle({contentInset:{top:threshold}}));
+listviewscroll.refs.InnerScrollView.setNativeProps(precomputeStyle({paddingTop:threshold}));
+listview.setNativeProps(precomputeStyle({top:-threshold,bottom:0}));});}},{key:'_doLoading',value:
+
+
+
+function _doLoading(){
+if(this.willRefresh || this.isLoading || this.state.threshold < 1)return;
+
+this.updateUIThreshold(this.getIndicatorHeight());
+
+this.state.loadingStatus = 'loading';
+this.state.threshold = 1;
+
+changeProps(this.refs.indicator,{status:this.state.loadingStatus,threshold:this.state.threshold});
+
+this.handleRefresh();}},{key:'_getIndicatorPosition',value:
+
+
+function _getIndicatorPosition(){
+return this.props.indicatorPosition || this.props.indicator.props.position || this.props.indicator.position || FIXED;}},{key:'_isIndicatorFixed',value:
+
+
+function _isIndicatorFixed(){
+return this._getIndicatorPosition() == FIXED;}},{key:'getIndicatorHeight',value:
+
+function getIndicatorHeight(){
+return this.props.threshold == 'auto'?
+this.refs.indicator && this.refs.indicator.props.height || this.props.indicator.props.height:
+parseInt(this.props.threshold);}},{key:'renderHeader',value:
+
+function renderHeader(){
+if(this._isIndicatorFixed()){
+
+return this.props.renderHeader && this.props.renderHeader();}
+
+return React.createElement(View,{style:{height:this.getIndicatorHeight(),flex:1,alignItems:'flex-end',flexDirection:'row',marginTop:-this.getIndicatorHeight()}},
+React.createElement(View,{style:{flex:1}},
+this.renderIndicator()));}},{key:'renderIndicator',value:
+
+
+
+
+function renderIndicator(){var _this3=this;
+var Indicator=this.props.indicator;
+return cloneElement(Indicator,{
+ref:(function(indicator){_this3.refs.indicator = indicator || _this3.refs.indicator;}).bind(this),
+status:this.state.loadingStatus,
+height:this.getIndicatorHeight(),
+threshold:this.state.threshold});}},{key:'render',value:
+
+
+
+function render(){
+var Component=this.props.component;
+return React.createElement(View,{style:[{flex:1},this.props.style]},
+React.createElement(View,{style:[styles.fixedLoaderWrapper,{marginTop:this.top || 0}]},
+this._isIndicatorFixed()?this.renderIndicator():null),
+
+React.createElement(Component,_extends({},this.props,{
+style:this.props.listStyle,
+onResponderRelease:this.onResponderRelease.bind(this),
+onResponderGrant:this.onResponderGrant.bind(this),
+renderHeader:this.renderHeader.bind(this),
+ref:'listview',
+onScroll:this.onScroll.bind(this)})));}}]);return RefresherListView;})(React.Component);
+
+
+
+
+
+var styles=StyleSheet.create({
+fixedLoaderWrapper:{
+position:'absolute',
+flex:1,
+top:0,
+marginTop:0,
+left:0,
+right:0},
+
+list:{
+backgroundColor:'transparent',
+position:'absolute',
+top:0,
+bottom:0,
+left:0,
+right:0}});
+
+
+
+
+RefresherListView.defaultProps = {
+threshold:'auto',
+component:ListView,
+minTime:320,
+indicator:React.createElement(LoadingActivityIndicatorIOS,null),
+refreshOnRelease:false,
+listStyle:styles.list};
+
+
+RefresherListView.DataSource = ListView.DataSource;
+
+module.exports = RefresherListView;
+});
+__d('react-native-refresher/lib/indicators/LoadingActivityIndicatorIOS.js',["react-native/Libraries/react-native/react-native.js"],function(global, require, module, exports) {  var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();var _get=function get(object,property,receiver){if(object === null)object = Function.prototype;var desc=Object.getOwnPropertyDescriptor(object,property);if(desc === undefined){var parent=Object.getPrototypeOf(object);if(parent === null){return undefined;}else {return get(parent,property,receiver);}}else if('value' in desc){return desc.value;}else {var getter=desc.get;if(getter === undefined){return undefined;}return getter.call(receiver);}};function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}function _inherits(subClass,superClass){if(typeof superClass !== 'function' && superClass !== null){throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__ = superClass;}var React=require('react-native/Libraries/react-native/react-native.js');var 
+
+View=
+
+
+React.View;var ActivityIndicatorIOS=React.ActivityIndicatorIOS;var StyleSheet=React.StyleSheet;var 
+
+LoadingActivityIndicatorIOS=(function(_React$Component){_inherits(LoadingActivityIndicatorIOS,_React$Component);function LoadingActivityIndicatorIOS(){_classCallCheck(this,LoadingActivityIndicatorIOS);_get(Object.getPrototypeOf(LoadingActivityIndicatorIOS.prototype),'constructor',this).apply(this,arguments);}_createClass(LoadingActivityIndicatorIOS,[{key:'render',value:
+function render(){var _props=
+this.props;var threshold=_props.threshold;var height=_props.height;var status=_props.status;
+if(!status)return null;
+return React.createElement(View,{style:[{height:height},styles.main,this.props.style]},
+React.createElement(ActivityIndicatorIOS,{
+style:{transform:[{scaleX:threshold * 0.75},{scaleY:threshold * 0.75},{translateY:parseInt((1 - threshold) * -10)},{rotate:parseInt(threshold * 12) * 30 + "deg"}]},
+size:'large',
+animating:status == 'loading',
+hidesWhenStopped:false}));}}]);return LoadingActivityIndicatorIOS;})(React.Component);
+
+
+
+
+LoadingActivityIndicatorIOS.defaultProps = {
+threshold:0,
+height:60,
+position:'fixed'};
+
+
+var styles=StyleSheet.create({
+main:{
+flex:1,
+alignItems:'center',
+justifyContent:'center'}});
+
+
+
+LoadingActivityIndicatorIOS.position = 'fixed';
+
+module.exports = LoadingActivityIndicatorIOS;
+});
+__d('is-promise/index.js',[],function(global, require, module, exports) {  module.exports = isPromise;
+
+function isPromise(obj){
+return obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';}
+});
+__d('react-native-refresher/lib/indicators/LoadingBarIndicator.js',["react-native/Libraries/react-native/react-native.js"],function(global, require, module, exports) {  var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();var _get=function get(object,property,receiver){if(object === null)object = Function.prototype;var desc=Object.getOwnPropertyDescriptor(object,property);if(desc === undefined){var parent=Object.getPrototypeOf(object);if(parent === null){return undefined;}else {return get(parent,property,receiver);}}else if('value' in desc){return desc.value;}else {var getter=desc.get;if(getter === undefined){return undefined;}return getter.call(receiver);}};function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}function _inherits(subClass,superClass){if(typeof superClass !== 'function' && superClass !== null){throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__ = superClass;}var React=require('react-native/Libraries/react-native/react-native.js');
+var NativeMethodsMixin=require('NativeMethodsMixin');var 
+
+View=
+
+
+React.View;var StyleSheet=React.StyleSheet;var Text=React.Text;var 
+
+LoadingBarIndicator=(function(_React$Component){_inherits(LoadingBarIndicator,_React$Component);
+function LoadingBarIndicator(){_classCallCheck(this,LoadingBarIndicator);
+_get(Object.getPrototypeOf(LoadingBarIndicator.prototype),'constructor',this).call(this);
+this.state = {
+width:320,
+height:60};}_createClass(LoadingBarIndicator,[{key:'measure',value:
+
+
+function measure(){
+NativeMethodsMixin.measure.bind(this).apply(undefined,arguments);}},{key:'getText',value:
+
+function getText(){
+switch(this.props.status){
+case 'pull':
+if(this.props.threshold > 1){
+return 'Release to refresh';}
+
+return 'Pull to refresh';
+break;
+case 'loading':
+return 'Loading...';
+break;}
+
+return null;}},{key:'componentDidMount',value:
+
+function componentDidMount(){
+setTimeout(this.measureDimensions.bind(this));}},{key:'measureDimensions',value:
+
+function measureDimensions(){var _this=this;
+this.measure(function(ox,oy,width,height){
+_this.setState({width:width,height:height});});}},{key:'render',value:
+
+
+function render(){
+if(!this.props.status)return null;
+var maxWidth=this.state.width;
+return React.createElement(View,{style:[styles.main,{height:this.props.height}]},
+React.createElement(View,{style:styles.textWrapper},
+React.createElement(Text,{style:styles.text},
+this.getText())),
+
+
+React.createElement(View,{style:[{backgroundColor:this.props.barColor,width:this.props.threshold * maxWidth},styles.bar]}));}}]);return LoadingBarIndicator;})(React.Component);
+
+
+
+
+LoadingBarIndicator.defaultProps = {
+barColor:'#00CC33',
+height:40,
+position:'top'};
+
+
+var styles=StyleSheet.create({
+main:{
+flex:1},
+
+textWrapper:{
+flex:1,
+alignItems:"center",
+flexDirection:"row"},
+
+bar:{
+height:3},
+
+text:{
+flex:1,
+textAlign:'center',
+fontSize:15,
+fontWeight:'500'}});
+
+
+
+module.exports = LoadingBarIndicator;
+});
 __d('react-native-blur/index.js',["react-native-blur/src/BlurView.js","react-native-blur/src/VibrancyView.js"],function(global, require, module, exports) {  const BlurView=require('react-native-blur/src/BlurView.js');
 const VibrancyView=require('react-native-blur/src/VibrancyView.js');
 
@@ -75104,7 +74691,7 @@ module.exports = VibrancyView;
 });
 __d('react-native-refreshable-listview/index.js',["react-native-refreshable-listview/lib/RefreshableListView.js"],function(global, require, module, exports) {  module.exports = require('react-native-refreshable-listview/lib/RefreshableListView.js');
 });
-__d('react-native-refreshable-listview/lib/RefreshableListView.js',["react-native/Libraries/react-native/react-native.js","react-native-refreshable-listview/lib/delay.js","react-native-refreshable-listview/lib/ListView.js","react-native-refreshable-listview/lib/RefreshingIndicator.js","react-native-refreshable-listview/lib/ControlledRefreshableListView.js","is-promise/index.js"],function(global, require, module, exports) {  var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};var React=require('react-native/Libraries/react-native/react-native.js');var 
+__d('react-native-refreshable-listview/lib/RefreshableListView.js',["react-native/Libraries/react-native/react-native.js","is-promise/index.js","react-native-refreshable-listview/lib/delay.js","react-native-refreshable-listview/lib/ListView.js","react-native-refreshable-listview/lib/RefreshingIndicator.js","react-native-refreshable-listview/lib/ControlledRefreshableListView.js"],function(global, require, module, exports) {  var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};var React=require('react-native/Libraries/react-native/react-native.js');var 
 
 PropTypes=
 React.PropTypes;
@@ -75392,27 +74979,27 @@ return createElement(elementOrClass,props);}}
 
 module.exports = createElementFrom;
 });
-__d('image!icon-region-shanxi',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-region-shanxi.imageset/icon-region-shanxi.png","uri":"icon-region-shanxi","width":124,"height":124,"deprecated":true};
+__d('image!icon-region-shanxi',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-region-shanxi.imageset/icon-region-shanxi.png","uri":"icon-region-shanxi","width":124,"height":124,"deprecated":true};
 });
-__d('image!icon-region-beijing',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-region-beijing.imageset/icon-region-beijing.png","uri":"icon-region-beijing","width":124,"height":124,"deprecated":true};
+__d('image!icon-region-beijing',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-region-beijing.imageset/icon-region-beijing.png","uri":"icon-region-beijing","width":124,"height":124,"deprecated":true};
 });
-__d('image!icon-region-hebei',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-region-hebei.imageset/icon-region-hebei.png","uri":"icon-region-hebei","width":124,"height":124,"deprecated":true};
+__d('image!icon-region-hebei',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-region-hebei.imageset/icon-region-hebei.png","uri":"icon-region-hebei","width":124,"height":124,"deprecated":true};
 });
-__d('image!icon-region-shandong',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-region-shandong.imageset/icon-region-shandong.png","uri":"icon-region-shandong","width":124,"height":124,"deprecated":true};
+__d('image!icon-region-shandong',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-region-shandong.imageset/icon-region-shandong.png","uri":"icon-region-shandong","width":124,"height":124,"deprecated":true};
 });
-__d('image!icon-region-tianjin',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-region-tianjin.imageset/icon-region-tianjin.png","uri":"icon-region-tianjin","width":124,"height":124,"deprecated":true};
+__d('image!icon-region-tianjin',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-region-tianjin.imageset/icon-region-tianjin.png","uri":"icon-region-tianjin","width":124,"height":124,"deprecated":true};
 });
-__d('image!icon-region-neimenggu',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-region-neimenggu.imageset/icon-region-neimenggu.png","uri":"icon-region-neimenggu","width":124,"height":124,"deprecated":true};
+__d('image!icon-region-neimenggu',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-region-neimenggu.imageset/icon-region-neimenggu.png","uri":"icon-region-neimenggu","width":124,"height":124,"deprecated":true};
 });
-__d('image!icon-annotation',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-annotation.imageset/icon-annotation.png","uri":"icon-annotation","width":29,"height":39,"deprecated":true};
+__d('image!icon-annotation',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-annotation.imageset/icon-annotation.png","uri":"icon-annotation","width":29,"height":39,"deprecated":true};
 });
-__d('image!icon-calendar',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-calendar.imageset/icon-calendar.png","uri":"icon-calendar","width":22,"height":22,"deprecated":true};
+__d('image!icon-calendar',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-calendar.imageset/icon-calendar.png","uri":"icon-calendar","width":22,"height":22,"deprecated":true};
 });
-__d('image!avatar-placeholder',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/avatar-placeholder.imageset/avatar-placeholder.png","uri":"avatar-placeholder","width":50,"height":50,"deprecated":true};
+__d('image!avatar-placeholder',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/avatar-placeholder.imageset/avatar-placeholder.png","uri":"avatar-placeholder","width":50,"height":50,"deprecated":true};
 });
-__d('image!icon-mark',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-mark.imageset/icon-mark.png","uri":"icon-mark","width":22,"height":24,"deprecated":true};
+__d('image!icon-mark',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-mark.imageset/icon-mark.png","uri":"icon-mark","width":22,"height":24,"deprecated":true};
 });
-__d('image!icon-star',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-star.imageset/icon-star.png","uri":"icon-star","width":30,"height":28,"deprecated":true};
+__d('image!icon-star',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-star.imageset/icon-star.png","uri":"icon-star","width":30,"height":28,"deprecated":true};
 });
 __d('AwesomeProject/src/Space.js',["image!icon-arrow","image!space-header","image!avatar-placeholder","image!levels-bg","image!icon-activity","image!icon-journey","image!icon-annotations","image!icon-photos","image!icon-bills","react-native/Libraries/react-native/react-native.js","AwesomeProject/src/styleUtils.js","AwesomeProject/src/api/index.js"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
 
@@ -75433,6 +75020,8 @@ React.AlertIOS;var StyleSheet=React.StyleSheet;var Text=React.Text;var Image=Rea
 
 var deviceWidth=Dimensions.get('window').width;
 var deviceHeight=Dimensions.get('window').height;
+
+console.log('device height',deviceHeight);
 
 var su=require('AwesomeProject/src/styleUtils.js');
 var api=require('AwesomeProject/src/api/index.js');
@@ -75515,6 +75104,18 @@ React.createElement(Text,{style:styles.logout},'退出'))));}});
 
 
 
+function avatarStyle(){
+var size=deviceHeight <= 568?48:64;
+var border=deviceHeight <= 568?2:3;
+return _extends({},
+su.size(size),{
+borderRadius:size / 2,
+marginTop:-size / 2,
+borderWidth:border,
+borderColor:'#fff'});}
+
+
+
 var styles=StyleSheet.create({
 container:{
 flex:1,
@@ -75523,7 +75124,7 @@ backgroundColor:'#fff'},
 
 banner:{
 width:deviceWidth,
-height:180},
+height:deviceHeight <= 568?125:180},
 
 
 links:{
@@ -75544,20 +75145,14 @@ color:'#fff'},
 
 user:{
 alignItems:'center',
-marginBottom:25},
+marginBottom:deviceHeight <= 568?15:25},
 
 
-avatar:_extends({},
-su.size(64),{
-borderRadius:32,
-marginTop:-32,
-borderWidth:3,
-borderColor:'#fff'}),
-
+avatar:avatarStyle(),
 
 username:{
 fontSize:17,
-marginVertical:8},
+marginVertical:5},
 
 
 levels:{
@@ -75635,21 +75230,21 @@ su.size(8,15))});
 
 module.exports = Space;
 });
-__d('image!icon-arrow',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-arrow.imageset/icon-arrow.png","uri":"icon-arrow","width":17,"height":29,"deprecated":true};
+__d('image!icon-arrow',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-arrow.imageset/icon-arrow.png","uri":"icon-arrow","width":17,"height":29,"deprecated":true};
 });
-__d('image!space-header',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/space-header.imageset/space-header.png","uri":"space-header","width":750,"height":360,"deprecated":true};
+__d('image!space-header',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/space-header.imageset/space-header.png","uri":"space-header","width":750,"height":360,"deprecated":true};
 });
-__d('image!levels-bg',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/levels-bg.imageset/levels-bg.png","uri":"levels-bg","width":122,"height":32,"deprecated":true};
+__d('image!levels-bg',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/levels-bg.imageset/levels-bg.png","uri":"levels-bg","width":122,"height":32,"deprecated":true};
 });
-__d('image!icon-activity',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-activity.imageset/icon-activity.png","uri":"icon-activity","width":48,"height":48,"deprecated":true};
+__d('image!icon-activity',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-activity.imageset/icon-activity.png","uri":"icon-activity","width":48,"height":48,"deprecated":true};
 });
-__d('image!icon-journey',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-journey.imageset/icon-journey.png","uri":"icon-journey","width":48,"height":48,"deprecated":true};
+__d('image!icon-journey',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-journey.imageset/icon-journey.png","uri":"icon-journey","width":48,"height":48,"deprecated":true};
 });
-__d('image!icon-annotations',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-annotations.imageset/icon-annotations.png","uri":"icon-annotations","width":48,"height":48,"deprecated":true};
+__d('image!icon-annotations',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-annotations.imageset/icon-annotations.png","uri":"icon-annotations","width":48,"height":48,"deprecated":true};
 });
-__d('image!icon-photos',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-photos.imageset/icon-photos.png","uri":"icon-photos","width":48,"height":48,"deprecated":true};
+__d('image!icon-photos',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-photos.imageset/icon-photos.png","uri":"icon-photos","width":48,"height":48,"deprecated":true};
 });
-__d('image!icon-bills',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-bills.imageset/icon-bills.png","uri":"icon-bills","width":48,"height":48,"deprecated":true};
+__d('image!icon-bills',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-bills.imageset/icon-bills.png","uri":"icon-bills","width":48,"height":48,"deprecated":true};
 });
 __d('AwesomeProject/src/JourneyTab.js',["image!avatar-placeholder","image!icon-views","image!icon-stars","moment/moment.js","react-native/Libraries/react-native/react-native.js","react-native-grid-view/index.js","AwesomeProject/src/Navbars.js","AwesomeProject/src/styleUtils.js","AwesomeProject/src/api/index.js"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
 
@@ -76011,9 +75606,53 @@ justifyContent:'center'}});
 
 module.exports = CollectionView;
 });
-__d('image!icon-views',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-views.imageset/icon-views.png","uri":"icon-views","width":24,"height":16,"deprecated":true};
+__d('image!icon-views',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-views.imageset/icon-views.png","uri":"icon-views","width":24,"height":16,"deprecated":true};
 });
-__d('image!icon-stars',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/jarvys/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-stars.imageset/icon-stars.png","uri":"icon-stars","width":24,"height":22,"deprecated":true};
+__d('image!icon-stars',[],function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"isStatic":true,"path":"/Users/yangchen/Documents/develop/travelling-app/ios/AwesomeProject/Images.xcassets/icon-stars.imageset/icon-stars.png","uri":"icon-stars","width":24,"height":22,"deprecated":true};
+});
+__d('AwesomeProject/style.js',["react-native/Libraries/react-native/react-native.js"],function(global, require, module, exports) {  'use strict';
+
+var React=require('react-native/Libraries/react-native/react-native.js');var 
+
+
+StyleSheet=
+React.StyleSheet;
+
+module.exports = StyleSheet.create({
+rootContainer:{
+flex:1,
+backgroundColor:'white'},
+
+
+headerContainer:{
+paddingTop:20,
+height:64,
+backgroundColor:'#0087fa',
+alignItems:'center',
+justifyContent:'center',
+flexDirection:'row'},
+
+
+header:{
+color:'white',
+fontSize:20},
+
+
+text:{
+color:'black',
+fontSize:30},
+
+button:{
+borderColor:'#696969',
+borderRadius:8,
+borderWidth:1,
+padding:10,
+margin:5,
+alignItems:'center',
+justifyContent:'center'},
+
+container:{
+flex:1}});
 });
 __d('AwesomeProject/styleListView.js',["react-native/Libraries/react-native/react-native.js"],function(global, require, module, exports) {  'use strict';
 
