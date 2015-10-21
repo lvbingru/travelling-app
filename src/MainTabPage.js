@@ -21,6 +21,7 @@ var SpringBoard = NativeModules.SpringBoard;
 var ActivityList = require('./Activity');
 var Space = require('./Space');
 var JourneyTab = require('./JourneyTab');
+var PlusMenu = require('./PlusMenu');
 
 var MainTabPage = React.createClass({
   statics: {
@@ -136,6 +137,23 @@ var MainTabPage = React.createClass({
     }.bind(this));
   },
 
+  _onPlusResult: function(result) {
+    console.log(result);
+  },
+
+  _onPlusDismiss: function() {
+    console.log('modal dismiss');
+  },
+
+  _popPlusMenu: function() {
+    var view = (
+      <PlusMenu 
+        onDismiss={this._onPlusDismiss} 
+        onResult={this._onPlusResult}/>
+    );
+    this.props.openModal(view);
+  },
+
   render: function() {
   	var containerStyles = [styles.container, this.props.style];
   	if (this.state.selectedTab === 'space') {
@@ -175,9 +193,9 @@ var MainTabPage = React.createClass({
 	        </TabBarIOS.Item>
 
 	        <TabBarIOS.Item
+            onPress={this._popPlusMenu}
 	          title=""
 	          icon={{uri: 'icon-tab-plus', scale: 2}}>
-	          <View></View>
 	        </TabBarIOS.Item>
 
 	        <TabBarIOS.Item
