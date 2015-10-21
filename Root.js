@@ -137,28 +137,6 @@ var Home = React.createClass({
   },
 
     render: function() {
-      // if (this.state.status === 'loading') {
-      //   return null;
-      // }
-
-      // var route;
-      // if (this.state.status === "onboarding") {
-      //   route = {
-      //     title: '功能介绍',
-      //     name: 'onboarding'
-      //   }
-      // } else if (this.state.status === 'signin') {
-      //   route = {
-      //     title: '登录',
-      //     name: 'signin'
-      //   };
-      // } else {
-      //   route = {
-      //     title: '活动',
-      //     name: 'main'
-      //   };
-      // }
-
       return (
         <Navigator
           ref="navigator"
