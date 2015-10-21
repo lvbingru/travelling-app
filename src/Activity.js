@@ -1,22 +1,10 @@
 'use strict';
 
 var moment = require('moment');
-
 var React = require('react-native');
-var {
-  RefresherListView,
-  Navigator,
-  LoadingBarIndicator
-} = require('react-native-refresher');
-
-var {BlurView} = require('react-native-blur');
-
-var RefreshableListView = require('react-native-refreshable-listview');
-
-var su = require('./styleUtils');
-var Navbars = require('./Navbars');
 
 var {
+  ActivityIndicatorIOS,
   StyleSheet,
   Text,
   Image,
@@ -26,6 +14,10 @@ var {
   ListView
 } = React;
 
+var {BlurView} = require('react-native-blur');
+var RefreshableListView = require('react-native-refreshable-listview');
+var su = require('./styleUtils');
+var Navbars = require('./Navbars');
 var api = require('./api');
 var activity = api.activity;
 
@@ -73,7 +65,9 @@ var ActivityList = React.createClass({
   },
 
   componentDidMount: function() {
-    this._fetchData();
+    this._fetchData({
+      region: this.state.region
+    });
   },
 
   _showRegions: function() {
@@ -186,9 +180,10 @@ var ActivityList = React.createClass({
       this.props.setNavigationBar(this._navbar());
   },
 
-  _fetchData: function() {
-    console.log('fetch data');
-    return activity.fetch().then(function(data) {
+  _fetchData: function(region) {
+    return activity.fetch({
+      region: region ? region.tag : null
+    }).then(function(data) {
       var dataSource = this.state.dataSource.cloneWithRows(data.results);
       this.setState({
         dataSource: dataSource
@@ -199,7 +194,31 @@ var ActivityList = React.createClass({
   },
 
   _renderHeaderWrapper: function(refreshingIndicator) {
-    return refreshingIndicator;
+    if (refreshingIndicator == null) {
+      return null;
+    }
+
+    var styles = {
+      wrap: {
+        flex: 1, 
+        paddingVertical: 15,
+        alignItems: 'center', 
+        justifyContent: 'center'
+      },
+
+      loading: {
+        fontSize: 9,
+        marginBottom: 5,
+        color: '#777'
+      }
+    }
+
+    return (
+        <View style={styles.wrap}>
+          <Text style={styles.loading}>刷新活动</Text>
+          <ActivityIndicatorIOS size="small"/>
+        </View>
+    );
   },
 
   _renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
@@ -216,11 +235,8 @@ var ActivityList = React.createClass({
 
   _onRegionSelect: function(region) {
     this.state.region = region;
-    this.setState({
-      filterShown: false
-    }, function() {
-      this.props.setNavigationBar(this._navbar());
-    }.bind(this));
+    this._hideRegions();
+    this._fetchData(region);
   },
 
   _renderRegionCell: function(item) {
@@ -240,8 +256,8 @@ var ActivityList = React.createClass({
       return (
           <View style={[styles.container, this.props.style]}>
             <RefreshableListView
-              renderSeparator={this._renderSeparator}
               renderHeaderWrapper={this._renderHeaderWrapper}
+              renderSeparator={this._renderSeparator}
               dataSource={this.state.dataSource}
               onEndReached={this._loadMore}
               renderRow={this._renderRow}
@@ -260,13 +276,12 @@ var ActivityList = React.createClass({
                 </View>
               </BlurView>
             </TouchableOpacity>}
-
           </View>
       );
   },
 
   _onRefresh: function() {
-    return this._fetchData();
+    return this._fetchData(this.state.region);
   },
 
   _renderRow: function(data) {

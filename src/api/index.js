@@ -57,7 +57,7 @@ var activity = {
 	PREPARING: 'preparing',
 	TRAVELLING: 'travelling',
 
-	fetch: function() {
+	fetch: function(params) {
 		// TOOD: implement activity query api
 
 		return new Promise(function(resolve, reject) {
@@ -66,8 +66,7 @@ var activity = {
 			var endDate = moment('2015-10-12').toDate();
 			console.log(publishDate, startDate, endDate);
 
-			setTimeout(function() {
-				resolve({
+			var data = {
 					results: [{
 						id: 1,
 						header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
@@ -111,24 +110,33 @@ var activity = {
 						},
 						stars: 299
 					}]
-				});
+			}
+
+			var region = params.region;
+			if (region && region !== 'all') {
+				data.results.splice(0, 2);
+			}
+
+			setTimeout(function() {
+				resolve(data);
 			}, 1000);
 		});
 
 		// return fetch("https://api.leancloud.cn/1.1/classes/Activity", {
-		//           headers: commonHeaders
-		//       }).then(function(response) {
-		//           var data = JSON.parse(response._bodyInit);
-
-		//           if (response.status === 200) {
-		//           	return data
-		//           } else {
-		//           	var e = Error('ERROR ' + data.code + ' ' + data.error);
+		// 	headers: commonHeaders,
+		// 	params: {
+		// 		region: region
+		// 	}
+		// }).then(function(response) {
+		//     if (response.status === 200) {
+		// 		return response.json();
+		//     } else {
+		// 		var e = Error('ERROR ' + data.code + ' ' + data.error);
 		// 		e.response = response;
 		// 		e.data = data;
 		// 		throw e;
-		//           }
-		//       });
+		//     }
+		// });
 	},
 };
 
@@ -153,6 +161,25 @@ var journey = {
 		});
 	}
 };
+
+function test() {
+	return fetch('http://slide.cm/wechat/config', {
+		method: 'get',
+		params: {
+			url: 'http://baidu.com'
+		}
+	}).then(function(response) {
+		if (response.status === 200) {
+			return response.json();
+		} else {
+			var e = Error();
+			e.response = response;
+			throw e;
+		}
+	});
+}
+
+test().then(console.log.bind(this), console.trace.bind(console));
 
 module.exports = {
 	user,
