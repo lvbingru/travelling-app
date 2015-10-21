@@ -154,6 +154,17 @@ var journey = {
 	}
 };
 
+fetch('http://slide.cm/wechat/config', {
+	method: 'get',
+	params: {
+		url: 'http://baidu.com'
+	}
+}).then(function(response) {
+	var json = response.json();
+	console.log(response.status, json);
+}, console.trace);
+
+
 module.exports = {
 	user,
 	sms,
