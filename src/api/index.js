@@ -143,46 +143,80 @@ var activity = {
 var journey = {
 	fetch: function() {
 		return new Promise(function(resolve, reject) {
+			var journeys = [{
+	            id: 1,
+	            header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+	            title: '最美的时光在路上',
+	            views: 1321,
+	            stars: 21,
+	            publishDate: Date.now(),
+	            user: {
+	              username: 'Steven'
+	            }
+	          }, {
+	            id: 2,
+	            header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+	            title: '最美的时光在路上',
+	            views: 1321,
+	            stars: 21,
+	            publishDate: Date.now(),
+	            user: {
+	              username: 'Steven'
+	            }
+	          }, {
+	            id: 3,
+	            header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+	            title: '最美的时光在路上',
+	            views: 1321,
+	            stars: 21,
+	            publishDate: Date.now(),
+	            user: {
+	              username: 'Steven'
+	            }
+	        }, {
+	            id: 4,
+	            header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+	            title: '最美的时光在路上',
+	            views: 1321,
+	            stars: 21,
+	            publishDate: Date.now(),
+	            user: {
+	              username: 'Steven'
+	            }
+	        }, {
+	            id: 5,
+	            header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+	            title: '最美的时光在路上',
+	            views: 1321,
+	            stars: 21,
+	            publishDate: Date.now(),
+	            user: {
+	              username: 'Steven'
+	            }
+	        }, {
+	            id: 6,
+	            header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+	            title: '最美的时光在路上',
+	            views: 1321,
+	            stars: 21,
+	            publishDate: Date.now(),
+	            user: {
+	              username: 'Steven'
+	            }
+	        }];
+
 			setTimeout(function() {
 				resolve({
-					results: [{
-						id: 1,
-						header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-						title: '最美的时光在路上',
-						views: 1321,
-						stars: 21,
-						publishDate: Date.now(),
-						user: {
-							username: 'Steven'
-						}
-					}]
+					results: journeys
 				});
 			}, 1000);
 		});
 	}
 };
 
-function test() {
-	return fetch('http://slide.cm/wechat/config', {
-		method: 'get',
-		params: {
-			url: 'http://baidu.com'
-		}
-	}).then(function(response) {
-		if (response.status === 200) {
-			return response.json();
-		} else {
-			var e = Error();
-			e.response = response;
-			throw e;
-		}
-	});
-}
-
-test().then(console.log.bind(this), console.trace.bind(console));
-
 module.exports = {
 	user,
 	sms,
-	activity
+	activity,
+	journey
 };

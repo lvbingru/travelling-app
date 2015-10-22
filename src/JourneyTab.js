@@ -3,6 +3,7 @@
 var moment = require('moment');
 var React = require('react-native');
 var {
+  ActivityIndicatorIOS,
   StyleSheet,
   Text,
   Image,
@@ -14,15 +15,16 @@ var {
   Dimensions,
 } = React;
 
-var GridView = require('react-native-grid-view');
+var RefreshableListView = require('react-native-refreshable-listview');
 var Navbars = require('./Navbars');
 
 var su = require('./styleUtils');
 var api = require('./api');
-var activity = api.activity;
+var journey = api.journey;
 
 var deviceWidth = Dimensions.get('window').width;
 
+// FIXME: hack listview for grid
 var JourneyTab = React.createClass({
   getInitialState: function() {
     return {
@@ -55,57 +57,53 @@ var JourneyTab = React.createClass({
   },
 
   _fetchData: function() {
-    /*
-    return activity.fetch().then(function(data) {
+    return journey.fetch().then(function(data) {
       var dataSource = this.state.dataSource.cloneWithRows(data.results);
       this.setState({
         dataSource: dataSource
       });
-    }.bind(this), function(e) {
-      console.trace(e);
-    });
-*/
+    }.bind(this), console.trace.bind(console));
+  },
+
+  _renderHeaderWrapper: function(refreshingIndicator) {
+    if (refreshingIndicator == null) {
+      return null;
+    }
+
+    var styles = {
+      wrap: {
+        width: deviceWidth - 10,
+        paddingVertical: 10,
+        alignItems: 'center', 
+        justifyContent: 'center'
+      },
+
+      loading: {
+        fontSize: 9,
+        marginBottom: 5,
+        color: '#777'
+      }
+    }
+
+    return (
+        <View style={styles.wrap}>
+          <Text style={styles.loading}>刷新游记</Text>
+          <ActivityIndicatorIOS size="small"/>
+        </View>
+    );
   },
 
   render: function() {
-      var journeys = [{
-            id: 1,
-            header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-            title: '最美的时光在路上',
-            views: 1321,
-            stars: 21,
-            publishDate: Date.now(),
-            user: {
-              username: 'Steven'
-            }
-          }, {
-            id: 2,
-            header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-            title: '最美的时光在路上',
-            views: 1321,
-            stars: 21,
-            publishDate: Date.now(),
-            user: {
-              username: 'Steven'
-            }
-          }, {
-            id: 3,
-            header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-            title: '最美的时光在路上',
-            views: 1321,
-            stars: 21,
-            publishDate: Date.now(),
-            user: {
-              username: 'Steven'
-            }
-          }];
-
       return (
-          <ListView
+        <View style={[{flex: 1}, this.props.style]}>
+          <RefreshableListView
             style={styles.list}
             contentContainerStyle={styles.grid}
-            dataSource={this.state.dataSource.cloneWithRows(journeys)}
-            renderRow={this._renderItem}/>
+            dataSource={this.state.dataSource}
+            renderHeaderWrapper={this._renderHeaderWrapper}
+            renderRow={this._renderItem}
+            loadData={this._onRefresh}/>
+        </View>
       );
   },
 
