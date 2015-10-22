@@ -92,15 +92,13 @@ var ActivityList = React.createClass({
     };
     var self = this;
     routeMapper.LeftButton = function(route, navigator, index, navState) {
+      console.log(route, index);
       var styles = StyleSheet.create({
         regionFilter: {
-          position: 'absolute',
-          backgroundColor: 'transparent',
-          marginVertical: 15,
-          marginLeft: 10,
+          paddingVertical: 15,
+          paddingLeft: 10,
         },
         cancel: {
-          backgroundColor: 'transparent',
           color: '#fff',
           height: 14,
           fontSize: 14
@@ -143,10 +141,6 @@ var ActivityList = React.createClass({
           marginLeft: 10,
         },
         regionFilterInner: {
-          position: 'absolute',
-          backgroundColor: 'transparent',
-          left: 0,
-          top: 0,
           alignItems: 'center',
           flexDirection: 'row'
         },
