@@ -10,6 +10,7 @@ var ModalExample = require('./ModalExample');
 var Onboarding = require('./src/Onboarding');
 var config = require('./src/config');
 var MainTabPage = require('./src/MainTabPage');
+var PlusMenu = require('./src/PlusMenu');
 
 var api = require('./src/api');
 var Navbars = require('./src/Navbars');
@@ -22,9 +23,11 @@ var {
 
 
 var {
+  Animated,
   AppRegistry,
   AsyncStorage,
   StyleSheet,
+  Dimensions,
   Text,
   Image,
   myIcon,
@@ -50,6 +53,42 @@ var API_URL = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_the
 var PAGE_SIZE = 25;
 var PARAMS = '?apikey=' + API_KEY + '&page_limit=' + PAGE_SIZE;
 var REQUEST_URL = API_URL + PARAMS;
+
+// FIXME: hack image width
+var deviceWidth = Dimensions.get('window').width;
+var deviceHeight = Dimensions.get('window').height;
+
+var TopModal = React.createClass({
+  getInitialState: function() {
+    return { offset: new Animated.Value(deviceHeight) }
+  },
+  componentDidMount: function() {
+    Animated.timing(this.state.offset, {
+      duration: 100,
+      toValue: 0
+    }).start();
+  },
+  closeModal: function() {
+    Animated.timing(this.state.offset, {
+      duration: 100,
+      toValue: deviceHeight
+    }).start(this.props.closeModal);
+  },
+
+  _renderView: function() {
+    return React.cloneElement(this.props.view, {
+      closeModal: this.closeModal
+    });
+  },
+
+  render: function() {
+    return (
+        <Animated.View style={[styles.modal, {transform: [{translateY: this.state.offset}]}]}>
+          {this._renderView()}
+        </Animated.View>
+    )
+  }
+});
 
 var Home = React.createClass({
   getInitialState: function() {
@@ -88,7 +127,7 @@ var Home = React.createClass({
   _ensureNavigationBar: function(e) {
     var route = e ? e.data.route : this.refs.navigator.navigationContext.currentRoute;
     console.log('handle willfocus', route);
-    if(['onboarding'].indexOf(route.name) !== -1) {
+    if(['onboarding', 'plus-menu'].indexOf(route.name) !== -1) {
       this.setState({
         navBar: Navbars.None
       });
@@ -138,22 +177,43 @@ var Home = React.createClass({
 
     render: function() {
       return (
-        <Navigator
-          ref="navigator"
-          navigationBar={this.state.navBar}
-          style={style.container}
-          initialRoute={{title: '', name: 'empty'}}
-          renderScene={this.renderScene}/>
+          <View style={styles.container}>
+            <Navigator
+              ref="navigator"
+              navigationBar={this.state.navBar}
+              style={styles.container}
+              initialRoute={{title: '', name: 'empty'}}
+              configureScene={this._configureScene}
+              renderScene={this.renderScene}/>
+
+            {this.state.modal && <TopModal view={this.state.modalView} closeModal={() => this.setState({modal: false})}/>}
+          </View>
       );
+    },
+
+    _configureScene: function(route) {
+      if (route.name === 'plus-menu') {
+        return Navigator.SceneConfigs.FloatFromBottom;
+      } else {
+        return Navigator.SceneConfigs.FloatFromRight;
+      }
     },
 
     _changeNavigationBar: function(navBar) {
       this.setState({navBar});
     },
 
+    _openModal: function(view) {
+      this.setState({
+        modal: true,
+        modalView: view
+      });
+    },
+
     renderScene: function(route, navigator) {
       var _interface = {
-        setNavigationBar: this._changeNavigationBar
+        setNavigationBar: this._changeNavigationBar,
+        openModal: this._openModal
       };
 
       if (route.name === 'onboarding') {
@@ -184,6 +244,19 @@ var style = require("./style");
 var styleListView = require("./styleListView");
 
 var styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+
+  modal: {
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0
+  },
+  
   icon: {
     fontSize: 20,
     color: 'white',

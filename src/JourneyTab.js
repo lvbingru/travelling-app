@@ -3,6 +3,7 @@
 var moment = require('moment');
 var React = require('react-native');
 var {
+  ActivityIndicatorIOS,
   StyleSheet,
   Text,
   Image,
@@ -14,17 +15,16 @@ var {
   Dimensions,
 } = React;
 
-var GridView = require('react-native-grid-view');
+var RefreshableListView = require('react-native-refreshable-listview');
 var Navbars = require('./Navbars');
 
 var su = require('./styleUtils');
 var api = require('./api');
-var activity = api.activity;
+var journey = api.journey;
 
-// FIXME: hack image width
 var deviceWidth = Dimensions.get('window').width;
-var deviceHeight = Dimensions.get('window').height;
 
+// FIXME: hack listview for grid
 var JourneyTab = React.createClass({
   getInitialState: function() {
     return {
@@ -57,59 +57,53 @@ var JourneyTab = React.createClass({
   },
 
   _fetchData: function() {
-    return activity.fetch().then(function(data) {
+    return journey.fetch().then(function(data) {
       var dataSource = this.state.dataSource.cloneWithRows(data.results);
       this.setState({
         dataSource: dataSource
       });
-    }.bind(this), function(e) {
-      console.trace(e);
-    });
+    }.bind(this), console.trace.bind(console));
+  },
+
+  _renderHeaderWrapper: function(refreshingIndicator) {
+    if (refreshingIndicator == null) {
+      return null;
+    }
+
+    var styles = {
+      wrap: {
+        width: deviceWidth - 10,
+        paddingVertical: 10,
+        alignItems: 'center', 
+        justifyContent: 'center'
+      },
+
+      loading: {
+        fontSize: 9,
+        marginBottom: 5,
+        color: '#777'
+      }
+    }
+
+    return (
+        <View style={styles.wrap}>
+          <Text style={styles.loading}>刷新游记</Text>
+          <ActivityIndicatorIOS size="small"/>
+        </View>
+    );
   },
 
   render: function() {
-      var journeys = [{
-            id: 1,
-            header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-            title: '最美的时光在路上',
-            views: 1321,
-            stars: 21,
-            publishDate: Date.now(),
-            user: {
-              username: 'Steven'
-            }
-          }, {
-            id: 2,
-            header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-            title: '最美的时光在路上',
-            views: 1321,
-            stars: 21,
-            publishDate: Date.now(),
-            user: {
-              username: 'Steven'
-            }
-          }, {
-            id: 3,
-            header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-            title: '最美的时光在路上',
-            views: 1321,
-            stars: 21,
-            publishDate: Date.now(),
-            user: {
-              username: 'Steven'
-            }
-          }];
-      if (journeys.length % 2 === 1) {
-        journeys = journeys.concat({
-            type: 'placeholder'
-        });
-      }
       return (
-          <GridView 
-            style={[styles.grid, this.props.style]}
-            items={journeys}
-            renderItem={this._renderItem}
-            itemsPerRow={2}/>
+        <View style={[{flex: 1}, this.props.style]}>
+          <RefreshableListView
+            style={styles.list}
+            contentContainerStyle={styles.grid}
+            dataSource={this.state.dataSource}
+            renderHeaderWrapper={this._renderHeaderWrapper}
+            renderRow={this._renderItem}
+            loadData={this._onRefresh}/>
+        </View>
       );
   },
 
@@ -118,13 +112,9 @@ var JourneyTab = React.createClass({
   },
 
   _renderItem: function(data) {
-    if (data.type === 'placeholder') {
-      return <View style={styles.cell}/>
-    } else {
       return (
-          <Journey key={data.id} data={data}/>
+          <Journey style={styles.cell} key={data.id} data={data}/>
       );
-    }
   },
 });
 
@@ -141,35 +131,32 @@ var Journey = React.createClass({
     var avatar = user.avatar ? {url: user.avatar} : require('image!avatar-placeholder');
 
     return (
-      <View style={styles.cell}>
-      <TouchableHighlight underlayColor='#f3f5f6'>
-        <View style={{alignItems: 'stretch'}}>
-          <View style={styles.header}>
-            <Image style={styles.image} source={{uri: data.header}}>
-              <View style={styles.info}>
-                <Image source={avatar} style={styles.avatar}/>
-                <View style={styles.user}>
-                  <Text style={styles.username}>{data.user.username}</Text>
-                  <Text style={styles.publishDate}>{moment(data.publishDate).format('YYYY-MM-DD HH:mm')}</Text>
+        <TouchableHighlight style={this.props.style} underlayColor='#f3f5f6'>
+          <View>
+            <View style={styles.header}>
+              <Image style={styles.image} source={{uri: data.header}}>
+                <View style={styles.info}>
+                  <Image source={avatar} style={styles.avatar}/>
+                  <View style={styles.user}>
+                    <Text style={styles.username}>{data.user.username}</Text>
+                    <Text style={styles.publishDate}>{moment(data.publishDate).format('YYYY-MM-DD HH:mm')}</Text>
+                  </View>
                 </View>
-              </View>
-            </Image>
-          </View>
-          
+              </Image>
+            </View>
 
-          <View style={styles.extra}>
-              <Text style={[styles.title, styles.baseText]}>{data.title}</Text>
+            <View style={styles.extra}>
+                <Text style={[styles.title, styles.baseText]}>{data.title}</Text>
 
-              <View style={styles.data}>
-                <Image source={require('image!icon-views')} style={[styles.icon, {marginRight: 4}]}/>
-                <Text style={[styles.small, {marginRight: 12}]}>{data.views}</Text>
-                <Image source={require('image!icon-stars')} style={[styles.icon, {marginRight: 4}]}/>
-                <Text style={styles.small}>{data.stars}</Text>
-              </View>
+                <View style={styles.data}>
+                  <Image source={require('image!icon-views')} style={[styles.icon, {marginRight: 4}]}/>
+                  <Text style={[styles.small, {marginRight: 12}]}>{data.views}</Text>
+                  <Image source={require('image!icon-stars')} style={[styles.icon, {marginRight: 4}]}/>
+                  <Text style={styles.small}>{data.stars}</Text>
+                </View>
+            </View>
           </View>
-        </View>
-      </TouchableHighlight>
-      </View>
+        </TouchableHighlight>
     );
   }
 });
@@ -185,17 +172,21 @@ var styles = StyleSheet.create({
         fontWeight: '200'
       },
 
-      grid: {
+      list: {
         backgroundColor: '#f3f5f6',
-        paddingHorizontal: 5,
-        flex: 1,
-        overflow: 'hidden'
+        padding: 5,
+      },
+
+      grid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        alignItems: 'flex-start',
+        flex: 1
       },
 
       cell: {
-        flex: 1,
+        width: (deviceWidth - 10) / 2,
         padding: 5,
-        overflow: 'hidden'
       },
 
       header: {
