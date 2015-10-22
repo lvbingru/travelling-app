@@ -154,8 +154,30 @@ var journey = {
 	}
 };
 
+var userinfo = {
+    fetch: function() {
+        return new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                resolve({
+                    results:{
+                        username: 'Komi',
+                        grade: '等级 1',
+                        activity: 8,
+                        journey: 8,
+                        annotations: 8,
+                        photos: 8,
+                        bills: 8,
+                        avatar: 'http://localhost:8081/img/avatar-placeholder.png'
+                    }
+                });
+            }, 1000);
+        });
+    }
+};
+
 module.exports = {
 	user,
 	sms,
-	activity
+	activity,
+    userinfo
 };
