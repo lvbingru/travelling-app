@@ -139,6 +139,12 @@ var MainTabPage = React.createClass({
 
   _onPlusResult: function(result) {
     console.log(result);
+    if (result === 'activity') {
+      this.props.navigator.push({
+        name: 'create-activity',
+        title: '发布活动(1/2)'
+      });
+    }
   },
 
   _onPlusDismiss: function() {

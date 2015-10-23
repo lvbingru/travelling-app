@@ -17,6 +17,9 @@ var {
 
 var RefreshableListView = require('react-native-refreshable-listview');
 var Navbars = require('./Navbars');
+var {
+  UserInfo 
+}= require('./widgets');
 
 var su = require('./styleUtils');
 var api = require('./api');
@@ -135,13 +138,11 @@ var Journey = React.createClass({
           <View>
             <View style={styles.header}>
               <Image style={styles.image} source={{uri: data.header}}>
-                <View style={styles.info}>
-                  <Image source={avatar} style={styles.avatar}/>
-                  <View style={styles.user}>
-                    <Text style={styles.username}>{data.user.username}</Text>
-                    <Text style={styles.publishDate}>{moment(data.publishDate).format('YYYY-MM-DD HH:mm')}</Text>
-                  </View>
-                </View>
+                <UserInfo 
+                  style={styles.info}
+                  avatar={avatar} 
+                  username={data.user.username} 
+                  publishDate={data.publishDate}/>
               </Image>
             </View>
 

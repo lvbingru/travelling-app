@@ -11,6 +11,9 @@ var Onboarding = require('./src/Onboarding');
 var config = require('./src/config');
 var MainTabPage = require('./src/MainTabPage');
 var PlusMenu = require('./src/PlusMenu');
+var ActivityDetail = require('./src/ActivityDetail');
+var CreateActivity = require('./src/CreateActivity');
+var DatepickerScene = require('./src/DatepickerScene');
 
 var api = require('./src/api');
 var Navbars = require('./src/Navbars');
@@ -127,7 +130,7 @@ var Home = React.createClass({
   _ensureNavigationBar: function(e) {
     var route = e ? e.data.route : this.refs.navigator.navigationContext.currentRoute;
     console.log('handle willfocus', route);
-    if(['onboarding', 'plus-menu'].indexOf(route.name) !== -1) {
+    if(['onboarding', 'plus-menu', 'activity-detail'].indexOf(route.name) !== -1) {
       this.setState({
         navBar: Navbars.None
       });
@@ -225,10 +228,13 @@ var Home = React.createClass({
         'signin': SignInView,
         'signup': SignUpView,
         'main': MainTabPage,
+        'activity-detail': ActivityDetail,
+        'create-activity': CreateActivity,
+        'datepicker-scene': DatepickerScene
       };
 
       var Component = routeCompMap[route.name];
-      return <Component navigator={navigator} style={styles.scene} {..._interface}/>
+      return <Component navigator={navigator} style={styles.scene} {..._interface} route={route}/>
     }
 });
 

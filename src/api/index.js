@@ -119,7 +119,7 @@ var activity = {
 
 			setTimeout(function() {
 				resolve(data);
-			}, 1000);
+			}, 0);
 		});
 
 		// return fetch("https://api.leancloud.cn/1.1/classes/Activity", {
@@ -209,7 +209,7 @@ var journey = {
 				resolve({
 					results: journeys
 				});
-			}, 1000);
+			}, 0);
 		});
 	}
 };

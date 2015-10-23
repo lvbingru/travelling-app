@@ -21,6 +21,11 @@ var Navbars = require('./Navbars');
 var api = require('./api');
 var activity = api.activity;
 
+var {
+  ActivitySchedule,
+  Tag
+} = require('./widgets');
+
 var REGIONS = [{
         id: 0,
         tag: 'all',
@@ -280,7 +285,14 @@ var ActivityList = React.createClass({
 
   _renderRow: function(data) {
     return (
-        <Activity key={data.id} data={data}/>
+        <Activity key={data.id} data={data} 
+          onPress={() => {
+            this.props.navigator.push({
+              name: 'activity-detail',
+              title: '',
+              id: data.id
+            });
+          }}/>
     );
   },
 });
@@ -294,48 +306,17 @@ var Activity = React.createClass({
     var data = this.props.data;
 
     var tags = data.tags.map(function(tag) {
-      return (<Text key={tag} style={styles.tag}>{tag}</Text>);
+      return (<Tag style={styles.tag} key={tag}>{tag}</Tag>);
     });
 
     if (data.status === activity.PREPARING) {
-      tags = [<Text key={activity.PREPARING} style={[styles.tag, styles.tagHot]}>火热报名中</Text>].concat(tags);
+      tags = [<Tag key={activity.PREPARING} style={styles.tagHot}>火热报名中</Tag>].concat(tags);
     } else {
-      tags = [<Text key={activity.TRAVELLING} style={[styles.tag, styles.tagDue]}>报名已截止</Text>].concat(tags);
+      tags = [<Tag key={activity.TRAVELLING} style={styles.tagDue}>报名已截止</Tag>].concat(tags);
     }
 
     return (
       <View style={styles.tags}>{tags}</View>
-    );
-  },
-
-  _onTouch: function() {},
-
-  _formatDate: function(date) {
-    date = moment(date);
-    if (date.year() === moment().year()) {
-      return date.format('MM-DD');
-    } else {
-      return date.format('YYYY-MM-DD');
-    }
-  },
-
-  _renderDate: function() {
-    var data = this.props.data;
-    var days = Math.floor((data.endDate.getTime() - data.startDate.getTime()) / (3600 * 1000 * 24)) + 1;
-    if (days > 1) {
-      var duration = "（" + days + "天" + (days-1) + "晚）";
-    } else {
-      var duration = "（" + days + "天）";
-    }
-
-    return (
-      <View style={styles.date}>
-        <Image style={[styles.icon, {marginRight: 10}]} source={require('image!icon-calendar')}/>
-        <Text style={styles.baseText}>
-          {this._formatDate(data.startDate)} ~ {this._formatDate(data.endDate)}
-        </Text>
-        <Text style={[styles.baseText, styles.duration]}>{duration}</Text>
-      </View>
     );
   },
 
@@ -345,7 +326,7 @@ var Activity = React.createClass({
     var avatar = user.avatar ? {url: user.avatar} : require('image!avatar-placeholder');
 
     return (
-      <TouchableHighlight underlayColor='#f3f5f6'>
+      <TouchableHighlight underlayColor='#f3f5f6' onPress={this.props.onPress}>
         <View style={styles.row}>
           <View style={styles.brief}>
             <Image style={styles.bg} source={{uri: data.header}}>
@@ -356,12 +337,7 @@ var Activity = React.createClass({
             </Image>
           </View>
 
-          <View style={styles.route}>
-            <Image style={[styles.icon, {marginRight: 10}]} source={require('image!icon-mark')}/>
-            <Text style={styles.baseText}>{data.route}</Text>
-          </View>
-
-          {this._renderDate()}
+          <ActivitySchedule data={data} style={{paddingLeft: 16}}/>
           
           <View style={styles.user}>
             <Image style={styles.avatar} source={avatar}/>
@@ -385,7 +361,7 @@ var styles = StyleSheet.create({
       },
 
       baseText: {
-        color: '#303030',
+      color: '#303030',
         fontWeight: '200'
       },
 
@@ -420,13 +396,6 @@ var styles = StyleSheet.create({
         bottom: 0
       },
 
-      route: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingLeft: 16,
-        marginBottom: 10
-      },
-
       title: {
         textAlign: 'left',
         fontSize: 20,
@@ -441,37 +410,19 @@ var styles = StyleSheet.create({
       },
 
       tag: {
-        fontSize: 10,
         marginRight: 5,
-        color: '#fff',
-        borderRadius: 3,
-        borderWidth: 1,
-        borderColor: '#fff',
-        overflow: 'hidden',
-        // FIXME: hack tag height!
-        lineHeight: 12,
-        ...su.padding(2, 4)
       },
 
       tagHot: {
+        marginRight: 5,
         borderColor: '#f03a47',
         backgroundColor: '#f03a47'
       },
 
       tagDue: {
+        marginRight: 5,
         borderColor: '#34be9a',
         backgroundColor: '#34be9a'
-      },
-
-      date: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingLeft: 16,
-        marginBottom: 10
-      },
-
-      duration: {
-        color: '#96969b'
       },
 
       user: {
