@@ -23,6 +23,7 @@ console.log('device height', deviceHeight);
 var su = require('./styleUtils');
 var api = require('./api');
 var user = api.user
+var fetchInfo = api.userinfo;
 
 var Entry = React.createClass({
   getInitialState: function() {
@@ -48,8 +49,23 @@ var Space = React.createClass({
 		return {
       title: 0,
       content: 0,
+      info: {}
 		};
 	},
+
+    componentDidMount: function() {
+        this.fetchData();
+    },
+
+    fetchData: function() {
+        fetchInfo.fetch()
+            .then((response) => {
+                this.setState({
+                    info: response.results
+                })
+            })
+            .done();
+    },
 
   _logout: function() {
     user.logout().then(function() {
@@ -64,6 +80,7 @@ var Space = React.createClass({
   },
 
 	render: function() {
+        var info = this.state.info;
     return (
       <View style={styles.container}>
         <Image style={styles.banner} source={require('image!space-header')}>
@@ -78,19 +95,19 @@ var Space = React.createClass({
         </Image>
 
         <View style={styles.user}>
-          <Image style={styles.avatar} source={require('image!avatar-placeholder')}></Image>
-          <Text style={styles.username}>Komi</Text>
+          <Image style={styles.avatar} source={{uri: info.avatar || ''}}></Image>
+          <Text style={styles.username}>{info.username || ''}</Text>
           <Image source={require('image!levels-bg')} resizeMode="contain" style={{height: 16}}>
-            <Text style={styles.levels}>等级 1</Text>
+            <Text style={styles.levels}>{info.grade || ''}</Text>
           </Image>
         </View>
 
         <View style={styles.items}>
-          <Entry label='活动' icon={require('image!icon-activity')} count={3}/>
-        <Entry label='游记' icon={require('image!icon-journey')} count={8}/>
-          <Entry label='轨迹' icon={require('image!icon-annotations')} count={12}/>
-          <Entry label='相册' icon={require('image!icon-photos')} count={32}/>
-          <Entry label='账单' icon={require('image!icon-bills')} count={11} style={styles.last}/>
+          <Entry label='活动' icon={require('image!icon-activity')} count={info.activity || ''}/>
+        <Entry label='游记' icon={require('image!icon-journey')} count={info.journey || ''}/>
+          <Entry label='轨迹' icon={require('image!icon-annotations')} count={info.annotations || ''}/>
+          <Entry label='相册' icon={require('image!icon-photos')} count={info.photos || ''}/>
+          <Entry label='账单' icon={require('image!icon-bills')} count={info.bills || ''} style={styles.last}/>
         </View>
 
         <TouchableOpacity style={{margin: 20}} activeOpacity={0.9} onPress={this._logout}>
