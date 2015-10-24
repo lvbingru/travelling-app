@@ -3,7 +3,9 @@ var React = require('react-native');
 var {
     View,
     DatePickerIOS,
-    StyleSheet
+    StyleSheet,
+    Text,
+    TouchableOpacity
 } = React;
 
 var DatepickerScene = React.createClass({
@@ -12,6 +14,10 @@ var DatepickerScene = React.createClass({
         return {
             date: new Date()
         }
+    },
+
+    _onSave: function() {
+
     },
 
     render: function() {
@@ -23,6 +29,10 @@ var DatepickerScene = React.createClass({
                     timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
                     onDateChange={(date) => {this.setState({date})}}
                     minuteInterval={10}/>
+
+                <TouchableOpacity activeOpacity={0.8} onPress={this._onSave} style={styles.save}>
+                    <Text style={styles.saveText}>确定</Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -33,6 +43,20 @@ var styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff'
+    },
+
+    save: {
+        margin: 10,
+        borderRadius: 6,
+        backgroundColor: 'transparent',
+        overflow: 'hidden'
+    },
+
+    saveText: {
+        paddingVertical: 10,
+        backgroundColor: '#0087fa',
+        color: '#fff',
+        textAlign: 'center'
     }
 });
 
