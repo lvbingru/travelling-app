@@ -1,3 +1,4 @@
+var moment = require('moment');
 var React = require('react-native');
 
 var {
@@ -63,14 +64,38 @@ var CreateActivity = React.createClass({
 
     _showDatePickerForStartDate: function() {
         this.props.navigator.push(new DatePickerRoute({
-            onResult: console.log.bind(console)
+            onResult: this._saveStartDate.bind(this),
+            maximumDate: this.state.endDate
         }));
+    },
+
+    _saveStartDate: function(date) {
+        this.setState({
+            startDate: date
+        });
     },
 
     _showDatePickerForEndDate: function() {
         this.props.navigator.push(new DatePickerRoute({
-            onResult: console.log.bind(console)
+            onResult: this._saveEndDate.bind(this),
+            minimumDate: this.state.startDate
         }));
+    },
+
+    _saveEndDate: function(date) {
+        this.setState({
+            endDate: date
+        });
+    },
+
+    _getStartDate: function() {
+        var date = this.state.startDate;
+        return date ? moment(date).format('YYYY-MM-DD') : "";
+    },
+
+    _getEndDate: function() {
+        var date = this.state.endDate;
+        return date ? moment(date).format('YYYY-MM-DD') : "";
     },
 
     render: function() {
@@ -101,19 +126,23 @@ var CreateActivity = React.createClass({
                             onChangeText={(route) => this.setState({route})}/>
                         <Image style={styles.arrow} source={require('image!icon-arrow')}/>
                     </View>
-                    <TouchableOpacity style={styles.field}
+                    <TouchableOpacity
+                        style={styles.field}
+                        activeOpacity={0.8}
                         onPress={this._showDatePickerForStartDate}>
                         <TextInput 
-                            value={this.state.startDate} 
+                            value={this._getStartDate()} 
                             editable={false}
                             style={styles.input} 
                             placeholder="出发时间"/>
                         <Image style={styles.arrow} source={require('image!icon-arrow')}/>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.field, styles.lastField]} 
+                    <TouchableOpacity 
+                        activeOpacity={0.8}
+                        style={[styles.field, styles.lastField]} 
                         onPress={this._showDatePickerForEndDate}>
                         <TextInput 
-                            value={this.state.endDate} 
+                            value={this._getEndDate()} 
                             editable={false}
                             style={styles.input} 
                             placeholder="结束时间"/>
@@ -162,7 +191,6 @@ var styles = StyleSheet.create({
     field: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 15,
         paddingRight: 8,
         borderBottomWidth: 1 / PixelRatio.get(),
         borderBottomColor: '#dbe0e3'
@@ -175,7 +203,8 @@ var styles = StyleSheet.create({
     input: {
         flex: 1,
         fontSize: 14,
-        height: 14
+        paddingVertical: 15,
+        height: 45
     },
 
     arrow: {

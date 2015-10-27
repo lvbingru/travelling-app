@@ -32,6 +32,8 @@ var DatepickerScene = React.createClass({
                 <DatePickerIOS
                     date={this.state.date}
                     mode="date"
+                    minimumDate={this.props.minimumDate}
+                    maximumDate={this.props.maximumDate}
                     timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
                     onDateChange={(date) => {this.setState({date})}}
                     minuteInterval={10}/>
@@ -104,6 +106,8 @@ class DatePickerRoute extends BaseRouteMapper {
         return (
             <DatepickerScene 
                 navbar={this.emitter}
+                maximumDate={this.params.maximumDate}
+                minimumDate={this.params.minimumDate}
                 onResult={this.params.onResult}/>
         );
     }
