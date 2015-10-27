@@ -12,6 +12,7 @@ var BaseRouteMapper = require('./BaseRouteMapper');
 var ViewPager = require('react-native-viewpager');
 var Button = require('./widgets').Button;
 var HomePage = require('./HomePage');
+var Dispatcher = require('./Dispatcher');
 
 var IMGS = [
 	require('image!page1'),
@@ -34,7 +35,9 @@ var Onboarding = React.createClass({
   },
 
   _onStart: function() {
-    this.props.navigator.resetTo(new HomePage(this.props.navigator));
+    Dispatcher.emit('Onboarding-start');
+    // var navigator = this.props.navigator;
+    // this.props.navigator.resetTo(new HomePage(this.props.navigator));
   },
 
   _renderPage: function(data, pageID) {

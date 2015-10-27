@@ -126,8 +126,6 @@ var Home = React.createClass({
             StatusBarIOS.setStyle('light-content');
         }
 
-        var context = this.refs.navigator.navigationContext;
-        context.addListener('willfocus', this._ensureNavigationBar);
         AsyncStorage.getItem('userstamp').then(function(userstamp) {
             if (!userstamp) {
                 return 'onboarding';
@@ -145,26 +143,6 @@ var Home = React.createClass({
 
     componentWillUnmount: function() {
         this._navigationSubscription.remove();
-    },
-
-    _ensureNavigationBar: function(e) {
-        /*
-        var route = e ? e.data.route : this.refs.navigator.navigationContext.currentRoute;
-        console.log('handle willfocus', route);
-        if(['onboarding', 'plus-menu', 'activity-detail'].indexOf(route.name) !== -1) {
-          this.setState({
-            navBar: Navbars.None
-          });
-        } else if (['signin'].indexOf(route.name) !== -1) {
-          this.setState({
-            navBar: Navbars.Transparent
-          });
-        } else {
-          this.setState({
-            navBar: Navbars.Normal
-          });
-        }
-        */
     },
 
     onStart: function() {
@@ -193,7 +171,6 @@ var Home = React.createClass({
     },
 
     render: function() {
-
         var routeMapper = {
             RightButton(route) {
                     return route.renderRightButton.apply(route, arguments);
