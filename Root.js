@@ -10,11 +10,7 @@ var ModalExample = require('./ModalExample');
 var Onboarding = require('./src/Onboarding');
 var config = require('./src/config');
 var HomePage = require('./src/HomePage');
-var PlusMenu = require('./src/PlusMenu');
 var Onboarding = require('./src/Onboarding');
-var ActivityDetail = require('./src/ActivityDetail');
-var CreateActivity = require('./src/CreateActivity');
-var DatepickerScene = require('./src/DatepickerScene');
 var NavigatorBar = require('./src/NavigatorBar');
 
 var Dispatcher = require('./src/Dispatcher');

@@ -378,7 +378,7 @@ class ActivityDetailRoute extends BaseRouteMapper {
 
     get style() {
         return {
-            backgroundColor: 'transparent',
+            backgroundColor: 'transparent'
         }
     }
 

@@ -65,10 +65,6 @@ var JourneyTab = React.createClass({
     return navbar;
   },
 
-  onSelect: function() {
-      this.props.setNavigationBar(this._navbar('游记'));
-  },
-
   _fetchData: function() {
     return journey.fetch().then(function(data) {
       var dataSource = this.state.dataSource.cloneWithRows(data.results);

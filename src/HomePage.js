@@ -22,6 +22,7 @@ var ActivityList = require('./Activity');
 var Space = require('./Space');
 var JourneyTab = require('./JourneyTab');
 var PlusMenu = require('./PlusMenu');
+var CreateActivity = require('./CreateActivity');
 
 function emptyFunction() {}
 
@@ -138,10 +139,11 @@ var HomePage = React.createClass({
     _onPlusResult: function(result) {
         console.log(result);
         if (result === 'activity') {
-            this.props.navigator.push({
-                name: 'create-activity',
-                title: '发布活动(1/2)'
-            });
+            this.props.navigator.push(new CreateActivity);
+            // this.props.navigator.push({
+            //     name: 'create-activity',
+            //     title: '发布活动(1/2)'
+            // });
         }
     },
 
@@ -152,8 +154,8 @@ var HomePage = React.createClass({
     _popPlusMenu: function() {
         var view = (
             <PlusMenu 
-        onDismiss={this._onPlusDismiss} 
-        onResult={this._onPlusResult}/>
+                onDismiss={this._onPlusDismiss} 
+                onResult={this._onPlusResult}/>
         );
         this.props.openModal(view);
     },
@@ -191,8 +193,7 @@ var HomePage = React.createClass({
 
                   <JourneyTab 
                     ref="journey" 
-                    navigator={this.props.navigator}
-                    setNavigationBar={emptyFunction}/>
+                    navigator={this.props.navigator}/>
                     
               </TabBarIOS.Item>
 
@@ -217,8 +218,7 @@ var HomePage = React.createClass({
 
                 <Space 
                   ref="space" 
-                  navigator={this.props.navigator}
-                  setNavigationBar={emptyFunction}/>
+                  navigator={this.props.navigator}/>
 
               </TabBarIOS.Item>
             </TabBarIOS>

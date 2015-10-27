@@ -11,7 +11,6 @@ var {
 } = React;
 
 var {BlurView} = require('react-native-blur');
-
 var su = require('./styleUtils');
 
 var PlusMenu = React.createClass({
@@ -37,26 +36,33 @@ var PlusMenu = React.createClass({
     render: function() {
         return (
           <BlurView style={styles.container} blurType="light">
-            <TouchableOpacity activeOpacity={0.8} 
+            <TouchableOpacity 
+                activeOpacity={0.8} 
                 onPress={this._dismiss} style={styles.dismiss}>
                 <Image source={require('image!icon-dismiss')} style={styles.button}/>
             </TouchableOpacity>
 
             <View style={styles.options}>
-                <TouchableOpacity activeOpacity={0.8} 
-                    onPress={this._setResult('route')} style={styles.option}>
+                <TouchableOpacity 
+                    activeOpacity={0.8} 
+                    onPress={this._setResult('route')} 
+                    style={styles.option}>
                     <Image source={require('image!icon-add-route')} style={styles.button}/>
                     <Text style={styles.baseText}>记录轨迹</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity activeOpacity={0.8} 
-                    onPress={this._setResult('activity')} style={styles.option}>
+                <TouchableOpacity 
+                    activeOpacity={0.8} 
+                    onPress={this._setResult('activity')} 
+                    style={styles.option}>
                     <Image source={require('image!icon-new-activity')} style={styles.button}/>
                     <Text style={styles.baseText}>发起活动</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity activeOpacity={0.8} 
-                    onPress={this._setResult('journey')} style={styles.option}>
+                <TouchableOpacity 
+                    activeOpacity={0.8} 
+                    onPress={this._setResult('journey')} 
+                    style={styles.option}>
                     <Image source={require('image!icon-new-journey-note')} style={styles.button}/>
                     <Text style={styles.baseText}>写游记</Text>
                 </TouchableOpacity>

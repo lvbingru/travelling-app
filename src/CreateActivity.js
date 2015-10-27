@@ -18,7 +18,9 @@ var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+var DatePickerRoute = require('./DatePickerRoute');
 var su = require('./styleUtils');
+var stylesVar = require('./stylesVar');
 
 var CreateActivity = React.createClass({
 
@@ -47,8 +49,11 @@ var CreateActivity = React.createClass({
 
             if (type === "cancel") {
                 console.log('User cancelled image picker');
-            } else if (type === 'uri'){
-                const source = {uri: result.replace('file://', ''), isStatic: true};
+            } else if (type === 'uri') {
+                const source = {
+                    uri: result.replace('file://', ''),
+                    isStatic: true
+                };
                 this.setState({
                     cover: source
                 });
@@ -57,19 +62,15 @@ var CreateActivity = React.createClass({
     },
 
     _showDatePickerForStartDate: function() {
-        this.props.navigator.push({
-            name: 'datepicker-scene',
-            title: '出发时间',
+        this.props.navigator.push(new DatePickerRoute({
             onResult: console.log.bind(console)
-        });
+        }));
     },
 
     _showDatePickerForEndDate: function() {
-        this.props.navigator.push({
-            name: 'datepicker-scene',
-            title: '结束时间',
+        this.props.navigator.push(new DatePickerRoute({
             onResult: console.log.bind(console)
-        });
+        }));
     },
 
     render: function() {
@@ -179,8 +180,58 @@ var styles = StyleSheet.create({
 
     arrow: {
         ...su.size(9, 15),
-            resizeMode: 'contain',
+        resizeMode: 'contain',
     }
 });
 
-module.exports = CreateActivity;
+var BaseRouteMapper = require('./BaseRouteMapper');
+
+class CreateActivityRoute extends BaseRouteMapper {
+
+    get style() {
+        return {
+            backgroundColor: stylesVar('brand-primary')
+        }
+    }
+
+    get title() {
+        return '发布活动(1/2)';
+    }
+
+    renderLeftButton(route, navigator, index, navState) {
+        if (index === 0) {
+            return null;
+        }
+
+        var styles = this.styles;
+        return (
+            <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => navigator.pop()}>
+                <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
+            </TouchableOpacity>
+        );
+    }
+
+    renderRightButton(route, navigator, index, navState) {
+        if (index === 0) {
+            return null;
+        }
+
+        var styles = this.styles;
+        return (
+            <TouchableOpacity
+                style={styles.navBarRightButton}
+                activeOpacity={0.8}>
+                <Text style={styles.navBarButtonText}>下一步</Text>
+            </TouchableOpacity>
+        );
+    }
+
+    renderScene() {
+        return <CreateActivity />
+    }
+}
+
+
+module.exports = CreateActivityRoute;
