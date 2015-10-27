@@ -26,8 +26,8 @@
  */
 'use strict';
 
-var React = require('React');
-var NavigatorNavigationBarStyles = require('NavigatorNavigationBarStyles');
+var React = require('React')
+var NavigatorNavigationBarStyles = require('./NavigationBarStyles');
 var StaticContainer = require('StaticContainer.react');
 var StyleSheet = require('StyleSheet');
 var View = require('View');

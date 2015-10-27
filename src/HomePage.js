@@ -45,11 +45,7 @@ var HomePage = React.createClass({
         };
     },
 
-    componentWillMount: function() {
-        console.log('will mount');
-    },
     componentDidMount: function() {
-        console.log('did mount');
         this.props.changeRoute(this.refs.activities.route);
     },
 
@@ -62,11 +58,11 @@ var HomePage = React.createClass({
     _renderContent: function(color: string, pageText: string, num ? : number) {
         return (
             <View style={[style.rootContainer, {backgroundColor: color}]}>
-      {this.renderHeader(pageText)}
-        <Text style={style.text}>{pageText}</Text>
-        <Text style={style.text}>{num} re-renders of the {pageText}</Text>
-        <Button onClick={this.gotoIM}>IM</Button>
-      </View>
+                {this.renderHeader(pageText)}
+                <Text style={style.text}>{pageText}</Text>
+                <Text style={style.text}>{num} re-renders of the {pageText}</Text>
+                <Button onClick={this.gotoIM}>IM</Button>
+            </View>
         );
     },
 
@@ -171,68 +167,69 @@ var HomePage = React.createClass({
         }
 
         return (
-            <View style={containerStyles}>
-        <TabBarIOS barTintColor="#fff">
-          <TabBarIOS.Item
-            title="活动"
-            icon={{uri: 'icon-tab-activity', scale: 2}}
-            selectedIcon={{uri: 'icon-tab-activity-active', scale: 2}}
-            selected={this.state.selectedTab === 'activities'}
-            onPress={this._onActivitiesSelect}>
+          <View style={containerStyles}>
+            <TabBarIOS barTintColor="#fff">
+              <TabBarIOS.Item
+                title="活动"
+                icon={{uri: 'icon-tab-activity', scale: 2}}
+                selectedIcon={{uri: 'icon-tab-activity-active', scale: 2}}
+                selected={this.state.selectedTab === 'activities'}
+                onPress={this._onActivitiesSelect}>
 
-            <ActivityList
-                ref="activities" 
-                navigator={this.props.navigator}/>
+                <ActivityList
+                    ref="activities" 
+                    navigator={this.props.navigator}/>
 
-          </TabBarIOS.Item>
+              </TabBarIOS.Item>
 
-          <TabBarIOS.Item
-            title="游记"
-            icon={{uri: 'icon-tab-journey', scale: 2}}
-            selectedIcon={{uri: 'icon-tab-journey-active', scale: 2}}
-            selected={this.state.selectedTab === 'journeys'}
-            onPress={this._onJourneySelect}>
+              <TabBarIOS.Item
+                title="游记"
+                icon={{uri: 'icon-tab-journey', scale: 2}}
+                selectedIcon={{uri: 'icon-tab-journey-active', scale: 2}}
+                selected={this.state.selectedTab === 'journeys'}
+                onPress={this._onJourneySelect}>
 
-              <JourneyTab 
-                ref="journey" 
-                navigator={this.props.navigator}
-                setNavigationBar={emptyFunction}/>
-                
-          </TabBarIOS.Item>
+                  <JourneyTab 
+                    ref="journey" 
+                    navigator={this.props.navigator}
+                    setNavigationBar={emptyFunction}/>
+                    
+              </TabBarIOS.Item>
 
-          <TabBarIOS.Item
-            onPress={this._popPlusMenu}
-            title=""
-            icon={{uri: 'icon-tab-plus', scale: 2}}>
-          </TabBarIOS.Item>
+              <TabBarIOS.Item
+                onPress={this._popPlusMenu}
+                title=""
+                icon={{uri: 'icon-tab-plus', scale: 2}}>
+              </TabBarIOS.Item>
 
-          <TabBarIOS.Item
-            title="朋友"
-            icon={{uri: 'icon-tab-friends', scale: 2}}
-            selectedIcon={{uri: 'icon-tab-friends-active', scale: 2}}>
-          </TabBarIOS.Item>
-          
-          <TabBarIOS.Item
-            title="我的"
-            icon={{uri: 'icon-tab-space', scale: 2}}
-            selectedIcon={{uri: 'icon-tab-space-active', scale: 2}}
-            selected={this.state.selectedTab === 'space'}
-            onPress={this._onSpaceSelect}>
+              <TabBarIOS.Item
+                title="朋友"
+                icon={{uri: 'icon-tab-friends', scale: 2}}
+                selectedIcon={{uri: 'icon-tab-friends-active', scale: 2}}>
+              </TabBarIOS.Item>
+              
+              <TabBarIOS.Item
+                title="我的"
+                icon={{uri: 'icon-tab-space', scale: 2}}
+                selectedIcon={{uri: 'icon-tab-space-active', scale: 2}}
+                selected={this.state.selectedTab === 'space'}
+                onPress={this._onSpaceSelect}>
 
-            <Space 
-              ref="space" 
-              navigator={this.props.navigator}
-              setNavigationBar={emptyFunction}/>
+                <Space 
+                  ref="space" 
+                  navigator={this.props.navigator}
+                  setNavigationBar={emptyFunction}/>
 
-          </TabBarIOS.Item>
-        </TabBarIOS>
-      </View>
+              </TabBarIOS.Item>
+            </TabBarIOS>
+          </View>
         );
     }
 });
 
 var styles = StyleSheet.create({
     container: {
+        backgroundColor: '#0087fa',
         flex: 1
     },
     navBarTransparent: {
@@ -258,12 +255,12 @@ class HomePageRoute extends BaseRouteMapper {
     }
 
     renderLeftButton(route, navigator, index, navState) {
-        return this._route && 
+        return this._route &&
             this._route.renderLeftButton(route, navigator, index, navState);
     }
 
     renderTitle(route, navigator, index, navState) {
-        return this._route && 
+        return this._route &&
             this._route.renderTitle(route, navigator, index, navState);
     }
 

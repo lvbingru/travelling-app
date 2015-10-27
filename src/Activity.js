@@ -20,6 +20,7 @@ var {
 var RefreshableListView = require('react-native-refreshable-listview');
 var su = require('./styleUtils');
 var Navbars = require('./Navbars');
+var ActivityDetail = require('./ActivityDetail');
 var api = require('./api');
 var activity = api.activity;
 
@@ -269,28 +270,28 @@ var ActivityList = React.createClass({
 
     render: function() {
         return (
-            <View style={[styles.container, this.props.style]}>
-            <RefreshableListView
-              renderHeaderWrapper={this._renderHeaderWrapper}
-              renderSeparator={this._renderSeparator}
-              dataSource={this.state.dataSource}
-              onEndReached={this._loadMore}
-              renderRow={this._renderRow}
-              loadData={this._onRefresh}/>
+          <View style={[styles.container, this.props.style]}>
+                <RefreshableListView
+                  renderHeaderWrapper={this._renderHeaderWrapper}
+                  renderSeparator={this._renderSeparator}
+                  dataSource={this.state.dataSource}
+                  onEndReached={this._loadMore}
+                  renderRow={this._renderRow}
+                  loadData={this._onRefresh}/>
 
-            {this.state.filterShown &&
-            <TouchableOpacity activeOpacity={1} style={regions.popup} onPress={this._hideRegions}>
-              <BlurView style={{flex: 1}} blurType="light">
-                <View style={regions.grid}>
-                  <View style={regions.row}>
-                    {REGIONS.slice(0, 3).map(this._renderRegionCell)}
-                  </View>
-                  <View style={regions.row}>
-                    {REGIONS.slice(3).map(this._renderRegionCell)}
-                  </View>
-                </View>
-              </BlurView>
-            </TouchableOpacity>}
+                {this.state.filterShown &&
+                <TouchableOpacity activeOpacity={1} style={regions.popup} onPress={this._hideRegions}>
+                  <BlurView style={{flex: 1}} blurType="light">
+                    <View style={regions.grid}>
+                      <View style={regions.row}>
+                        {REGIONS.slice(0, 3).map(this._renderRegionCell)}
+                      </View>
+                      <View style={regions.row}>
+                        {REGIONS.slice(3).map(this._renderRegionCell)}
+                      </View>
+                    </View>
+                  </BlurView>
+                </TouchableOpacity>}
           </View>
         );
     },
@@ -300,22 +301,14 @@ var ActivityList = React.createClass({
     },
 
     _renderRow: function(data) {
-        return ( < Activity key = {
-                data.id
-            }
-            data = {
-                data
-            }
-            onPress = {
-                () => {
-                    this.props.navigator.push({
-                        name: 'activity-detail',
-                        title: '',
-                        id: data.id
-                    });
+        return (
+            <Activity 
+                key={data.id} 
+                data={data} 
+                onPress={() => {
+                    this.props.navigator.push(new ActivityDetail(data.id));
                 }
-            }
-            />
+            }/>
         );
     },
 });
@@ -352,30 +345,30 @@ var Activity = React.createClass({
 
         return (
             <TouchableHighlight underlayColor='#f3f5f6' onPress={this.props.onPress}>
-        <View style={styles.row}>
-          <View style={styles.brief}>
-            <Image style={styles.bg} source={{uri: data.header}}>
-              <View style={styles.info}>
-                <Text style={styles.title}>{data.title}</Text>
-                {this._renderTags(data)}
-              </View>
-            </Image>
-          </View>
+                <View style={styles.row}>
+                  <View style={styles.brief}>
+                    <Image style={styles.bg} source={{uri: data.header}}>
+                      <View style={styles.info}>
+                        <Text style={styles.title}>{data.title}</Text>
+                        {this._renderTags(data)}
+                      </View>
+                    </Image>
+                  </View>
 
-          <ActivitySchedule data={data} style={{paddingLeft: 16}}/>
-          
-          <View style={styles.user}>
-            <Image style={styles.avatar} source={avatar}/>
-            <Text style={[styles.username, styles.baseText]}>{data.user.username}</Text>
-            <Text style={[styles.publishDate]}>发布于 {moment(data.publishDate).format('YYYY-MM-DD HH:mm')}</Text>
+                  <ActivitySchedule data={data} style={{paddingLeft: 16}}/>
+                  
+                  <View style={styles.user}>
+                    <Image style={styles.avatar} source={avatar}/>
+                    <Text style={[styles.username, styles.baseText]}>{data.user.username}</Text>
+                    <Text style={[styles.publishDate]}>发布于 {moment(data.publishDate).format('YYYY-MM-DD HH:mm')}</Text>
 
-            <View style={styles.star}>
-              <Image style={styles.iconStar} source={data.starred ? require('image!icon-starred') : require('image!icon-star')}/>
-              <Text style={[styles.baseText, styles.stars]}>{data.stars}</Text>
-            </View>
-          </View>
-        </View>
-      </TouchableHighlight>
+                    <View style={styles.star}>
+                      <Image style={styles.iconStar} source={data.starred ? require('image!icon-starred') : require('image!icon-star')}/>
+                      <Text style={[styles.baseText, styles.stars]}>{data.stars}</Text>
+                    </View>
+                  </View>
+                </View>
+            </TouchableHighlight>
         );
     }
 });
@@ -392,7 +385,7 @@ var styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#f3f5f6'
+        backgroundColor: '#f3f5f6',
     },
 
     row: {

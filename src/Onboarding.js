@@ -35,9 +35,7 @@ var Onboarding = React.createClass({
   },
 
   _onStart: function() {
-    Dispatcher.emit('Onboarding-start');
-    // var navigator = this.props.navigator;
-    // this.props.navigator.resetTo(new HomePage(this.props.navigator));
+    Dispatcher.emit('onboarding-start');
   },
 
   _renderPage: function(data, pageID) {

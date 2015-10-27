@@ -122,6 +122,8 @@ var Home = React.createClass({
             this.refs.navigator.resetTo(new SignIn)
         }.bind(this));
 
+        Dispatcher.addListener('onboarding-start', this.onStart.bind(this));
+
         if (config.platform === 'ios') {
             StatusBarIOS.setStyle('light-content');
         }

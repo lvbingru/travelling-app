@@ -25,26 +25,6 @@ var {
 } = require('./widgets');
 
 var ActivityDetail = React.createClass({
-    _renderNavbar: function() {
-        return (
-            <View style={styles.navbar}>
-                    <TouchableOpacity
-                        style={styles.navbarLeft}
-                        onPress={() => this.props.navigator.pop()}>
-                        <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
-                    </TouchableOpacity>
-
-                    <View style={styles.navbarRight}>
-                        <Image style={styles.iconComments} source={require('image!icon-comments')}/>
-                        <Text style={styles.navbarText}>127</Text>
-                        <Image style={styles.iconStars} source={require('image!icon-stars-o')}/>
-                        <Text style={styles.navbarText}>19</Text>
-                        <Image style={styles.iconShare} source={require('image!icon-share')}/>
-                    </View>
-            </View>
-        );
-    },
-
     render: function() {
         var moment = require('moment');
         var publishDate = moment('2015-10-08 12:00').toDate();
@@ -141,8 +121,6 @@ var ActivityDetail = React.createClass({
                     </View>
                 </ScrollView>
 
-                {this._renderNavbar()}
-
                 <View style={styles.bottomBar}>
                     <TouchableOpacity style={styles.information} activeOpacity={0.9}>
                         <Image source={require('image!icon-information')} style={{width: 22, height: 22, marginBottom: 5}}/>
@@ -172,12 +150,12 @@ var styles = StyleSheet.create({
     },
 
     navbar: {
-      position: 'absolute',
-      backgroundColor: 'transparent',
-      top: 20,
-      left: 0,
-      right: 0,
-      height: 44
+        position: 'absolute',
+        backgroundColor: 'transparent',
+        top: 20,
+        left: 0,
+        right: 0,
+        height: 44
     },
 
     navbarText: {
@@ -197,30 +175,10 @@ var styles = StyleSheet.create({
 
     navBarLeftButton: {
         ...su.size(17, 15),
-        marginLeft: 10,
+            marginLeft: 10,
     },
 
-    iconComments: {
-        ...su.size(17)
-    },
-
-    iconStars: {
-        ...su.size(18, 17)
-    },
-
-    iconShare: {
-        ...su.size(14, 20)
-    },
-
-    navbarRight: {
-        position: 'absolute',
-        right: 10,
-        height: 44,
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'center'
-    },
-
+    
     banner: {
         height: 180,
         width: deviceWidth,
@@ -290,7 +248,7 @@ var styles = StyleSheet.create({
     separator: {
         width: 1 / PixelRatio.get(),
         backgroundColor: '#f3f5f6',
-        height: 90 
+        height: 90
     },
 
     number: {
@@ -312,7 +270,7 @@ var styles = StyleSheet.create({
 
     icon: {
         ...su.size(24),
-        marginRight: 5
+            marginRight: 5
     },
 
     bottomBar: {
@@ -352,4 +310,81 @@ var styles = StyleSheet.create({
     }
 });
 
-module.exports = ActivityDetail;
+var BaseRouteMapper = require('./BaseRouteMapper');
+
+class ActivityDetailRoute extends BaseRouteMapper {
+    constructor(id) {
+        super()
+
+        this.id = id;
+    }
+
+    renderLeftButton(route, navigator, index, navState) {
+        if (index === 0) {
+            return null;
+        }
+
+        var styles = this.styles;
+        return (
+            <TouchableOpacity
+                onPress={() => navigator.pop()}>
+                <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
+            </TouchableOpacity>
+        );
+    }
+
+    renderRightButton(route, navigator, index, navState) {
+        var navBarRightButton = this.styles.navBarRightButton;
+        var styles = StyleSheet.create({
+            iconComments: {
+                ...su.size(17)
+            },
+
+            iconStars: {
+                ...su.size(18, 17)
+            },
+
+            iconShare: {
+                ...su.size(14, 20)
+            },
+
+            navbarRight: {
+                height: 44,
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                alignItems: 'center'
+            },
+
+            navbarText: {
+                fontSize: 10,
+                color: '#fff',
+                marginRight: 15,
+                marginLeft: 5
+            },
+        });
+
+        return (
+            <View style={navBarRightButton}>
+                <View style={styles.navbarRight}>
+                    <Image style={styles.iconComments} source={require('image!icon-comments')}/>
+                    <Text style={styles.navbarText}>127</Text>
+                    <Image style={styles.iconStars} source={require('image!icon-stars-o')}/>
+                    <Text style={styles.navbarText}>19</Text>
+                    <Image style={styles.iconShare} source={require('image!icon-share')}/>
+                </View>
+            </View>
+        );
+    }
+
+    get style() {
+        return {
+            backgroundColor: 'transparent',
+        }
+    }
+
+    renderScene() {
+        return <ActivityDetail id={this.id}/>
+    }
+}
+
+module.exports = ActivityDetailRoute;
