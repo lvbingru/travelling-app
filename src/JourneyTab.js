@@ -27,9 +27,19 @@ var journey = api.journey;
 
 var deviceWidth = Dimensions.get('window').width;
 
+var BaseRouteMapper = require('./BaseRouteMapper');
+
+class JourneyRoute extends BaseRouteMapper {
+  get title() {
+    return '游记';
+  }
+}
+
 // FIXME: hack listview for grid
 var JourneyTab = React.createClass({
   getInitialState: function() {
+    this.route = new JourneyRoute();
+    
     return {
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,

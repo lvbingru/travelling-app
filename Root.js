@@ -3,52 +3,58 @@
 var React = require('react-native');
 var cssVar = require('cssVar');
 
-var SignInView = require('./src/SignInView');
-var SignUpView = require('./src/SignUpView');
+var SignIn = require('./src/SignIn');
+var SignUp = require('./src/SignUp');
 
 var ModalExample = require('./ModalExample');
 var Onboarding = require('./src/Onboarding');
 var config = require('./src/config');
-var MainTabPage = require('./src/MainTabPage');
+var HomePage = require('./src/HomePage');
 var PlusMenu = require('./src/PlusMenu');
+var Onboarding = require('./src/Onboarding');
 var ActivityDetail = require('./src/ActivityDetail');
 var CreateActivity = require('./src/CreateActivity');
 var DatepickerScene = require('./src/DatepickerScene');
+var NavigatorBar = require('./src/NavigatorBar');
+
+var Dispatcher = require('./src/Dispatcher');
 
 var api = require('./src/api');
 var Navbars = require('./src/Navbars');
-var {user} = api;
+var {
+    user
+} = api;
 
 var {
-  RefresherListView,
-  LoadingBarIndicator
+    RefresherListView,
+    LoadingBarIndicator
 } = require('react-native-refresher');
 
 
 var {
-  Animated,
-  AppRegistry,
-  AsyncStorage,
-  StyleSheet,
-  Dimensions,
-  Text,
-  Image,
-  myIcon,
-  CameraRoll,
-  SliderIOS,
-  SwitchIOS,
-  AlertIOS,
-  Modal,
-  View,
-  Component,
-  LayoutAnimation,
-  TouchableOpacity,
-  ListView,
-  TouchableHighlight,
-  Navigator,
-  TabBarIOS,
-  StatusBarIOS,
-  NativeModules
+    Animated,
+    AppRegistry,
+    AsyncStorage,
+    StyleSheet,
+    Dimensions,
+    Text,
+    Image,
+    myIcon,
+    CameraRoll,
+    SliderIOS,
+    SwitchIOS,
+    AlertIOS,
+    Modal,
+    View,
+    Component,
+    LayoutAnimation,
+    TouchableOpacity,
+    ListView,
+    TouchableHighlight,
+    Navigator,
+    TabBarIOS,
+    StatusBarIOS,
+    NativeModules
 } = React;
 
 var API_KEY = '7waqfqbprs7pajbz28mqf6vz';
@@ -62,186 +68,206 @@ var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
 var TopModal = React.createClass({
-  getInitialState: function() {
-    return { offset: new Animated.Value(deviceHeight) }
-  },
-  componentDidMount: function() {
-    Animated.timing(this.state.offset, {
-      duration: 100,
-      toValue: 0
-    }).start();
-  },
-  closeModal: function() {
-    Animated.timing(this.state.offset, {
-      duration: 100,
-      toValue: deviceHeight
-    }).start(this.props.closeModal);
-  },
-
-  _renderView: function() {
-    return React.cloneElement(this.props.view, {
-      closeModal: this.closeModal
-    });
-  },
-
-  render: function() {
-    return (
-        <Animated.View style={[styles.modal, {transform: [{translateY: this.state.offset}]}]}>
-          {this._renderView()}
-        </Animated.View>
-    )
-  }
-});
-
-var Home = React.createClass({
-  getInitialState: function() {
-    return {
-      status: 'loading',
-      navBar: Navbars.None
-    };
-  },
-
-  componentDidMount: function() {
-    if (config.platform === 'ios') {
-      StatusBarIOS.setStyle('light-content');
-    }
-
-    var context = this.refs.navigator.navigationContext;
-    context.addListener('willfocus', this._ensureNavigationBar);
-    AsyncStorage.getItem('userstamp').then(function(userstamp) {
-        if (!userstamp) {
-          return 'onboarding';
+    getInitialState: function() {
+        return {
+            offset: new Animated.Value(deviceHeight)
         }
+    },
+    componentDidMount: function() {
+        Animated.timing(this.state.offset, {
+            duration: 100,
+            toValue: 0
+        }).start();
+    },
+    closeModal: function() {
+        Animated.timing(this.state.offset, {
+            duration: 100,
+            toValue: deviceHeight
+        }).start(this.props.closeModal);
+    },
 
-        return user.currentUser().then(function(user) {
-          return user ? 'playing' : 'signin'
-        }, function(e) {
-          return 'signin';
+    _renderView: function() {
+        return React.cloneElement(this.props.view, {
+            closeModal: this.closeModal
         });
-      }, function() {
-        return 'onboarding'; 
-      }).then(this._replaceRoute);
-  },
-
-  componentWillUnmount: function() {
-    this._navigationSubscription.remove();
-  },
-
-  _ensureNavigationBar: function(e) {
-    var route = e ? e.data.route : this.refs.navigator.navigationContext.currentRoute;
-    console.log('handle willfocus', route);
-    if(['onboarding', 'plus-menu', 'activity-detail'].indexOf(route.name) !== -1) {
-      this.setState({
-        navBar: Navbars.None
-      });
-    } else if (['signin'].indexOf(route.name) !== -1) {
-      this.setState({
-        navBar: Navbars.Transparent
-      });
-    } else {
-      this.setState({
-        navBar: Navbars.Normal
-      });
-    }
-  },
-
-  onStart: function() {
-    AsyncStorage.setItem('userstamp', "" + Date.now()).catch(function(e) {
-      console.trace(e);
-    });
-
-    user.currentUser().then(function(user) {
-      return user ? 'playing' : 'signin';
-    }, function () {
-      return 'signin'
-    }).then(this._replaceRoute);
-  },
-
-  _replaceRoute: function(status) {
-    var route;
-    if (status === 'signin') {
-        route = {
-          title: '登录',
-          name: 'signin'
-        };
-    } else if(status === 'onboarding'){
-        route = {
-          title: '功能介绍',
-          name: 'onboarding'
-        };
-    } else {
-      route = {
-          title: '活动',
-          name: 'main'
-      };
-    }
-    this.refs.navigator.replace(route);
-  },
+    },
 
     render: function() {
-      return (
-          <View style={styles.container}>
+        return (
+            <Animated.View style={[styles.modal, {transform: [{translateY: this.state.offset}]}]}>
+          {this._renderView()}
+        </Animated.View>
+        )
+    }
+});
+
+var BaseRouteMapper = require('./src/BaseRouteMapper');
+
+class EmptyRoute extends BaseRouteMapper {
+    renderScene(navigator) {
+        return null;
+    }
+}
+
+var Home = React.createClass({
+    getInitialState: function() {
+        return {
+            status: 'loading',
+            navBar: Navbars.None
+        };
+    },
+
+    componentDidMount: function() {
+        Dispatcher.addListener('logout', function() {
+            this.refs.navigator.resetTo(new SignIn)
+        }.bind(this));
+
+        if (config.platform === 'ios') {
+            StatusBarIOS.setStyle('light-content');
+        }
+
+        var context = this.refs.navigator.navigationContext;
+        context.addListener('willfocus', this._ensureNavigationBar);
+        AsyncStorage.getItem('userstamp').then(function(userstamp) {
+            if (!userstamp) {
+                return 'onboarding';
+            }
+
+            return user.currentUser().then(function(user) {
+                return user ? 'playing' : 'signin'
+            }, function(e) {
+                return 'signin';
+            });
+        }, function() {
+            return 'onboarding';
+        }).then(this._replaceRoute);
+    },
+
+    componentWillUnmount: function() {
+        this._navigationSubscription.remove();
+    },
+
+    _ensureNavigationBar: function(e) {
+        /*
+        var route = e ? e.data.route : this.refs.navigator.navigationContext.currentRoute;
+        console.log('handle willfocus', route);
+        if(['onboarding', 'plus-menu', 'activity-detail'].indexOf(route.name) !== -1) {
+          this.setState({
+            navBar: Navbars.None
+          });
+        } else if (['signin'].indexOf(route.name) !== -1) {
+          this.setState({
+            navBar: Navbars.Transparent
+          });
+        } else {
+          this.setState({
+            navBar: Navbars.Normal
+          });
+        }
+        */
+    },
+
+    onStart: function() {
+        AsyncStorage.setItem('userstamp', "" + Date.now()).catch(function(e) {
+            console.trace(e);
+        });
+
+        user.currentUser().then(function(user) {
+            return user ? 'playing' : 'signin';
+        }, function() {
+            return 'signin'
+        }).then(this._replaceRoute);
+    },
+
+    _replaceRoute: function(status) {
+        var route;
+        if (status === 'signin') {
+            route = new SignIn();
+        } else if (status === 'onboarding') {
+            route = new Onboarding();
+        } else {
+            route = new HomePage(this.refs.navigator);
+        }
+
+        this.refs.navigator.replace(route);
+    },
+
+    render: function() {
+
+        var routeMapper = {
+            RightButton(route) {
+                    return route.renderRightButton.apply(route, arguments);
+                },
+
+                Title(route) {
+                    return route.renderTitle.apply(route, arguments);
+                },
+
+                Style(route) {
+                    return route.style;
+                },
+
+                LeftButton(route) {
+                    return route.renderLeftButton.apply(route, arguments);
+                }
+        };
+
+        var navbar = (
+            <NavigatorBar
+            style={styles.navBar} 
+            routeMapper={routeMapper}/>
+        );
+
+        return (
+            <View style={styles.container}>
             <Navigator
               ref="navigator"
-              navigationBar={this.state.navBar}
+              navigationBar={navbar}
               style={styles.container}
-              initialRoute={{title: '', name: 'empty'}}
+              initialRoute={new EmptyRoute}
               configureScene={this._configureScene}
               renderScene={this.renderScene}/>
 
             {this.state.modal && <TopModal view={this.state.modalView} closeModal={() => this.setState({modal: false})}/>}
           </View>
-      );
+        );
     },
 
     _configureScene: function(route) {
-      if (route.name === 'plus-menu') {
-        return Navigator.SceneConfigs.FloatFromBottom;
-      } else {
-        return Navigator.SceneConfigs.FloatFromRight;
-      }
+        if (route.name === 'plus-menu') {
+            return Navigator.SceneConfigs.FloatFromBottom;
+        } else {
+            return Navigator.SceneConfigs.FloatFromRight;
+        }
     },
 
     _changeNavigationBar: function(navBar) {
-      this.setState({navBar});
+        this.setState({
+            navBar
+        });
     },
 
     _openModal: function(view) {
-      this.setState({
-        modal: true,
-        modalView: view
-      });
+        this.setState({
+            modal: true,
+            modalView: view
+        });
     },
 
     renderScene: function(route, navigator) {
-      var _interface = {
-        setNavigationBar: this._changeNavigationBar,
-        openModal: this._openModal
-      };
+        var scene = route.renderScene(navigator);
+        if (!scene) {
+            return null;
+        }
 
-      if (route.name === 'onboarding') {
-        return <Onboarding onStart={this.onStart} {..._interface}/>
-      }
-
-      var routeCompMap = {
-        'empty': EmptyRoute,
-        'signin': SignInView,
-        'signup': SignUpView,
-        'main': MainTabPage,
-        'activity-detail': ActivityDetail,
-        'create-activity': CreateActivity,
-        'datepicker-scene': DatepickerScene
-      };
-
-      var Component = routeCompMap[route.name];
-      return <Component navigator={navigator} style={styles.scene} {..._interface} route={route}/>
+        return React.cloneElement(scene, {
+            navigator: navigator,
+            setNavigationBar: this._changeNavigationBar,
+            openModal: this._openModal,
+            style: styles.scene,
+            update: this.forceUpdate.bind(this)
+        });
     }
-});
-
-var EmptyRoute = React.createClass({
-  render: function() {
-    return <View></View>;
-  }
 });
 
 
@@ -250,71 +276,71 @@ var style = require("./style");
 var styleListView = require("./styleListView");
 
 var styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
+    container: {
+        flex: 1
+    },
 
-  modal: {
-    backgroundColor: 'transparent',
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0
-  },
-  
-  icon: {
-    fontSize: 20,
-    color: 'white',
-    paddingVertical: 5,
-    paddingHorizontal: 8,
-    borderRadius: 4,
-    backgroundColor: '#3b5998',
-  },
+    modal: {
+        backgroundColor: 'transparent',
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+    },
 
-  slider: {
-    height: 10,
-    margin: 10,
-  },
-  text: {
-    fontSize: 14,
-    textAlign: 'center',
-    fontWeight: '500',
-    margin: 10,
-  },
+    icon: {
+        fontSize: 20,
+        color: 'white',
+        paddingVertical: 5,
+        paddingHorizontal: 8,
+        borderRadius: 4,
+        backgroundColor: '#3b5998',
+    },
 
-  navBarTrasnparent: {
-    backgroundColor: 'transparent'
-  },
+    slider: {
+        height: 10,
+        margin: 10,
+    },
+    text: {
+        fontSize: 14,
+        textAlign: 'center',
+        fontWeight: '500',
+        margin: 10,
+    },
 
-  navBar: {
-    backgroundColor: '#0087fa'
-  },
+    navBarTrasnparent: {
+        backgroundColor: 'transparent'
+    },
 
-  navBarText: {
-    fontSize: 16,
-    marginVertical: 10,
-  },
-  navBarTitleText: {
-    color: '#fff',
-    height: 16,
-    marginVertical: 14,
-  },
-  navBarLeftButton: {
-    marginLeft: 10,
-    marginVertical: 14,
-    width: 17,
-    height: 16
-  },
-  navBarRightButton: {
-    paddingRight: 10,
-  },
-  navBarButtonText: {
-    color: '#fff'
-  },
-  scene: {
-    paddingTop: 64
-  }
+    navBar: {
+        backgroundColor: '#0087fa'
+    },
+
+    navBarText: {
+        fontSize: 16,
+        marginVertical: 10,
+    },
+    navBarTitleText: {
+        color: '#fff',
+        height: 16,
+        marginVertical: 14,
+    },
+    navBarLeftButton: {
+        marginLeft: 10,
+        marginVertical: 14,
+        width: 17,
+        height: 16
+    },
+    navBarRightButton: {
+        paddingRight: 10,
+    },
+    navBarButtonText: {
+        color: '#fff'
+    },
+    scene: {
+        paddingTop: 64
+    }
 });
 
 module.exports = Home;

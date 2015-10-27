@@ -16,6 +16,8 @@ var {
 } = React;
 
 var {user} = require('./api');
+var SignUp = require('./SignUp');
+var HomePage = require('./HomePage');
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
@@ -54,10 +56,8 @@ var SignInView = React.createClass({
 		}
 
 		user.signin(this.state.phone, this.state.password).then(function() {
-			this.props.navigator.resetTo({
-				title: '活动',
-				name: 'main'
-			});
+			var navigator = this.props.navigator;
+			navigator.resetTo(new HomePage(navigator));
 		}.bind(this), function(e) {
 			console.trace(e);
 			return AlertIOS.alert(e.reason || '登录失败');
@@ -65,10 +65,7 @@ var SignInView = React.createClass({
 	},
 
 	_signup: function() {
-		this.props.navigator.push({
-			name: 'signup',
-			title: '注册'
-		});
+		this.props.navigator.push(new SignUp);
 	},
 
 	_forgetPassword: function() {
@@ -213,4 +210,23 @@ var styles = StyleSheet.create({
 	}
 });
 
-module.exports = SignInView;
+var BaseRouteMapper = require('./BaseRouteMapper');
+
+class SignInRoute extends BaseRouteMapper {
+
+	get style() {
+		return {
+			backgroundColor: 'transparent'
+		}
+	}
+
+	get title() {
+		return '登录';
+	}
+
+	renderScene() {
+		return <SignInView/>	
+	}
+}
+
+module.exports = SignInRoute;

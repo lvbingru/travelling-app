@@ -8,8 +8,10 @@ var {
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
+var BaseRouteMapper = require('./BaseRouteMapper');
 var ViewPager = require('react-native-viewpager');
 var Button = require('./widgets').Button;
+var HomePage = require('./HomePage');
 
 var IMGS = [
 	require('image!page1'),
@@ -31,12 +33,16 @@ var Onboarding = React.createClass({
     );
   },
 
+  _onStart: function() {
+    this.props.navigator.resetTo(new HomePage(this.props.navigator));
+  },
+
   _renderPage: function(data, pageID) {
   	return (
   		<Image source={data} style={styles.page}>
   			{pageID == IMGS.length - 1&& 
   			<View style={styles.buttonWrap}>
-	  			<Button style={styles.button} onPress={this.props.onStart}>马上出发</Button>
+	  			<Button style={styles.button} onPress={this._onStart}>马上出发</Button>
 	  		</View>}
   		</Image>
   	);
@@ -66,4 +72,16 @@ var styles = StyleSheet.create({
 	}
 });
 
-module.exports = Onboarding;
+class OnboardingRoute extends BaseRouteMapper {
+    get style() {
+        return {
+            opacity: 0
+        }
+    }
+
+    renderScene(navigator) {
+        return <Onboarding/>
+    }
+}
+
+module.exports = OnboardingRoute;

@@ -26,6 +26,7 @@ var {
 	user,
 	sms
 } = api;
+var HomePage = require('./HomePage');
 
 var SMS_COOLDOWN = 60;
 
@@ -97,10 +98,8 @@ var SignUpView = React.createClass({
 				AlertIOS.alert('注册成功', null, [{
 					text: '确定',
 					onPress: function() {
-						this.props.navigator.resetTo({
-							title: '活动',
-						    name: 'main'
-						});
+						var navigator = this.props.navigator;
+						navigator.resetTo(new HomePage(navigator));
 					}.bind(this)
 				}]);
 			}.bind(this), function(e) {
@@ -250,4 +249,30 @@ var styles = StyleSheet.create({
 	},
 });
 
-module.exports = SignUpView;
+var BaseRouteMapper = require('./BaseRouteMapper');
+
+class SignUpRoute extends BaseRouteMapper {
+	get title() {
+		return '注册';
+	}
+
+	renderLeftButton(route, navigator, index, navState) {
+		if (index === 0) {
+	      return null;
+	    }
+
+	    var styles = this.styles;
+	    return (
+	      <TouchableOpacity
+	        onPress={() => navigator.pop()}>
+	        <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
+	      </TouchableOpacity>
+	    );
+	}
+
+	renderScene() {
+		return <SignUpView/>
+	}
+}
+
+module.exports = SignUpRoute;
