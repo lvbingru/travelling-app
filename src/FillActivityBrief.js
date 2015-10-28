@@ -56,6 +56,14 @@ var FillActivityBrief = React.createClass({
             return AlertIOS.alert(Labels[prop] + '没有填写');
         }
 
+        if (this.state.title.length > 50) {
+            return AlertIOS.alert('标题不能超50个字');
+        }
+
+        if (this.state.route.length > 100) {
+            return AlertIOS.alert('路线不能超过100个字');
+        }
+
         var brief = _.pick(this.state, _.keys(Labels));
         this.props.navigator.push(new FillActivityDetailRoute(brief));
     },
@@ -158,7 +166,7 @@ var FillActivityBrief = React.createClass({
 
                 <View style={styles.info}>
                     <View style={styles.field}>
-                        <Text style={styles.label}>{Labels.title}</Text>
+                        <Text  style={[styles.label, styles.labelFixed]}>{Labels.title}</Text>
                         <TextInput 
                             value={this.state.title} 
                             style={styles.input} 
@@ -167,7 +175,7 @@ var FillActivityBrief = React.createClass({
                     </View>
 
                     <View style={styles.field}>
-                        <Text style={styles.label}>{Labels.route}</Text>
+                        <Text style={[styles.label, styles.labelFixed]}>{Labels.route}</Text>
                         <TextInput 
                             value={this.state.route} 
                             style={styles.input} 
@@ -180,7 +188,7 @@ var FillActivityBrief = React.createClass({
                         activeOpacity={0.8}
                         onPress={this._showDatePickerForStartDate}>
 
-                        <Text style={styles.label}>{Labels.startDate}</Text>
+                    <Text style={[styles.label, styles.labelFixed]}>{Labels.startDate}</Text>
                         <TextInput 
                             value={this._getStartDate()} 
                             editable={false}
@@ -193,7 +201,7 @@ var FillActivityBrief = React.createClass({
                         onPress={this._showDatePickerForEndDate}
                         style={[styles.field, styles.lastField]}>
 
-                        <Text style={styles.label}>{Labels.endDate}</Text>
+                        <Text style={[styles.label, styles.labelFixed]}>{Labels.endDate}</Text>
                         <TextInput 
                             value={this._getEndDate()} 
                             editable={false}
@@ -209,7 +217,7 @@ var FillActivityBrief = React.createClass({
 var styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#e7eaeb'
+        backgroundColor: stylesVar('dark-lighter')
     },
 
     coverSection: {
@@ -242,14 +250,17 @@ var styles = StyleSheet.create({
         paddingLeft: 15,
 
         borderBottomWidth: 1 / PixelRatio.get(),
-        borderBottomColor: '#dbe0e3',
+        borderBottomColor: stylesVar('dark-light'),
         borderTopWidth: 1 / PixelRatio.get(),
-        borderTopColor: '#dbe0e3'
+        borderTopColor: stylesVar('dark-light')
+    },
+
+    labelFixed: {
+        width: 60
     },
 
     label: {
-        width: 60,
-        color: stylesVar('dark-light')
+        color: stylesVar('dark-mid')
     },
 
     field: {

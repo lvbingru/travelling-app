@@ -69,12 +69,16 @@ var TopModal = React.createClass({
             offset: new Animated.Value(deviceHeight)
         }
     },
+
+    displayName: 'TopModal',
+
     componentDidMount: function() {
         Animated.timing(this.state.offset, {
             duration: 100,
             toValue: 0
         }).start();
     },
+
     closeModal: function() {
         Animated.timing(this.state.offset, {
             duration: 100,
@@ -90,9 +94,10 @@ var TopModal = React.createClass({
 
     render: function() {
         return (
-            <Animated.View style={[styles.modal, {transform: [{translateY: this.state.offset}]}]}>
-          {this._renderView()}
-        </Animated.View>
+            <Animated.View 
+                style={[styles.modal, {transform: [{translateY: this.state.offset}]}]}>
+                {this._renderView()}
+            </Animated.View>
         )
     }
 });
@@ -124,19 +129,23 @@ var Home = React.createClass({
             StatusBarIOS.setStyle('light-content');
         }
 
-        AsyncStorage.getItem('userstamp').then(function(userstamp) {
-            if (!userstamp) {
-                return 'onboarding';
-            }
+        // AsyncStorage.getItem('userstamp').then(function(userstamp) {
+        //     if (!userstamp) {
+        //         return 'onboarding';
+        //     }
 
-            return user.currentUser().then(function(user) {
-                return user ? 'playing' : 'signin'
-            }, function(e) {
-                return 'signin';
-            });
-        }, function() {
-            return 'onboarding';
-        }).then(this._replaceRoute);
+        //     return user.currentUser().then(function(user) {
+        //         return user ? 'playing' : 'signin'
+        //     }, function(e) {
+        //         return 'signin';
+        //     });
+        // }, function() {
+        //     return 'onboarding';
+        // }).then(this._replaceRoute);
+
+        // var Route = require('./src/FillActivityBrief');
+        var Route = require('./src/FillActivityDetail');
+        this.refs.navigator.replace(new Route());
     },
 
     componentWillUnmount: function() {
@@ -203,7 +212,13 @@ var Home = React.createClass({
               configureScene={this._configureScene}
               renderScene={this.renderScene}/>
 
-            {this.state.modal && <TopModal view={this.state.modalView} closeModal={() => this.setState({modal: false})}/>}
+            {this.state.modal && 
+            <View style={[styles.modal, this.state.modalStyle]}>
+                <TopModal 
+                    view={this.state.modalView} 
+                    closeModal={() => this.setState({modal: false})}/>
+            </View>
+            }
           </View>
         );
     },
@@ -222,9 +237,10 @@ var Home = React.createClass({
         });
     },
 
-    _openModal: function(view) {
+    _openModal: function(view, style) {
         this.setState({
             modal: true,
+            modalStyle: style,
             modalView: view
         });
     },
