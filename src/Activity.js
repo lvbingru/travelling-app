@@ -306,7 +306,12 @@ var ActivityList = React.createClass({
                 key={data.id} 
                 data={data} 
                 onPress={() => {
-                    this.props.navigator.push(new ActivityDetail({id: data.id, status: data.status, isEnter: data.isEnter}));
+                    this.props.navigator.push(new ActivityDetail({
+                        id: data.id, 
+                        status: data.status, 
+                        isEnter: data.isEnter,
+                        isSponsor: data.isSponsor
+                    }));
                 }
             }/>
         );

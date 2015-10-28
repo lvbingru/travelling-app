@@ -17,6 +17,7 @@ var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
 var su = require('./styleUtils');
+var stylesVar = require('./stylesVar');
 var {
     Tag,
     UserInfo,
@@ -25,6 +26,87 @@ var {
 } = require('./widgets');
 
 var ActivityDetail = React.createClass({
+    renderCenter: function() {
+        var status = this.props.status;
+        if (status === 'preparing') {
+            return (
+                <View style={styles.section}>
+                    <View style={styles.row}>
+                        <Image style={styles.countdown} source={require('image!icon-countdown')}/>
+                        <Text style={styles.baseText}>报名倒计时：8天</Text>
+                        <Text style={[styles.baseText, styles.gray]}>（截止日期：9月1日12:00）</Text>
+                    </View>
+                    <View style={[styles.row, styles.spaceNone]}>
+                        <View style={styles.numberLabel}>
+                            <Text style={[styles.number, {color: '#61a9da'}]}>2</Text>
+                            <Text style={styles.smallGray}>已报名车辆</Text>
+                        </View>
+                        <View style={styles.separator}></View>
+                        <View style={styles.numberLabel}>
+                            <Text style={[styles.number, {color: '#f2b658'}]}>12</Text>
+                            <Text style={styles.smallGray}>剩余车辆名额</Text>
+                        </View>
+                        <View style={styles.separator}></View>
+                        <View style={styles.numberLabel}>
+                            <Text style={[styles.number, {color: '#92c056'}]}>1</Text>
+                            <Text style={styles.smallGray}>剩余座位</Text>
+                        </View>
+                    </View>
+                    <View style={[styles.row, styles.spaceNone]}>
+                        <View style={styles.note}>
+                            <Image source={require('image!icon-photos')} style={styles.icon}/>
+                            <Text style={styles.baseText}>相册</Text>
+                            <Text style={styles.gray}>(0)</Text>
+                        </View>
+                        <View style={[styles.separator, {height: 45}]}></View>
+                        <View style={styles.note}>
+                            <Image source={require('image!icon-journey')} style={styles.icon}/>
+                            <Text style={styles.baseText}>游记</Text>
+                            <Text style={styles.gray}>(0)</Text>
+                        </View>
+                        <View style={[styles.separator, {height: 45}]}></View>
+                        <View style={styles.note}>
+                            <Image source={require('image!icon-annotations')} style={styles.icon}/>
+                            <Text style={styles.baseText}>轨迹</Text>
+                            <Text style={styles.gray}>(0)</Text>
+                        </View>
+                    </View>
+                </View>
+            );
+        } else if (status === 'travelling') {
+            return (
+                <View style={styles.section}>
+                    <View style={styles.row}>
+                        <Image style={styles.countdown} source={require('image!icon-countdown')}/>
+                        <Text style={styles.gray}>活动已结束</Text>
+                    </View>
+                    <View style={[styles.row, styles.spaceNone]}>
+                        <View style={styles.stopCell}>
+                            <Image source={require('image!icon-photo-green')} style={styles.iconPhotoGreen}/>
+                            <Text style={styles.baseText}>相册
+                                <Text style={styles.gray}>(10)</Text>
+                            </Text>
+                        </View>
+                        <View style={[styles.separator, {height: 90}]}></View>
+                        <View style={styles.stopCell}>
+                            <Image source={require('image!icon-journey-red')} style={styles.iconJourneyRed}/>
+                            <Text style={styles.baseText}>游记
+                                <Text style={styles.gray}>(10)</Text>
+                            </Text>
+                        </View>
+                        <View style={[styles.separator, {height: 90}]}></View>
+                        <View style={styles.stopCell}>
+                            <Image source={require('image!icon-annotation-yello')} style={styles.iconAnnotationYello} />
+                            <Text style={styles.baseText}>轨迹
+                                <Text style={styles.gray}>(10)</Text>
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+            );
+        }
+    },
+
     renderBottom: function() {
         var status = this.props.status;
         var isEnter = this.props.isEnter;
@@ -45,7 +127,7 @@ var ActivityDetail = React.createClass({
                 return (
                     <View style={styles.bottomBar}>
                         <TouchableOpacity style={styles.activityCircle} activeOpacity={0.9}>
-                            <Image source={require('image!icon-activityCircle')} style={styles.iconActivityCircle}/>
+                            <Image source={require('image!icon-activity-circle-trans')} style={styles.iconActivityCircle}/>
                             <Text style={styles.informationText}>活动圈子</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.apply} activeOpacity={0.9}>
@@ -68,26 +150,35 @@ var ActivityDetail = React.createClass({
             } else if (isEnter === '1') {
                 return (
                     <View style={styles.bottomBar}>
-                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
-                            <Image source={require('image!icon-activityCircle')} style={styles.>
-                        <TouchableOpacity>
-                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
-                        <TouchableOpacity>
-                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
-                        <TouchableOpacity>
-                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
-                        <TouchableOpacity>
+                        <TouchableOpacity style={[styles.information, styles.activityCircle]} activeOpacity={0.9}>
+                            <Image source={require('image!icon-activity-circle-trans')} style={styles.iconActivityCircle} />
+                            <Text style={styles.informationText}>活动圈子</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.information, styles.pictureTrans]} activeOpacity={0.9}>
+                            <Image source={require('image!icon-picture-trans')} style={styles.iconPictureTrans} />
+                            <Text style={styles.informationText}>分享照片</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.information, styles.journeyTrans]} activeOpacity={0.9}>
+                            <Image source={require('image!icon-journey-trans')} style={styles.iconJourneyTrans} />
+                            <Text style={styles.informationText}>写游记</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.information, styles.annotationTrans]} activeOpacity={0.9}>
+                            <Image source={require('image!icon-annotation-trans')} style={styles.iconAnnotationTrans} />
+                            <Text style={styles.informationText}>上传轨迹</Text>
+                        </TouchableOpacity>
                     </View>
                 );
             }
         }
     },
+
     render: function() {
         var moment = require('moment');
         var publishDate = moment('2015-10-08 12:00').toDate();
         var startDate = moment('2015-10-09').toDate();
         var endDate = moment('2015-10-12').toDate();
         console.log(publishDate, startDate, endDate);
+        var isSponsor = this.props.isSponsor;
         var data = {
             id: 3,
             header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
@@ -115,6 +206,14 @@ var ActivityDetail = React.createClass({
                             username="Steven"
                             publishDate={Date.now()}
                             avatar={require('image!avatar-placeholder')}/>
+                        {isSponsor === '1' && (
+                            <View style={styles.manageInfo}>
+                                <Image source={require('image!icon-edit-white')} style={styles.iconEditWhite}/>
+                                <Text style={[styles.manageText, styles.editText]}>编辑</Text>
+                                <Image source={require('image!icon-manage-white')} style={styles.iconManageWhite} />
+                                <Text style={styles.manageText}>管理</Text>
+                            </View>
+                        )}
                     </Image>
 
                     <View style={[styles.section, styles.detail]}>
@@ -133,49 +232,8 @@ var ActivityDetail = React.createClass({
                             })}
                         </View>
                     </View>
-
-                    <View style={styles.section}>
-                        <View style={styles.row}>
-                            <Image style={styles.countdown} source={require('image!icon-countdown')}/>
-                            <Text style={styles.baseText}>报名倒计时：8天</Text>
-                            <Text style={[styles.baseText, styles.gray]}>（截止日期：9月1日12:00）</Text>
-                        </View>
-                        <View style={[styles.row, {paddingLeft: 0, paddingVertical: 0}]}>
-                            <View style={styles.numberLabel}>
-                                <Text style={[styles.number, {color: '#61a9da'}]}>2</Text>
-                                <Text style={styles.smallGray}>已报名车辆</Text>
-                            </View>
-                            <View style={styles.separator}></View>
-                            <View style={styles.numberLabel}>
-                                <Text style={[styles.number, {color: '#f2b658'}]}>12</Text>
-                                <Text style={styles.smallGray}>剩余车辆名额</Text>
-                            </View>
-                            <View style={styles.separator}></View>
-                            <View style={styles.numberLabel}>
-                                <Text style={[styles.number, {color: '#92c056'}]}>1</Text>
-                                <Text style={styles.smallGray}>剩余座位</Text>
-                            </View>
-                        </View>
-                        <View style={[styles.row, {paddingLeft: 0, paddingVertical: 0}]}>
-                            <View style={styles.note}>
-                                <Image source={require('image!icon-photos')} style={styles.icon}/>
-                                <Text style={styles.baseText}>相册</Text>
-                                <Text style={styles.gray}>(0)</Text>
-                            </View>
-                            <View style={[styles.separator, {height: 45}]}></View>
-                            <View style={styles.note}>
-                                <Image source={require('image!icon-journey')} style={styles.icon}/>
-                                <Text style={styles.baseText}>游记</Text>
-                                <Text style={styles.gray}>(0)</Text>
-                            </View>
-                            <View style={[styles.separator, {height: 45}]}></View>
-                            <View style={styles.note}>
-                                <Image source={require('image!icon-annotations')} style={styles.icon}/>
-                                <Text style={styles.baseText}>轨迹</Text>
-                                <Text style={styles.gray}>(0)</Text>
-                            </View>
-                        </View>
-                    </View>
+                    {this.renderCenter()}
+                    
                 </ScrollView>
                 {this.renderBottom()}  
             </View>
@@ -195,6 +253,12 @@ var styles = StyleSheet.create({
         left: 0,
         right: 0,
         top: 0
+    },
+
+    baseText: {
+        color: '#303030',
+        fontWeight: '200',
+        fontSize: 15
     },
 
     navbar: {
@@ -238,6 +302,35 @@ var styles = StyleSheet.create({
         bottom: 15
     },
 
+    manageInfo: {
+        position: 'absolute',
+        right: 15,
+        bottom: 15,
+        backgroundColor: 'transparent',
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 30
+    },
+
+    manageText: {
+        color: stylesVar('white'),
+        fontSize: 14
+    },
+
+    iconEditWhite: {
+        ...su.size(14),
+        marginRight: 5
+    },
+
+    iconManageWhite: {
+        ...su.size(17),
+        marginRight: 5
+    },
+
+    editText: {
+        marginRight: 15
+    },
+
     section: {
         borderTopWidth: 1 / PixelRatio.get(),
         borderBottomWidth: 1 / PixelRatio.get(),
@@ -258,6 +351,11 @@ var styles = StyleSheet.create({
         paddingLeft: 8,
         borderBottomWidth: 1 / PixelRatio.get(),
         borderBottomColor: '#f3f5f6'
+    },
+
+    spaceNone: {
+        paddingLeft: 0, 
+        paddingVertical: 0
     },
 
     title: {
@@ -286,7 +384,7 @@ var styles = StyleSheet.create({
     },
 
     gray: {
-        color: '#777'
+        color: stylesVar('dark-light')
     },
 
     numberLabel: {
@@ -307,7 +405,7 @@ var styles = StyleSheet.create({
 
     smallGray: {
         fontSize: 10,
-        color: '#9c9b97'
+        color: stylesVar('dark-light-slight')
     },
 
     note: {
@@ -315,6 +413,29 @@ var styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+
+    stopCell: {
+        flex: 1,
+        height: 90,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: 17
+    },
+
+    iconPhotoGreen: {
+        ...su.size(27, 30),
+        marginBottom: 12
+    },
+
+    iconJourneyRed: {
+        ...su.size(22, 30),
+        marginBottom: 12
+    },
+
+    iconAnnotationYello: {
+        ...su.size(23, 30),
+        marginBottom: 12
     },
 
     icon: {
@@ -364,6 +485,33 @@ var styles = StyleSheet.create({
         marginBottom: 5
     },
 
+    pictureTrans: {
+        backgroundColor: '#34be9a'
+    },
+
+    iconPictureTrans: {
+        ...su.size(22, 16),
+        marginBottom: 5
+    },
+
+    journeyTrans: {
+        backgroundColor: '#ee5a2f'
+    },
+
+    iconJourneyTrans: {
+        ...su.size(16, 18),
+        marginBottom: 5
+    },
+
+    annotationTrans: {
+        backgroundColor: '#f2b658'
+    },
+
+    iconAnnotationTrans: {
+        ...su.size(15, 20),
+        marginBottom: 5
+    },
+
     apply: {
         flex: 3,
         height: 60,
@@ -387,6 +535,7 @@ class ActivityDetailRoute extends BaseRouteMapper {
         this.id = data.id;
         this.status = data.status;
         this.isEnter = data.isEnter;
+        this.isSponsor = data.isSponsor;
     }
 
     renderLeftButton(route, navigator, index, navState) {
@@ -453,7 +602,10 @@ class ActivityDetailRoute extends BaseRouteMapper {
     }
 
     renderScene() {
-        return <ActivityDetail id={this.id} status={this.status} isEnter={this.isEnter}/>
+        return <ActivityDetail id={this.id} 
+                    status={this.status} 
+                    isEnter={this.isEnter}
+                    isSponsor={this.isSponsor}/>
     }
 }
 
