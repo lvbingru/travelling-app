@@ -33,6 +33,15 @@ var Labels = {
     maxCars: '最大车辆数量'
 }
 
+var DetailEntry = React.createClass({
+    render: function() {
+        <TouchableOpacity activeOpacity={0.8} style={styles.detailEntry}>
+            <Image style={styles.detailEntryIcon} source={require('image!icon-add-detail')}/>
+            <Text>this.props.label</Text>
+        </TouchableOpacity>
+    }
+});
+
 var FillActivityDetail = React.createClass({
 
     getInitialState: function() {
@@ -87,6 +96,7 @@ var FillActivityDetail = React.createClass({
             minCars,
             maxCars
         } = this.state;
+
         return (
             <View style={[styles.container, this.props.style]}>
                 <View style={styles.section}>
@@ -128,6 +138,9 @@ var FillActivityDetail = React.createClass({
                             style={styles.input}/>
                         <Image style={styles.arrow} source={require('image!icon-arrow')}/>
                     </TouchableOpacity>
+                </View>
+
+                <View style={styles.details}>
                 </View>
             </View>
         );
@@ -178,6 +191,18 @@ var styles = StyleSheet.create({
     arrow: {
         ...su.size(9, 15),
         resizeMode: 'contain',
+    },
+
+    detailEntry: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderWidth: 1 / PixelRatio.get(),
+        borderColor: stylesVar('dark-light')
+    },
+
+    detailEntryIcon: {
+        ...su.size(18)
     }
 });
 
