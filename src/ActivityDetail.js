@@ -384,7 +384,7 @@ var styles = StyleSheet.create({
     },
 
     gray: {
-        color: stylesVar('dark-light')
+        color: stylesVar('dark-mid')
     },
 
     numberLabel: {
