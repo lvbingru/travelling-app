@@ -1,24 +1,26 @@
 var React = require('react-native');
 var {
-    Text,
-    StyleSheet
+    StyleSheet,
+    Text
 } = React;
 
+var stylesVar = require('./stylesVar');
+
 class BaseRouteMapper {
-
-    get title() {
-        return "";
-    }
-
-    get style() {
-        return this.styles.navBar;
-    }
 
     renderRightButton() {
         return null;
     }
 
+    get style() {
+        return {};
+    }
+
     renderLeftButton() {
+        return null;
+    }
+
+    renderTitle() {
         return null;
     }
 
@@ -41,7 +43,7 @@ class BaseRouteMapper {
                 backgroundColor: 'transparent'
             },
             navBar: {
-                backgroundColor: '#0087fa'
+                backgroundColor: stylesVar('brand-primary')
             },
             navBarText: {
                 fontSize: 16,
@@ -49,9 +51,9 @@ class BaseRouteMapper {
             },
             navBarTitleText: {
                 color: '#fff',
-                height: 16,
+                height: 20,
+                marginVertical: 12,
                 fontSize: 16,
-                marginVertical: 14,
             },
             navBarLeftButton: {
                 marginLeft: 10,
@@ -60,9 +62,12 @@ class BaseRouteMapper {
                 height: 16
             },
             navBarRightButton: {
-                paddingRight: 10,
+                marginRight: 10,
             },
             navBarButtonText: {
+                height: 20,
+                fontSize: 16,
+                marginVertical: 12,
                 color: '#fff'
             }
         });
