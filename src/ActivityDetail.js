@@ -18,6 +18,8 @@ var deviceHeight = Dimensions.get('window').height;
 
 var su = require('./styleUtils');
 var stylesVar = require('./stylesVar');
+var activityApi = require('./api').activity;
+
 var {
     Tag,
     UserInfo,
@@ -26,29 +28,46 @@ var {
 } = require('./widgets');
 
 var ActivityDetail = React.createClass({
+    getInitialState: function() {
+        return {
+            data: {}
+        }
+    },
+
+    componentDidMount: function() {
+        activityApi.fetchDetail().then(function(data) {
+            this.setState({
+                data: data
+            });
+        }.bind(this), function(e) {
+            console.trace(e);
+        });
+    },
+
     renderCenter: function() {
         var status = this.props.status;
+        var data = this.state.data;
         if (status === 'preparing') {
             return (
                 <View style={styles.section}>
                     <View style={styles.row}>
                         <Image style={styles.countdown} source={require('image!icon-countdown')}/>
-                        <Text style={styles.baseText}>报名倒计时：8天</Text>
-                        <Text style={[styles.baseText, styles.gray]}>（截止日期：9月1日12:00）</Text>
+                        <Text style={styles.countdownText}>报名倒计时：{data.remainDay}天</Text>
+                        <Text style={[styles.countdownText, styles.gray]}>（截止报名时间：{data.deadline}）</Text>
                     </View>
                     <View style={[styles.row, styles.spaceNone]}>
                         <View style={styles.numberLabel}>
-                            <Text style={[styles.number, {color: '#61a9da'}]}>2</Text>
+                            <Text style={[styles.number, {color: stylesVar('blue-light')}]}>{data.haveCar}</Text>
                             <Text style={styles.smallGray}>已报名车辆</Text>
                         </View>
                         <View style={styles.separator}></View>
                         <View style={styles.numberLabel}>
-                            <Text style={[styles.number, {color: '#f2b658'}]}>12</Text>
+                            <Text style={[styles.number, {color: stylesVar('orange')}]}>{data.needCar}</Text>
                             <Text style={styles.smallGray}>剩余车辆名额</Text>
                         </View>
                         <View style={styles.separator}></View>
                         <View style={styles.numberLabel}>
-                            <Text style={[styles.number, {color: '#92c056'}]}>1</Text>
+                            <Text style={[styles.number, {color: stylesVar('green-light')}]}>{data.remainSeat}</Text>
                             <Text style={styles.smallGray}>剩余座位</Text>
                         </View>
                     </View>
@@ -56,19 +75,19 @@ var ActivityDetail = React.createClass({
                         <View style={styles.note}>
                             <Image source={require('image!icon-photos')} style={styles.icon}/>
                             <Text style={styles.baseText}>相册</Text>
-                            <Text style={styles.gray}>(0)</Text>
+                            <Text style={styles.gray}>({data.photos})</Text>
                         </View>
                         <View style={[styles.separator, {height: 45}]}></View>
                         <View style={styles.note}>
                             <Image source={require('image!icon-journey')} style={styles.icon}/>
                             <Text style={styles.baseText}>游记</Text>
-                            <Text style={styles.gray}>(0)</Text>
+                            <Text style={styles.gray}>({data.journeys})</Text>
                         </View>
                         <View style={[styles.separator, {height: 45}]}></View>
                         <View style={styles.note}>
                             <Image source={require('image!icon-annotations')} style={styles.icon}/>
                             <Text style={styles.baseText}>轨迹</Text>
-                            <Text style={styles.gray}>(0)</Text>
+                            <Text style={styles.gray}>({data.annotations})</Text>
                         </View>
                     </View>
                 </View>
@@ -84,21 +103,21 @@ var ActivityDetail = React.createClass({
                         <View style={styles.stopCell}>
                             <Image source={require('image!icon-photo-green')} style={styles.iconPhotoGreen}/>
                             <Text style={styles.baseText}>相册
-                                <Text style={styles.gray}>(10)</Text>
+                                <Text style={styles.gray}>({data.photos})</Text>
                             </Text>
                         </View>
                         <View style={[styles.separator, {height: 90}]}></View>
                         <View style={styles.stopCell}>
                             <Image source={require('image!icon-journey-red')} style={styles.iconJourneyRed}/>
                             <Text style={styles.baseText}>游记
-                                <Text style={styles.gray}>(10)</Text>
+                                <Text style={styles.gray}>({data.journeys})</Text>
                             </Text>
                         </View>
                         <View style={[styles.separator, {height: 90}]}></View>
                         <View style={styles.stopCell}>
                             <Image source={require('image!icon-annotation-yello')} style={styles.iconAnnotationYello} />
                             <Text style={styles.baseText}>轨迹
-                                <Text style={styles.gray}>(10)</Text>
+                                <Text style={styles.gray}>({data.annotations})</Text>
                             </Text>
                         </View>
                     </View>
@@ -126,7 +145,7 @@ var ActivityDetail = React.createClass({
             } else if (isEnter === '1') {//已经报名
                 return (
                     <View style={styles.bottomBar}>
-                        <TouchableOpacity style={styles.activityCircle} activeOpacity={0.9}>
+                        <TouchableOpacity style={styles.information, styles.activityCircle} activeOpacity={0.9}>
                             <Image source={require('image!icon-activity-circle-trans')} style={styles.iconActivityCircle}/>
                             <Text style={styles.informationText}>活动圈子</Text>
                         </TouchableOpacity>
@@ -150,19 +169,19 @@ var ActivityDetail = React.createClass({
             } else if (isEnter === '1') {
                 return (
                     <View style={styles.bottomBar}>
-                        <TouchableOpacity style={[styles.information, styles.activityCircle]} activeOpacity={0.9}>
+                        <TouchableOpacity style={[styles.information, styles.blueLight]} activeOpacity={0.9}>
                             <Image source={require('image!icon-activity-circle-trans')} style={styles.iconActivityCircle} />
                             <Text style={styles.informationText}>活动圈子</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.information, styles.pictureTrans]} activeOpacity={0.9}>
+                        <TouchableOpacity style={[styles.information, styles.green]} activeOpacity={0.9}>
                             <Image source={require('image!icon-picture-trans')} style={styles.iconPictureTrans} />
                             <Text style={styles.informationText}>分享照片</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.information, styles.journeyTrans]} activeOpacity={0.9}>
+                        <TouchableOpacity style={[styles.information, styles.red]} activeOpacity={0.9}>
                             <Image source={require('image!icon-journey-trans')} style={styles.iconJourneyTrans} />
                             <Text style={styles.informationText}>写游记</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.information, styles.annotationTrans]} activeOpacity={0.9}>
+                        <TouchableOpacity style={[styles.information, styles.orange]} activeOpacity={0.9}>
                             <Image source={require('image!icon-annotation-trans')} style={styles.iconAnnotationTrans} />
                             <Text style={styles.informationText}>上传轨迹</Text>
                         </TouchableOpacity>
@@ -173,39 +192,20 @@ var ActivityDetail = React.createClass({
     },
 
     render: function() {
-        var moment = require('moment');
-        var publishDate = moment('2015-10-08 12:00').toDate();
-        var startDate = moment('2015-10-09').toDate();
-        var endDate = moment('2015-10-12').toDate();
-        console.log(publishDate, startDate, endDate);
         var isSponsor = this.props.isSponsor;
-        var data = {
-            id: 3,
-            header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-            title: 'GO！一起去草原撒野',
-            status: 'preparing',
-            tags: ['3-5车同行', '行程容易'],
-            route: '北京 - 天津 - 石家庄',
-            startDate: startDate,
-            endDate: endDate,
-            publishDate: publishDate,
-            user: {
-                username: 'Steven'
-            },
-            stars: 299
-        };
+        var data = this.state.data;
 
         return (
             <View style={styles.container}>
                 <ScrollView style={styles.scrollContainer}>
                     <Image 
-                        source={require('image!banner-activity-placeholder')}
+                        source={data.header ? {uri: data.header} : require('image!banner-activity-placeholder')}
                         style={styles.banner}>
                         <UserInfo 
                             style={styles.info}
-                            username="Steven"
-                            publishDate={Date.now()}
-                            avatar={require('image!avatar-placeholder')}/>
+                            username={data.user && data.user.username}
+                            publishDate={data.publishDate}
+                            avatar={data.user && data.user.avatar ? {uri: data.user.avatar} : require('image!avatar-placeholder')}/>
                         {isSponsor === '1' && (
                             <View style={styles.manageInfo}>
                                 <Image source={require('image!icon-edit-white')} style={styles.iconEditWhite}/>
@@ -227,13 +227,22 @@ var ActivityDetail = React.createClass({
                             <ActivityPublishDate data={data}/>
                         </View>
                         <View style={styles.tags}>
-                            {data.tags.map(function(tag) {
+                            {data.tags && data.tags.map(function(tag) {
                                 return <Tag key={tag} style={[styles.tag, {marginRight: 10}]}>{tag}</Tag> 
                             })}
                         </View>
                     </View>
                     {this.renderCenter()}
-                    
+                    <View style={styles.moreRow}>
+                        <Image source={require('image!more-down-gray')} style={styles.moreDownGray} />
+                    </View>
+                    <View style={styles.moreRow}>
+                        <View style={styles.moreLine}></View>
+                        <View style={styles.moreTextView}>
+                            <Text style={styles.moreText}>继续拖动，查看详情</Text>
+                        </View>
+                        <View style={styles.moreLine}></View>
+                    </View>
                 </ScrollView>
                 {this.renderBottom()}  
             </View>
@@ -256,9 +265,15 @@ var styles = StyleSheet.create({
     },
 
     baseText: {
-        color: '#303030',
+        color: stylesVar('dark'),
         fontWeight: '200',
         fontSize: 15
+    },
+
+    countdownText: {
+        color: stylesVar('dark'),
+        fontWeight: '200',
+        fontSize: 12
     },
 
     navbar: {
@@ -272,7 +287,7 @@ var styles = StyleSheet.create({
 
     navbarText: {
         fontSize: 10,
-        color: '#fff',
+        color: stylesVar('white'),
         marginRight: 20,
         marginLeft: 5
     },
@@ -334,8 +349,8 @@ var styles = StyleSheet.create({
     section: {
         borderTopWidth: 1 / PixelRatio.get(),
         borderBottomWidth: 1 / PixelRatio.get(),
-        borderColor: '#dbe0e3',
-        backgroundColor: '#fff',
+        borderColor: stylesVar('dark-light'),
+        backgroundColor: stylesVar('white'),
         marginBottom: 20
     },
 
@@ -365,8 +380,8 @@ var styles = StyleSheet.create({
 
     tag: {
         marginRight: 10,
-        color: '#34be9a',
-        borderColor: '#34be9a'
+        color: stylesVar('green'),
+        borderColor: stylesVar('green')
     },
 
     tags: {
@@ -457,7 +472,7 @@ var styles = StyleSheet.create({
         height: 60,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#34be9a'
+        backgroundColor: stylesVar('green')
     },
 
     iconInformation: {
@@ -467,16 +482,12 @@ var styles = StyleSheet.create({
     },
 
     informationText: {
-        color: '#fff',
+        color: stylesVar('white'),
         fontSize: 10
     },
 
-    activityCircle: {
-        flex: 1,
-        height: 60,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#61a9da'
+    blueLight: {
+        backgroundColor: stylesVar('blue-light')
     },
 
     iconActivityCircle: {
@@ -485,8 +496,8 @@ var styles = StyleSheet.create({
         marginBottom: 5
     },
 
-    pictureTrans: {
-        backgroundColor: '#34be9a'
+    green: {
+        backgroundColor: stylesVar('green')
     },
 
     iconPictureTrans: {
@@ -494,8 +505,8 @@ var styles = StyleSheet.create({
         marginBottom: 5
     },
 
-    journeyTrans: {
-        backgroundColor: '#ee5a2f'
+    red: {
+        backgroundColor: stylesVar('red')
     },
 
     iconJourneyTrans: {
@@ -503,8 +514,8 @@ var styles = StyleSheet.create({
         marginBottom: 5
     },
 
-    annotationTrans: {
-        backgroundColor: '#f2b658'
+    orange: {
+        backgroundColor: stylesVar('orange')
     },
 
     iconAnnotationTrans: {
@@ -517,12 +528,45 @@ var styles = StyleSheet.create({
         height: 60,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#0087fa'
+        backgroundColor: stylesVar('blue')
     },
 
     applyText: {
         fontSize: 20,
-        color: '#fff'
+        color: stylesVar('white')
+    },
+
+    moreRow: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingLeft: 15,
+        paddingRight: 15,
+        marginBottom: 8
+    },
+
+    moreDownGray: {
+        marginTop: 25,
+        ...su.size(14)
+    },
+
+    moreTextView: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
+    moreText: {
+        fontSize: 10,
+        color: stylesVar('dark-mid')
+    },
+
+    moreLine: {
+        flex: 1,
+        height: 1 / PixelRatio.get(),
+        backgroundColor: stylesVar('dark-light')
     }
 });
 
@@ -576,7 +620,7 @@ class ActivityDetailRoute extends BaseRouteMapper {
 
             navbarText: {
                 fontSize: 10,
-                color: '#fff',
+                color: stylesVar('white'),
                 marginRight: 15,
                 marginLeft: 5
             },

@@ -160,6 +160,40 @@ var activity = {
 		//     }
 		// });
 	},
+	fetchDetail: function() {
+		return new Promise(function(resolve, reject) {
+			var moment = require('moment');
+
+			var detail = {
+				id: 3,
+            	header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+            	title: 'GO！一起去草原撒野',
+            	status: 'preparing',
+            	tags: ['3-5车同行', '行程容易'],
+            	route: '北京 - 天津 - 石家庄',
+            	startDate: moment('2015-09-03').toDate(),
+            	endDate: moment('2015-09-10').toDate(),
+            	publishDate: moment('2015-08-09'),
+            	user: {
+                	username: 'Steven',
+                	avatar: ''
+            	},
+            	stars: 299,
+            	remainDay: 8,
+            	deadline: '9月1日12:00',
+            	haveCar: 2,
+            	needCar: 3,
+            	remainSeat: 12,
+            	photos: 2,
+            	journeys: 2,
+            	annotations: 3
+			}
+
+			setTimeout(function() {
+				resolve(detail);
+			}, 0);
+		});
+	}
 };
 
 var journey = {
