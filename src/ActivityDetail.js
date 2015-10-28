@@ -25,6 +25,63 @@ var {
 } = require('./widgets');
 
 var ActivityDetail = React.createClass({
+    renderBottom: function() {
+        var status = this.props.status;
+        var isEnter = this.props.isEnter;
+        if (status === 'preparing') { //活动没有结束
+            if (isEnter === '0') { //没有报名
+                return (
+                    <View style={styles.bottomBar}>
+                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
+                            <Image source={require('image!icon-information')} style={styles.iconInformation}/>
+                            <Text style={styles.informationText}>咨询楼主</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.apply} activeOpacity={0.9}>
+                            <Text style={styles.applyText}>我要报名</Text>
+                        </TouchableOpacity>
+                    </View>
+                );
+            } else if (isEnter === '1') {//已经报名
+                return (
+                    <View style={styles.bottomBar}>
+                        <TouchableOpacity style={styles.activityCircle} activeOpacity={0.9}>
+                            <Image source={require('image!icon-activityCircle')} style={styles.iconActivityCircle}/>
+                            <Text style={styles.informationText}>活动圈子</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.apply} activeOpacity={0.9}>
+                            <Text style={styles.applyText}>我的报名信息</Text>
+                        </TouchableOpacity>
+                    </View>
+                );
+            }
+            
+        } else if (status === 'travelling') {
+            if (isEnter === '0') {
+                return (
+                    <View style={styles.bottomBar}>
+                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
+                            <Image source={require('image!icon-information')} style={styles.iconInformation} />
+                            <Text style={styles.informationText}>咨询楼主</Text>
+                        </TouchableOpacity>
+                    </View>
+                );
+            } else if (isEnter === '1') {
+                return (
+                    <View style={styles.bottomBar}>
+                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
+                            <Image source={require('image!icon-activityCircle')} style={styles.>
+                        <TouchableOpacity>
+                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
+                        <TouchableOpacity>
+                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
+                        <TouchableOpacity>
+                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
+                        <TouchableOpacity>
+                    </View>
+                );
+            }
+        }
+    },
     render: function() {
         var moment = require('moment');
         var publishDate = moment('2015-10-08 12:00').toDate();
@@ -120,16 +177,7 @@ var ActivityDetail = React.createClass({
                         </View>
                     </View>
                 </ScrollView>
-
-                <View style={styles.bottomBar}>
-                    <TouchableOpacity style={styles.information} activeOpacity={0.9}>
-                        <Image source={require('image!icon-information')} style={{width: 22, height: 22, marginBottom: 5}}/>
-                        <Text style={styles.informationText}>咨询</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.apply} activeOpacity={0.9}>
-                        <Text style={styles.applyText}>我要报名</Text>
-                    </TouchableOpacity>
-                </View>
+                {this.renderBottom()}  
             </View>
         );
     }
@@ -231,7 +279,8 @@ var styles = StyleSheet.create({
     },
 
     countdown: {
-        paddingLeft: 8,
+        marginLeft: 8,
+        marginRight: 10,
         ...su.size(9, 12),
         resizeMode: 'contain'
     },
@@ -282,7 +331,6 @@ var styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
 
-
     information: {
         flex: 1,
         height: 60,
@@ -291,9 +339,29 @@ var styles = StyleSheet.create({
         backgroundColor: '#34be9a'
     },
 
+    iconInformation: {
+        width: 22, 
+        height: 22, 
+        marginBottom: 5
+    },
+
     informationText: {
         color: '#fff',
         fontSize: 10
+    },
+
+    activityCircle: {
+        flex: 1,
+        height: 60,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#61a9da'
+    },
+
+    iconActivityCircle: {
+        width: 22,
+        height: 22,
+        marginBottom: 5
     },
 
     apply: {
@@ -313,10 +381,12 @@ var styles = StyleSheet.create({
 var BaseRouteMapper = require('./BaseRouteMapper');
 
 class ActivityDetailRoute extends BaseRouteMapper {
-    constructor(id) {
+    constructor(data) {
         super()
 
-        this.id = id;
+        this.id = data.id;
+        this.status = data.status;
+        this.isEnter = data.isEnter;
     }
 
     renderLeftButton(route, navigator, index, navState) {
@@ -383,7 +453,7 @@ class ActivityDetailRoute extends BaseRouteMapper {
     }
 
     renderScene() {
-        return <ActivityDetail id={this.id}/>
+        return <ActivityDetail id={this.id} status={this.status} isEnter={this.isEnter}/>
     }
 }
 

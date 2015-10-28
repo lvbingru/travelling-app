@@ -72,6 +72,7 @@ var activity = {
 						header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
 						title: 'GO！一起去草原撒野',
 						status: 'preparing',
+						isEnter: '0',
 						tags: ['3-5车同行', '行程容易'],
 						route: '北京 - 天津 - 石家庄',
 						startDate: startDate,
@@ -86,6 +87,7 @@ var activity = {
 						header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
 						title: 'GO！一起去草原撒野',
 						status: 'travelling',
+						isEnter: '0',
 						tags: ['3-5车同行', '行程容易'],
 						route: '北京 - 天津 - 石家庄',
 						startDate: startDate,
@@ -100,6 +102,22 @@ var activity = {
 						header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
 						title: 'GO！一起去草原撒野',
 						status: 'preparing',
+						isEnter: '1',
+						tags: ['3-5车同行', '行程容易'],
+						route: '北京 - 天津 - 石家庄',
+						startDate: startDate,
+						endDate: endDate,
+						publishDate: publishDate,
+						user: {
+							username: 'Steven'
+						},
+						stars: 299
+					}, {
+						id: 4,
+						header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+						title: 'GO！一起去草原撒野',
+						status: 'travelling',
+						isEnter: '1',
 						tags: ['3-5车同行', '行程容易'],
 						route: '北京 - 天津 - 石家庄',
 						startDate: startDate,
