@@ -22,7 +22,7 @@ var ActivityList = require('./Activity');
 var Space = require('./Space');
 var JourneyTab = require('./JourneyTab');
 var PlusMenu = require('./PlusMenu');
-var CreateActivity = require('./CreateActivity');
+var FillActivityBrief = require('./FillActivityBrief');
 
 function emptyFunction() {}
 
@@ -137,13 +137,8 @@ var HomePage = React.createClass({
     },
 
     _onPlusResult: function(result) {
-        console.log(result);
         if (result === 'activity') {
-            this.props.navigator.push(new CreateActivity);
-            // this.props.navigator.push({
-            //     name: 'create-activity',
-            //     title: '发布活动(1/2)'
-            // });
+            this.props.navigator.push(new FillActivityBrief);
         }
     },
 

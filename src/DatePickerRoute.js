@@ -75,6 +75,10 @@ class DatePickerRoute extends BaseRouteMapper {
         this.emitter = new EventEmitter();
     }
 
+    get title() {
+        return "选择时间";
+    }
+
     _onSave() {
         this.emitter.emit('save');
     }
