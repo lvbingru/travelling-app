@@ -22,7 +22,7 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @providesModule NavigatorNavigationBar
+ * @providesModule CustomNavBar
  */
 'use strict';
 
@@ -44,7 +44,7 @@ var navStatePresentedIndex = function(navState) {
   return navState.observedTopOfStack;
 };
 
-var NavigatorNavigationBar = React.createClass({
+var NavBar = React.createClass({
 
   propTypes: {
     navigator: React.PropTypes.object,
@@ -190,9 +190,7 @@ var NavigatorNavigationBar = React.createClass({
     this._descriptors[componentName] = this._descriptors[componentName].set(route, rendered);
     return rendered;
   },
-
 });
-
 
 var styles = StyleSheet.create({
   navBarContainer: {
@@ -205,4 +203,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = NavigatorNavigationBar;
+module.exports = NavBar;

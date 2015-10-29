@@ -2,72 +2,72 @@ var React = require('react-native');
 
 var {
     View,
-    DatePickerIOS,
-    StyleSheet,
-    Text,
     Image,
-    TouchableOpacity
+    Text,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet
 } = React;
 
-var DatepickerScene = React.createClass({
+var stylesVar = require('./stylesVar');
+
+var TextInputScene = React.createClass({
+
+    displayName: 'TextInputScene',
 
     getInitialState: function() {
         return {
-            date: new Date()
-        }
+            value: this.props.initValue || ''
+        };
     },
 
     componentDidMount: function() {
-        this.props.navbar.addListener('save', this._handleSave.bind(this));
+        this._subscribe = this.props.navbar.addListener('save', function() {
+            this.props.onResult(this.state.value);
+            this.props.navigator.pop();
+        }.bind(this));
     },
 
-    _handleSave: function() {
-        this.props.onResult(this.state.date);
-        this.props.navigator.pop();
+    componentWillUnmount: function() {
+        this._subscribe.remove();
     },
 
     render: function() {
         return (
             <View style={[styles.container, this.props.style]}>
-                <DatePickerIOS
-                    date={this.state.date}
-                    mode="date"
-                    minimumDate={this.props.minimumDate}
-                    maximumDate={this.props.maximumDate}
-                    timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
-                    onDateChange={(date) => {this.setState({date})}}
-                    minuteInterval={10}/>
+                <TextInput 
+                    autoFocus={true}
+                    multiline={true} 
+                    style={styles.textInput}
+                    onChangeText={(value) => this.setState({value})} 
+                    value={this.state.value}/>
             </View>
-        )
+        );
     }
 });
-
 
 var styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff'
+        backgroundColor: stylesVar('bg-gray')
     },
 
-    save: {
-        margin: 10,
-        borderRadius: 6,
-        backgroundColor: 'transparent',
-        overflow: 'hidden'
-    },
-
-    saveText: {
-        paddingVertical: 10,
-        backgroundColor: '#0087fa',
-        color: '#fff',
-        textAlign: 'center'
+    textInput: {
+        backgroundColor: 'white',
+        padding: 10,
+        height: 95,
+        marginTop: 20,
+        borderTopWidth: 1,
+        borderTopColor: stylesVar('dark-lighter'),
+        borderBottomWidth: 1,
+        borderBottomColor: stylesVar('dark-lighter'),
     }
 });
 
 var BaseRouteMapper = require('./BaseRouteMapper');
 var EventEmitter = require('EventEmitter');
 
-class DatePickerRoute extends BaseRouteMapper {
+class TextInputRoute extends BaseRouteMapper {
 
     constructor(params) {
         super();
@@ -76,7 +76,7 @@ class DatePickerRoute extends BaseRouteMapper {
     }
 
     get title() {
-        return this.params.title || "选择时间";
+        return this.params.title || "输入文字";
     }
 
     _onSave() {
@@ -86,7 +86,7 @@ class DatePickerRoute extends BaseRouteMapper {
     renderLeftButton(route, navigator, index, navState) {
         var styles = this.styles;
         return (
-          <TouchableOpacity
+            <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => navigator.pop()}>
             <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
@@ -97,7 +97,7 @@ class DatePickerRoute extends BaseRouteMapper {
     renderRightButton(route, navigator, index, navState) {
         var styles = this.styles;
         return (
-          <TouchableOpacity 
+            <TouchableOpacity 
             activeOpacity={0.8} 
             style={styles.navBarRightButton}
             onPress={this._onSave.bind(this)}>
@@ -108,13 +108,12 @@ class DatePickerRoute extends BaseRouteMapper {
 
     renderScene() {
         return (
-            <DatepickerScene 
+            <TextInputScene 
                 navbar={this.emitter}
-                maximumDate={this.params.maximumDate}
-                minimumDate={this.params.minimumDate}
+                initValue={this.params.initValue}
                 onResult={this.params.onResult}/>
         );
     }
 }
 
-module.exports = DatePickerRoute;
+module.exports = TextInputRoute;

@@ -11,7 +11,7 @@ var Onboarding = require('./src/Onboarding');
 var config = require('./src/config');
 var HomePage = require('./src/HomePage');
 var Onboarding = require('./src/Onboarding');
-var NavigatorBar = require('./src/NavigatorBar');
+var NavBar = require('./src/NavBar');
 
 var Dispatcher = require('./src/Dispatcher');
 
@@ -145,7 +145,8 @@ var Home = React.createClass({
 
         // var Route = require('./src/FillActivityBrief');
         var Route = require('./src/FillActivityDetail');
-        this.refs.navigator.replace(new Route());
+        // var Route = require('./src/ActivityFormSummary');
+        this.refs.navigator.replace(new Route({}));
     },
 
     componentWillUnmount: function() {
@@ -197,9 +198,9 @@ var Home = React.createClass({
         };
 
         var navbar = (
-            <NavigatorBar
-            style={styles.navBar} 
-            routeMapper={routeMapper}/>
+            <NavBar
+                style={styles.navBar} 
+                routeMapper={routeMapper}/>
         );
 
         return (

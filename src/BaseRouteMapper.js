@@ -58,7 +58,7 @@ class BaseRouteMapper {
             navBarLeftButton: {
                 marginLeft: 10,
                 marginVertical: 14,
-                width: 17,
+                width: 18,
                 height: 16
             },
             navBarRightButton: {

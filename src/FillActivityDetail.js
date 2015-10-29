@@ -1,15 +1,12 @@
 'use strict';
 
+var _ = require('underscore');
 var moment = require('moment');
 var React = require('react-native');
-
 var {
     AlertIOS,
-    PickerIOS,
     StyleSheet,
-    CameraRoll,
     Dimensions,
-    DatePickerIOS,
     PixelRatio,
     ScrollView,
     Text,
@@ -19,30 +16,41 @@ var {
     TouchableOpacity,
 } = React;
 
-var deviceWidth = Dimensions.get('window').width;
-var deviceHeight = Dimensions.get('window').height;
-
 var su = require('./styleUtils');
 var stylesVar = require('./stylesVar');
-var ActivityCarsPicker = require('./ActivityCarsPicker');
-var DatePickerRoute = require('./DatePickerRoute');
+var {
+    detailLabels,
+    BaseMixin,
+    DetailMixin
+} = require('./createActivity');
 
-var Labels = {
-    entryDeadline: '报名截止日期',
-    minCars: '最少车辆数量',
-    maxCars: '最大车辆数量'
-}
+var deviceWidth = Dimensions.get('window').width;
 
 var DetailEntry = React.createClass({
+
     render: function() {
-        <TouchableOpacity activeOpacity={0.8} style={styles.detailEntry}>
-            <Image style={styles.detailEntryIcon} source={require('image!icon-add-detail')}/>
-            <Text>this.props.label</Text>
-        </TouchableOpacity>
+        var icon = this.props.ready ? 
+                    require('image!icon-ready') :
+                    require('image!icon-add-detail');
+
+        var style = this.props.ready ? 
+                        [styles.detailEntry, styles.detailEntryReady]:
+                        styles.detailEntry;
+        return (
+            <TouchableOpacity 
+                onPress={this.props.onPress}
+                activeOpacity={0.6} 
+                style={style}>
+                <Image style={styles.detailEntryIcon} source={icon}/>
+                <Text style={styles.detailEntryText}>{this.props.label}</Text>
+            </TouchableOpacity>
+        );
     }
 });
 
 var FillActivityDetail = React.createClass({
+
+    mixins: [BaseMixin, DetailMixin],
 
     getInitialState: function() {
         return {};
@@ -52,43 +60,13 @@ var FillActivityDetail = React.createClass({
         this.props.events.addListener('next', this._next.bind(this));
     },
 
-    _showDatePickerForEntryDeadline: function() {
-        this.props.navigator.push(new DatePickerRoute({
-            onResult: this._saveEntryDeadline.bind(this),
-            maximumDate: this.props.brief.startDate
-        }));
-    },
-
-    _saveEntryDeadline: function(date) {
-        this.setState({
-            entryDeadline: date
-        });
-    },
-
-    _showMinCarsPicker: function() {
-        var modal = <ActivityCarsPicker onResult={this._save('minCars')}/>;
-        this.props.openModal(modal);
-    },
-
-    _showMaxCarsPicker: function() {
-        var modal = <ActivityCarsPicker onResult={this._save('maxCars')}/>;
-        this.props.openModal(modal);
-    },
-
     _next: function() {
-        console.log('next');
-    },
-
-    _save: function(key) {
-        return function(value) {
-            var partial = {};
-            partial[key] = String(value);
-            this.setState(partial);
-        }.bind(this)
-    },
-
-    _formatDate: function(date) {
-        return date ? moment(date).format('YYYY-MM-DD') : '';
+        try {
+            this._validateDetail();
+            var detail = _.extend({}, this.props.brief, this.state);
+        } catch(e) {
+            AlertIOS.alert(e.message);
+        }
     },
 
     render: function() {
@@ -105,7 +83,7 @@ var FillActivityDetail = React.createClass({
                         onPress={this._showDatePickerForEntryDeadline}
                         style={styles.field}>
 
-                        <Text style={[styles.label, styles.labelFixed]}>{Labels.entryDeadline}</Text>
+                        <Text style={[styles.label, styles.labelFixed]}>{detailLabels.entryDeadline}</Text>
                         <TextInput 
                             value={this._formatDate(this.state.entryDeadline)} 
                             editable={false}
@@ -118,7 +96,7 @@ var FillActivityDetail = React.createClass({
                         onPress={this._showMinCarsPicker}
                         style={styles.field}>
 
-                        <Text style={[styles.label, styles.labelFixed]}>{Labels.minCars}</Text>
+                        <Text style={[styles.label, styles.labelFixed]}>{detailLabels.minCars}</Text>
                         <TextInput 
                             value={minCars ? minCars + "辆" : ""} 
                             editable={false}
@@ -131,7 +109,7 @@ var FillActivityDetail = React.createClass({
                         onPress={this._showMaxCarsPicker}
                         style={[styles.field, styles.lastField]}>
 
-                        <Text style={[styles.label, styles.labelFixed]}>{Labels.maxCars}</Text>
+                        <Text style={[styles.label, styles.labelFixed]}>{detailLabels.maxCars}</Text>
                         <TextInput 
                             value={maxCars ? maxCars + "辆" : ""} 
                             editable={false}
@@ -141,6 +119,30 @@ var FillActivityDetail = React.createClass({
                 </View>
 
                 <View style={styles.details}>
+                    <DetailEntry 
+                        onPress={this._editRouteMap}
+                        label={"选择" + detailLabels.routeMap}
+                        ready={!!this.state.routeMap}/>
+                    <DetailEntry 
+                        onPress={this._editText('routeDesc')} 
+                        label={detailLabels.routeDesc} 
+                        ready={!!this.state.routeDesc}/>
+                    <DetailEntry 
+                        onPress={this._editText('partnerRequirements')}
+                        label={detailLabels.partnerRequirements} 
+                        ready={!!this.state.partnerRequirements}/>
+                    <DetailEntry 
+                        onPress={this._editText('equipementRequirements')}
+                        label={detailLabels.equipementRequirements}
+                        ready={!!this.state.equipementRequirements}/>
+                    <DetailEntry
+                        onPress={this._editText('costDesc')}
+                        label={detailLabels.costDesc}
+                        ready={!!this.state.costDesc}/>
+                    <DetailEntry
+                        onPress={this._editText('riskPrompt')}
+                        label={detailLabels.riskPrompt}
+                        ready={!!this.state.riskPrompt}/>
                 </View>
             </View>
         );
@@ -155,7 +157,7 @@ var styles = StyleSheet.create({
 
     section: {
         marginTop: 20,
-        marginBottom: 30,
+        marginBottom: 20,
         borderTopWidth: 1 / PixelRatio.get(),
         borderTopColor: stylesVar('dark-light'),
         borderBottomWidth: 1 / PixelRatio.get(),
@@ -193,16 +195,37 @@ var styles = StyleSheet.create({
         resizeMode: 'contain',
     },
 
-    detailEntry: {
+    details: {
         flexDirection: 'row',
-        alignItems: 'center',
+        flexWrap: 'wrap',
+        marginHorizontal: 10
+    },
+
+    detailEntry: {
+        width: (deviceWidth - 60) / 2,
+        ...su.margin(0, 10, 10),
         backgroundColor: '#fff',
         borderWidth: 1 / PixelRatio.get(),
-        borderColor: stylesVar('dark-light')
+        borderColor: stylesVar('dark-light'),
+        paddingVertical: 20,
+        paddingLeft: 15,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+
+    detailEntryReady: {
+        borderWidth: 1 / PixelRatio.get(),
+        borderColor: stylesVar('brand-primary'),
     },
 
     detailEntryIcon: {
-        ...su.size(18)
+        ...su.size(18),
+        resizeMode: 'contain',
+        marginRight: 9
+    },
+
+    detailEntryText: {
+        color: stylesVar('dark-mid')
     }
 });
 

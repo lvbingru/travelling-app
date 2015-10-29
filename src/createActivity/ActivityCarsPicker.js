@@ -14,16 +14,15 @@ var {
   Dimensions,
 } = React;
 
-var stylesVar = require('./stylesVar');
-var su = require('./styleUtils');
+var stylesVar = require('../stylesVar');
+var su = require('../styleUtils');
 
 var RANGE = _.range(5).map((n) => n + 1);
 
 var ActivityCarsPicker = React.createClass({
     getInitialState: function() {
         return {
-            min: 1,
-            max: 1,
+            value: 1
         };
     },
 

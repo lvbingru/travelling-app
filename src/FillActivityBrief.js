@@ -7,11 +7,7 @@ var React = require('react-native');
 var {
     AlertIOS,
     StyleSheet,
-    CameraRoll,
-    Dimensions,
-    DatePickerIOS,
     PixelRatio,
-    ScrollView,
     Text,
     TextInput,
     Image,
@@ -19,25 +15,21 @@ var {
     TouchableOpacity,
 } = React;
 
-var deviceWidth = Dimensions.get('window').width;
-var deviceHeight = Dimensions.get('window').height;
-
-var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
-
 var su = require('./styleUtils');
 var stylesVar = require('./stylesVar');
-var DatePickerRoute = require('./DatePickerRoute');
+var ActivityCoverInput = require('./ActivityCoverInput');
 var FillActivityDetailRoute = require('./FillActivityDetail');
 
-var Labels = {
-    cover: '封面',
-    title: '标题',
-    route: '路线',
-    startDate: '出发时间',
-    endDate: '结束时间',
-};
+var {
+    briefLabels,
+    BaseMixin,
+    BriefMixin
+} = require('./createActivity');
+var Labels = briefLabels;
 
 var FillActivityBrief = React.createClass({
+
+    mixins: [BaseMixin, BriefMixin],
 
     getInitialState: function() {
         return {};
@@ -48,121 +40,22 @@ var FillActivityBrief = React.createClass({
     },
 
     _next: function() {
-        var prop = _.find(_.keys(Labels), function(key) {
-            return !this.state[key];
-        }, this);
-
-        if (prop) {
-            return AlertIOS.alert(Labels[prop] + '没有填写');
-        }
-
-        if (this.state.title.length > 50) {
-            return AlertIOS.alert('标题不能超50个字');
-        }
-
-        if (this.state.route.length > 100) {
-            return AlertIOS.alert('路线不能超过100个字');
-        }
-
-        var brief = _.pick(this.state, _.keys(Labels));
-        this.props.navigator.push(new FillActivityDetailRoute(brief));
-    },
-
-    _showCameraRoll: function() {
-        var options = {
-            title: '选择封面',
-            cancelButtonTitle: '取消',
-            takePhotoButtonTitle: '拍照',
-            chooseFromLibraryButtonTitle: '从手机相册选择',
-            maxWidth: 800,
-            maxHeight: 800,
-            quality: 1,
-            allowsEditing: false,
-            storageOptions: {
-                skipBackup: true,
-                path: 'images'
-            }
-        };
-
-        UIImagePickerManager.showImagePicker(options, function(type, result) {
-            console.log('show image picker', arguments);
-
-            if (type === "cancel") {
-                console.log('User cancelled image picker');
-            } else if (type === 'uri') {
-                var source = {
-                    uri: result.replace('file://', ''),
-                    isStatic: true
-                };
-
-                this.setState({
-                    cover: source
-                });
-            }
-        }.bind(this));
-    },
-
-    _showDatePickerForStartDate: function() {
-        this.props.navigator.push(new DatePickerRoute({
-            onResult: this._saveStartDate.bind(this),
-            maximumDate: this.state.endDate
-        }));
-    },
-
-    _saveStartDate: function(date) {
-        this.setState({
-            startDate: date
-        });
-    },
-
-    _showDatePickerForEndDate: function() {
-        this.props.navigator.push(new DatePickerRoute({
-            onResult: this._saveEndDate.bind(this),
-            minimumDate: this.state.startDate
-        }));
-    },
-
-    _saveEndDate: function(date) {
-        this.setState({
-            endDate: date
-        });
-    },
-
-    _getStartDate: function() {
-        var date = this.state.startDate;
-        return date ? moment(date).format('YYYY-MM-DD') : "";
-    },
-
-    _getEndDate: function() {
-        var date = this.state.endDate;
-        return date ? moment(date).format('YYYY-MM-DD') : "";
-    },
-
-    _renderCover: function() {
-        if (!this.state.cover) {
-            var coverPlaceholder = require('image!cover-placeholder');
-            return (
-                <Image source={coverPlaceholder} style={styles.coverPlaceholder}/>
-            );
-        } else {
-            return (
-                <Image source={this.state.cover} style={styles.cover}>
-                        <Image source={require('image!icon-edit')} style={styles.iconEdit}/>
-                </Image>
-            );
+        try {
+            this._validateBrief();
+            var brief = _.pick(this.state, _.keys(Labels));
+            this.props.navigator.push(new FillActivityDetailRoute(brief));
+        } catch(e) {
+            AlertIOS.alert(e.message);
         }
     },
 
     render: function() {
-
         return (
             <View style={[styles.container, this.props.style]}>
-                <TouchableOpacity
-                    style={styles.coverSection}
-                    activeOpacity={0.9}
-                    onPress={this._showCameraRoll}>
-                    {this._renderCover()}
-                </TouchableOpacity>
+                <ActivityCoverInput 
+                    style={styles.section}
+                    value={this.state.cover}
+                    onChange={(cover) => this.setState({cover})}/>
 
                 <View style={styles.info}>
                     <View style={styles.field}>
@@ -190,7 +83,7 @@ var FillActivityBrief = React.createClass({
 
                     <Text style={[styles.label, styles.labelFixed]}>{Labels.startDate}</Text>
                         <TextInput 
-                            value={this._getStartDate()} 
+                            value={this._formatDate(this.state.startDate)} 
                             editable={false}
                         style={styles.input}/>
                         <Image style={styles.arrow} source={require('image!icon-arrow')}/>
@@ -203,7 +96,7 @@ var FillActivityBrief = React.createClass({
 
                         <Text style={[styles.label, styles.labelFixed]}>{Labels.endDate}</Text>
                         <TextInput 
-                            value={this._getEndDate()} 
+                            value={this._formatDate(this.state.endDate)} 
                             editable={false}
                             style={styles.input}/>
                         <Image style={styles.arrow} source={require('image!icon-arrow')}/>
@@ -220,29 +113,8 @@ var styles = StyleSheet.create({
         backgroundColor: stylesVar('dark-lighter')
     },
 
-    coverSection: {
-        backgroundColor: '#fff',
+    section: {
         marginBottom: 20,
-    },
-
-    iconEdit: {
-        ...su.size(32),
-        backgroundColor: 'transparent'
-    },
-
-    cover: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: deviceWidth,
-        resizeMode: 'cover',
-        height: 145
-    },
-
-    coverPlaceholder: {
-        width: deviceWidth - 10,
-        resizeMode: 'stretch',
-        height: 145,
-        margin: 5
     },
 
     info: {

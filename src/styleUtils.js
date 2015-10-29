@@ -59,7 +59,8 @@ function margin() {
 		return {
 			marginTop: top,
 			marginBottom: bottom,
-			marginVertical: vertical,
+			marginLeft: vertical,
+			marginRight: vertical
 		}
 	}
 
