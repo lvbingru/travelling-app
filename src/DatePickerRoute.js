@@ -11,9 +11,31 @@ var {
 
 var DatepickerScene = React.createClass({
 
+    propTypes: {
+        minimumDate: React.PropTypes.instanceOf(Date),
+        maximumDate: React.PropTypes.instanceOf(Date),
+        current: React.PropTypes.instanceOf(Date),
+    },
+
+    statics: {
+        getInitialDate: function(min, max, current) {
+            var date = current || new Date;
+            if (min && date < min) {
+                date = min;
+            } else if (max && date > max) {
+                date = max;
+            }
+            return date;
+        }
+    },
+
     getInitialState: function() {
+        var min = this.props.minimumDate;
+        var max = this.props.maximumDate;
+        var current = this.props.current;
+
         return {
-            date: new Date()
+            date: DatepickerScene.getInitialDate(min, max, current)
         }
     },
 
@@ -86,10 +108,12 @@ class DatePickerRoute extends BaseRouteMapper {
     renderLeftButton(route, navigator, index, navState) {
         var styles = this.styles;
         return (
-          <TouchableOpacity
+            <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => navigator.pop()}>
-            <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
+            <Image
+                style={styles.navBarLeftButton} 
+                source={require('image!back-icon')}/>
           </TouchableOpacity>
         );
     }
@@ -97,7 +121,7 @@ class DatePickerRoute extends BaseRouteMapper {
     renderRightButton(route, navigator, index, navState) {
         var styles = this.styles;
         return (
-          <TouchableOpacity 
+            <TouchableOpacity 
             activeOpacity={0.8} 
             style={styles.navBarRightButton}
             onPress={this._onSave.bind(this)}>
@@ -112,6 +136,7 @@ class DatePickerRoute extends BaseRouteMapper {
                 navbar={this.emitter}
                 maximumDate={this.params.maximumDate}
                 minimumDate={this.params.minimumDate}
+                current={this.params.current}
                 onResult={this.params.onResult}/>
         );
     }

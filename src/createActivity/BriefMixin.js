@@ -28,29 +28,20 @@ var BriefMixin = {
 
     _showDatePickerForStartDate: function() {
         this.props.navigator.push(new DatePickerRoute({
-            onResult: this._saveStartDate.bind(this),
-            maximumDate: this.state.endDate
+            onResult: this._save('startDate'),
+            current: this.state.startDate,
+            maximumDate: this.state.endDate,
+            minimumDate: this.state.entryDeadline
         }));
-    },
-
-    _saveStartDate: function(date) {
-        this.setState({
-            startDate: date
-        });
     },
 
     _showDatePickerForEndDate: function() {
         this.props.navigator.push(new DatePickerRoute({
-            onResult: this._saveEndDate.bind(this),
+            onResult: this._save('endDate'),
+            current: this.state.endDate,
             minimumDate: this.state.startDate
         }));
-    },
-
-    _saveEndDate: function(date) {
-        this.setState({
-            endDate: date
-        });
-    },
+    }
 }
 
 module.exports = BriefMixin;

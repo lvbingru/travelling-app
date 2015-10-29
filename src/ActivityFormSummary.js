@@ -29,10 +29,11 @@ var ActivityCoverInput = require('./ActivityCoverInput');
 var RoutePicker = require('./RoutePicker');
 var DatePickerRoute = require('./DatePickerRoute');
 var {
-    Labels,
+    labels,
     BaseMixin,
     BriefMixin,
-    DetailMixin
+    DetailMixin,
+    SimpleField
 } = require('./createActivity');
 
 var ActivityFormSummaryScene = React.createClass({
@@ -41,77 +42,57 @@ var ActivityFormSummaryScene = React.createClass({
 
     getInitialState() {
         return {
-            ...this.props.summary
+            ...this.props.data
         };
     },
     
     render: function() {
         return (
-            <View style={[styles.container, this.props.style]}>
+            <ScrollView style={[styles.container, this.props.style]}>
                 <ActivityCoverInput 
                     style={styles.section}
                     value={this.state.cover}
                     onChange={(cover) => this.setState({cover})}/>
 
                 <View style={[styles.section, styles.formGroup]}>
-                    <View style={styles.field}>
-                        <Text style={styles.label}>{Labels.title}</Text>
-                        <TextInput 
-                            value={this.state.title} 
-                            style={styles.input} 
-                            onChangeText={(title) => this.setState({title})}/>
-                        <Image style={styles.arrow} source={require('image!icon-arrow')}/>
-                    </View>
-                    <View style={styles.field}>
-                        <Text style={styles.label}>{Labels.route}</Text>
-                        <TextInput 
-                            value={this.state.route} 
-                            style={styles.input} 
-                            onChangeText={(route) => this.setState({route})}/>
-                        <Image style={styles.arrow} source={require('image!icon-arrow')}/>
-                    </View>
-                    <TouchableOpacity 
-                        activeOpacity={0.8} 
-                        onPress={this._showDatePickerForStartDate}
-                        style={styles.field}>
-                        <Text style={styles.label}>{Labels.startDate}</Text>
-                        <TextInput 
-                            value={this.state.startDate} 
-                            style={styles.input} 
+                    <SimpleField
+                        label={labels.title}
+                        value={this.state.title}
+                        onChange={this._save('title')}/>
 
-                            editable={false}/>
-                        <Image style={styles.arrow} source={require('image!icon-arrow')}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.8} style={[styles.field, styles.lastField]}>
-                        <Text style={styles.label}>{Labels.endDate}</Text>
-                        <TextInput 
-                            value={this.state.endDate} 
-                            style={styles.input} 
-                            editable={false}/>
-                        <Image style={styles.arrow} source={require('image!icon-arrow')}/>
-                    </TouchableOpacity>
+                    <SimpleField
+                        value={this.state.route}
+                        label={labels.route}
+                        onChange={this._save('route')}/>
+
+                    <SimpleField
+                        label={labels.startDate}
+                        value={this._formatDate(this.state.startDate)} 
+                        onPress={this._showDatePickerForStartDate}/>
+
+                    <SimpleField
+                        label={labels.endDate}
+                        value={this._formatDate(this.state.endDate)}
+                        style={styles.lastField}
+                        onPress={this._showDatePickerForEndDate}/>
                 </View>
 
                 <View style={[styles.section, styles.formGroup]}>
-                    <View style={styles.field}>
-                        <Text style={styles.label}>标题</Text>
-                        <TextInput 
-                            value={this.state.title} 
-                            style={styles.input} 
-                            onChangeText={(title) => this.setState({title})}/>
-                        <Image style={styles.arrow} source={require('image!icon-arrow')}/>
-                    </View>
-                    <View style={styles.field}>
-                        <Text style={styles.label}>标题</Text>
-                        <TextInput 
-                            value={this.state.title} 
-                            style={styles.input} 
-                            onChangeText={(title) => this.setState({title})}/>
-                        <Image style={styles.arrow} source={require('image!icon-arrow')}/>
-                    </View>
+                    <SimpleField
+                        label={labels.entryDeadline}
+                        value={this._formatDate(this.state.entryDeadline)} 
+                        onPress={this._showDatePickerForEntryDeadline}/>
+                    <SimpleField
+                        label={labels.minCars}
+                        value={this.state.minCars && String(this.state.minCars) + '辆'}
+                        onPress={this._showMinCarsPicker}/>
+                    <SimpleField
+                        label={labels.maxCars}
+                        value={this.state.maxCars && String(this.state.maxCars) + '辆'}
+                        style={styles.lastField}
+                        onPress={this._showMaxCarsPicker}/>
                 </View>
-
-            </View>            
+            </ScrollView>            
         );
     }
 });
@@ -128,7 +109,7 @@ var FillActivityDetail = React.createClass({
 
     _showDatePickerForEntryDeadline: function() {
         this.props.navigator.push(new DatePickerRoute({
-            title: Labels.entryDeadline,
+            title: labels.entryDeadline,
             onResult: this._saveEntryDeadline.bind(this),
             maximumDate: this.props.brief.startDate
         }));
@@ -141,7 +122,7 @@ var FillActivityDetail = React.createClass({
     },
 
     _showMinCarsPicker: function() {
-        var modal = <ActivityCarsPicker onResult={this._save('minCars')}/>;
+        var modal = <ActivityCarsPicker onResult={this._save('maxCars')}/>;
         this.props.openModal(modal);
     },
 
@@ -151,12 +132,12 @@ var FillActivityDetail = React.createClass({
     },
 
     _next: function() {
-        var prop = _.find(_.keys(Labels), function(key) {
+        var prop = _.find(_.keys(labels), function(key) {
             return !this.state[key];
         }, this);
 
         if (prop) {
-            return AlertIOS.alert(Labels[prop] + '没有填写');
+            return AlertIOS.alert(labels[prop] + '没有填写');
         }
 
         if (this.state.maxCars < this.state.minCars) {
@@ -189,7 +170,7 @@ var FillActivityDetail = React.createClass({
         }
 
         navigator.push(new TextInputRoute({
-            title: Labels[entry],
+            title: labels[entry],
             initValue: this.state[entry],
             onResult: this._save(entry)
         }));
@@ -309,9 +290,9 @@ class ActivityFormSummaryRoute extends BaseRouteMapper {
         return '活动信息确认';
     }
 
-    constructor(summary) {
+    constructor(data) {
         super();
-        this.summary = summary;
+        this.data = data;
         this.emitter = new EventEmitter();
     }
 
@@ -345,7 +326,7 @@ class ActivityFormSummaryRoute extends BaseRouteMapper {
     }
 
     renderScene() {
-        return <ActivityFormSummaryScene summary={this.summary} events={this.emitter}/>
+        return <ActivityFormSummaryScene data={this.data} events={this.emitter}/>
     }
 
     _publish() {

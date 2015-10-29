@@ -143,10 +143,10 @@ var Home = React.createClass({
         //     return 'onboarding';
         // }).then(this._replaceRoute);
 
-        // var Route = require('./src/FillActivityBrief');
+        var Route = require('./src/FillActivityBrief');
         var Route = require('./src/FillActivityDetail');
         // var Route = require('./src/ActivityFormSummary');
-        this.refs.navigator.replace(new Route({}));
+        this.refs.navigator.replace(new Route({startDate: new Date(2015, 9, 10)}));
     },
 
     componentWillUnmount: function() {

@@ -8,7 +8,7 @@ var BaseMixin = {
     _save: function(key) {
         return function(value) {
             var partial = {};
-            partial[key] = String(value);
+            partial[key] = value;
             this.setState(partial);
         }.bind(this)
     }

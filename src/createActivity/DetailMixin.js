@@ -14,8 +14,9 @@ var DetailMixin = {
         this.props.navigator.push(new DatePickerRoute({
             title: Labels.entryDeadline,
             onResult: this._saveEntryDeadline.bind(this),
-            maximumDate: this.props.brief.startDate
-        }));
+            current: this.state.entryDeadline,
+            maximumDate: this.state.startDate
+        }))
     },
 
     _saveEntryDeadline: function(date) {
