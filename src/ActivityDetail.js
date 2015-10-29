@@ -1,6 +1,7 @@
 var React = require('react-native');
 
 var {
+    Animated,
     ActivityIndicatorIOS,
     StyleSheet,
     Dimensions,
@@ -19,6 +20,7 @@ var deviceHeight = Dimensions.get('window').height;
 var su = require('./styleUtils');
 var stylesVar = require('./stylesVar');
 var activityApi = require('./api').activity;
+var ActivityMoreDetail = require('./ActivityMoreDetail');
 
 var {
     Tag,
@@ -30,11 +32,13 @@ var {
 var ActivityDetail = React.createClass({
     getInitialState: function() {
         return {
-            data: {}
+            data: {},
+            translateY: 0
         }
     },
 
     componentDidMount: function() {
+        this.scrollHandleCopy = this.scrollHandle;
         activityApi.fetchDetail().then(function(data) {
             this.setState({
                 data: data
@@ -191,13 +195,40 @@ var ActivityDetail = React.createClass({
         }
     },
 
+    scrollHandle: function(e) {
+        e = e.nativeEvent;
+        var height = e.contentOffset.y + e.layoutMeasurement.height;
+        var contentHeight = e.contentSize.height;
+
+        if (height >= contentHeight) {
+            console.log('scroll to bottom');
+            
+            this.scrollHandle = null;
+            this.props.navigator.push(new ActivityMoreDetail({
+                id: this.props.id, 
+                status: this.props.status, 
+                isEnter: this.props.isEnter,
+                isSponsor: this.props.isSponsor,
+                resetScrollHandle: this.resetScrollHandle
+            }))
+        }
+    },
+
+    resetScrollHandle: function() {
+        this.scrollHandle = this.scrollHandleCopy;
+    },
+
     render: function() {
         var isSponsor = this.props.isSponsor;
         var data = this.state.data;
 
         return (
             <View style={styles.container}>
-                <ScrollView style={styles.scrollContainer}>
+                <Animated.View style={[styles.partContainer, {transform: [{translateY: this.state.translateY}]}]} >
+                <ScrollView style={styles.scrollContainer} 
+                    onScroll={this.scrollHandle}
+                    scrollEventThrottle={16}
+                    onScrollAnimationEnd={this.scrollEndHandle}>
                     <Image 
                         source={data.header ? {uri: data.header} : require('image!banner-activity-placeholder')}
                         style={styles.banner}>
@@ -244,7 +275,8 @@ var ActivityDetail = React.createClass({
                         <View style={styles.moreLine}></View>
                     </View>
                 </ScrollView>
-                {this.renderBottom()}  
+                </Animated.View>  
+                {this.renderBottom()}
             </View>
         );
     }
@@ -252,6 +284,11 @@ var ActivityDetail = React.createClass({
 
 var styles = StyleSheet.create({
     container: {
+        flex: 1,
+        backgroundColor: '#f3f5f6'
+    },
+
+    partContainer: {
         flex: 1,
         backgroundColor: '#f3f5f6'
     },

@@ -193,6 +193,55 @@ var activity = {
 				resolve(detail);
 			}, 0);
 		});
+	},
+	fetchMoreDetail: {
+		fetchRoute: function(query) {
+			return new Promise(function(resolve, reject) {
+				var datas = {
+					routeImg: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+					info: '当离开这个荒芜的社会，进入繁华的沙漠时，一个人的思想就变了。只有在这里，你才能感受到自己的真实，而不是被社会被世俗所束缚的自己，你的思想才能变得丰富起来，同样在这里，你才能看到朋友真实的一面。'
+				}
+
+				setTimeout(function() {
+					resolve(datas);
+				}, 1000);
+			});
+		}, 
+		fetchDetail: function(query) {
+			return new Promise(function(resolve, reject) {
+				var datas = {
+					info: '当离开这个荒芜的社会，进入繁华的沙漠时，一个人的思想就变了。只有在这里，你才能感受到自己的真实，而不是被社会被世俗所束缚的自己，你的思想才能变得丰富起来，同样在这里，你才能看到朋友真实的一面。'
+				}
+
+				setTimeout(function() {
+					resolve(datas);
+				}, 1000);
+			});
+		},
+		fetchTips: function(query) {
+			return new Promise(function(resolve, reject) {
+				var datas = {
+					participantInfo: '当离开这个荒芜的社会，进入繁华的沙漠时，一个人的思想就变了。只有在这里，你才能感受到自己的真实，而不是被社会被世俗所束缚的自己，你的思想才能变得丰富起来，同样在这里，你才能看到朋友真实的一面。',
+					devInfo: '车辆类型：SUV/4驱SUV\n每车必备：车台/备胎/拖车绳\n车队至少有一套：充气泵/铁锹/维修工具',
+					moneyInfo: '本次活动费用预估1200元，包含汽油费、过路费、住宿费、门票费。'
+				}
+
+				setTimeout(function() {
+					resolve(datas);
+				}, 1000);
+			});
+		},
+		fetchDanger: function(query) {
+			return new Promise(function(resolve, reject) {
+				var datas = {
+					info: '当离开这个荒芜的社会，进入繁华的沙漠时，一个人的思想就变了。只有在这里，你才能感受到自己的真实，而不是被社会被世俗所束缚的自己，你的思想才能变得丰富起来，同样在这里，你才能看到朋友真实的一面。\n\n我知道不少人看完电影会问，最后他们走出沙漠了吗？'
+				}
+
+				setTimeout(function() {
+					resolve(datas);
+				}, 1000);
+			});
+		}
 	}
 };
 
