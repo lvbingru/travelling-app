@@ -293,18 +293,12 @@ class CommentListRoute extends BaseRouteMapper {
 	}
 
 	renderLeftButton(route, navigator, index, navState) {
-		if (index === 0) {
-			return null;
-		}
-
-		var styles = this.styles;
-		return (
-			<TouchableOpacity
-				onPress={() => navigator.pop()}>
-				<Image style={styles.navBarLeftButton} source={require('image!back-icon')} />
-			</TouchableOpacity>
-		);
+        return this._renderBackButton(route, navigator, index, navState);
 	}
+
+    get style() {
+        return this.styles.navBar;
+    }
 
 	get title() {
 		return '评论(' + this.count + ')';
