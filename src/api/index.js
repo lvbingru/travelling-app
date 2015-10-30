@@ -176,7 +176,7 @@ var activity = {
             	publishDate: moment('2015-08-09'),
             	user: {
                 	username: 'Steven',
-                	avatar: ''
+                	avatar: 'http://localhost:8081/img/avatar-placeholder.png'
             	},
             	stars: 299,
             	remainDay: 8,
@@ -242,6 +242,35 @@ var activity = {
 				}, 1000);
 			});
 		}
+	},
+	fetchComments: function() {
+		return new Promise(function(resolve, reject) {
+			var datas = [{
+				user: {
+					username: '赵鑫',
+					avatar: 'http://localhost:8081/img/avatar-placeholder.png'
+				},
+				info: '这里的风景真是好棒哦，太美了～',
+				publishDate: '下午 22：13',
+				star: 180,
+				isLike: '1',
+				images: []
+			}, {
+				user: {
+					username: '赵鑫',
+					avatar: 'http://localhost:8081/img/avatar-placeholder.png'
+				},
+				info: '今天和大家一起好开心，山清水秀好风光好景色，小赵同学是个吃货，以后不想和他一起出去玩。',
+				publishDate: '下午 22：13',
+				star: 180,
+				isLike: '1',
+				images: ['http://localhost:8081/img/page1.png', 'http://localhost:8081/img/signin-bg.png', 'http://localhost:8081/img/space-header.png']
+			}]
+
+			setTimeout(function() {
+				resolve(datas);
+			}, 1000);
+		});
 	}
 };
 

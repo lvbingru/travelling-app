@@ -21,6 +21,7 @@ var su = require('./styleUtils');
 var stylesVar = require('./stylesVar');
 var activityApi = require('./api').activity;
 var ActivityMoreDetail = require('./ActivityMoreDetail');
+var CommentList = require('./CommentList');
 
 var {
     Tag,
@@ -339,7 +340,7 @@ var styles = StyleSheet.create({
 
     navBarLeftButton: {
         ...su.size(17, 15),
-            marginLeft: 10,
+        marginLeft: 10,
     },
 
     
@@ -666,7 +667,9 @@ class ActivityDetailRoute extends BaseRouteMapper {
         return (
             <View style={navBarRightButton}>
                 <View style={styles.navbarRight}>
-                    <Image style={styles.iconComments} source={require('image!icon-comments')}/>
+                    <TouchableOpacity activeOpacity={1} onPress={this.commentHandle.bind(this, navigator)}>
+                        <Image style={styles.iconComments} source={require('image!icon-comments')}/>
+                    </TouchableOpacity>
                     <Text style={styles.navbarText}>127</Text>
                     <Image style={styles.iconStars} source={require('image!icon-stars-o')}/>
                     <Text style={styles.navbarText}>19</Text>
@@ -674,6 +677,13 @@ class ActivityDetailRoute extends BaseRouteMapper {
                 </View>
             </View>
         );
+    }
+
+    commentHandle(navigator) {
+        navigator.push(new CommentList({
+            id: this.id,
+            count: 127
+        }));
     }
 
     get style() {

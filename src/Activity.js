@@ -228,9 +228,9 @@ var ActivityList = React.createClass({
 
         return (
             <View style={styles.wrap}>
-          <Text style={styles.loading}>刷新活动</Text>
-          <ActivityIndicatorIOS size="small"/>
-        </View>
+                <Text style={styles.loading}>刷新活动</Text>
+                <ActivityIndicatorIOS size="small"/>
+            </View>
         );
     },
 
