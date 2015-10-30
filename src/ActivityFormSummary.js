@@ -45,6 +45,12 @@ var {
 
 var Dispatcher = require('./Dispatcher');
 
+var {
+    user,
+    uploadPhoto,
+    activity
+} = require('./api');
+
 Text = BaseText;
 TextInput = BaseTextInput;
 
@@ -118,8 +124,17 @@ var ActivityFormSummaryScene = React.createClass({
         try {
             this._validateBrief();
             this._validateDetail();
-            var activity = Object.assign({}, this.state);
-            console.log(activity);
+            var _activity = _.extend({}, this.state);
+            // TODO: save routeMap & cover;
+            delete _activity.routeMap;
+            delete _activity.cover;
+            console.log(_activity);
+            activity.publish(_activity).then(function() {
+                AlertIOS.alert('发布成功');
+                Dispatcher.emit('publish-activity:done');
+            }, function(e) {
+                AlertIOS.alert(e.message);
+            });
         } catch (e) {
             console.trace(e);
             AlertIOS.alert(e.message);
@@ -127,7 +142,7 @@ var ActivityFormSummaryScene = React.createClass({
     },
 
     _cancel: function() {
-        Dispatcher.emit('publish-activity-cancel');
+        Dispatcher.emit('publish-activity:cancel');
     },
 
     render: function() {

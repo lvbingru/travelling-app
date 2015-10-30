@@ -75,7 +75,7 @@ var SignUpView = React.createClass({
 		}
 	},
 
-	_siginup: function() {
+	_signup: function() {
 		var labels = {
 			phone: '手机号',
 			password: '密码',
@@ -166,7 +166,7 @@ var SignUpView = React.createClass({
 				</View>
 
 				<View style={styles.signupButtonWrap}>
-					<TouchableHighlight onPress={this._siginup} underlayColor='transparent'>
+					<TouchableHighlight onPress={this._signup} underlayColor='transparent'>
 						<Text style={styles.signupButton}>注册</Text>
 					</TouchableHighlight>
 				</View>
@@ -257,17 +257,7 @@ class SignUpRoute extends BaseRouteMapper {
 	}
 
 	renderLeftButton(route, navigator, index, navState) {
-		if (index === 0) {
-	      return null;
-	    }
-
-	    var styles = this.styles;
-	    return (
-	      <TouchableOpacity
-	        onPress={() => navigator.pop()}>
-	        <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
-	      </TouchableOpacity>
-	    );
+		return this._renderBackButton(route, navigator, index, navState);
 	}
 
 	renderScene() {

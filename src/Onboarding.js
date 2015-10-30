@@ -35,7 +35,7 @@ var Onboarding = React.createClass({
   },
 
   _onStart: function() {
-    Dispatcher.emit('onboarding-start');
+    Dispatcher.emit('onboarding:start');
   },
 
   _renderPage: function(data, pageID) {

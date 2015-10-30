@@ -69,7 +69,7 @@ var ActivityCoverInput = React.createClass({
                 console.log('User cancelled image picker');
             } else if (type === 'uri') {
                 var source = {
-                    uri: result.replace('file://', ''),
+                    uri: result,
                     isStatic: true
                 };
 

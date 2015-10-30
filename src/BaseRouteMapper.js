@@ -94,6 +94,10 @@ var styles = StyleSheet.create({
     navBar: {
         backgroundColor: stylesVar('brand-primary')
     },
+    navBarEmpty: {
+        opacity: 0
+    },
+    
     navBarText: {
         fontSize: 16,
         color: 'white'

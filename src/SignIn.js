@@ -215,9 +215,7 @@ var BaseRouteMapper = require('./BaseRouteMapper');
 class SignInRoute extends BaseRouteMapper {
 
 	get style() {
-		return {
-			backgroundColor: 'transparent'
-		}
+		return this.styles.navBarTransparent;
 	}
 
 	get title() {

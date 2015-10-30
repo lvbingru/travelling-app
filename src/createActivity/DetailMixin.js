@@ -1,6 +1,4 @@
-'use strict';
-
-var _ = require('underscore');
+'use strict'; var _ = require('underscore');
 var React = require('react-native');
 var DatePickerRoute = require('../DatePickerRoute');
 var TextInputRoute = require('../TextInputRoute');
@@ -13,7 +11,7 @@ var DetailMixin = {
     _showDatePickerForEntryDeadline: function() {
         this.props.navigator.push(new DatePickerRoute({
             title: Labels.entryDeadline,
-            onResult: this._saveEntryDeadline.bind(this),
+            onResult: this._saveEntryDeadline,
             current: this.state.entryDeadline,
             maximumDate: this.state.startDate
         }))

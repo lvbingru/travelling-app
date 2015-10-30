@@ -25,6 +25,7 @@ RCT_EXPORT_METHOD(currentUser:(RCTResponseSenderBlock)callback)
                   [[NSString alloc] initWithString:currentUser.sessionToken], @"sessionToken",
                   [[NSString alloc] initWithString:currentUser.username], @"username",
                   [[NSString alloc] initWithString:currentUser.mobilePhoneNumber], @"phone",
+                  [[NSString alloc] initWithString:currentUser.objectId], @"id",
                   nil];
     callback(@[[NSNull null], userResult]);
   } else {

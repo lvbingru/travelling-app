@@ -11,6 +11,7 @@ var {
   ScrollView,
   TouchableHighlight,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   Dimensions,
 } = React;
 
@@ -52,9 +53,8 @@ var ActivityCarsPicker = React.createClass({
 
     render: function() {
         return (
-          <TouchableOpacity
+          <TouchableWithoutFeedback
             onPress={this._onPress}
-            activeOpacity={0.8}
             style={styles.container}>
 
             <View style={styles.wrap}>
@@ -89,7 +89,7 @@ var ActivityCarsPicker = React.createClass({
                     })}
                 </PickerIOS>
             </View>
-          </TouchableOpacity>
+          </TouchableWithoutFeedback>
         );
     }
 });

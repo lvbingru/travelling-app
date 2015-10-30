@@ -58,7 +58,7 @@ class SpaceRoute extends BaseRouteMapper {
     }
 
     get style() {
-        return this.styles.navBarTransparent;
+        return this.styles.navBarEmpty;
     }
 }
 
@@ -128,7 +128,7 @@ var Space = React.createClass({
                 <Image style={styles.avatar} source={avatar}></Image>
                 <Text style={styles.username}>{info.username || ''}</Text>
                 <Image source={require('image!levels-bg')} resizeMode="contain" style={{height: 16}}>
-                  <Text style={styles.levels}>{info.grade || ''}</Text>
+                  <Text style={styles.levels}>等级 {info.grade}</Text>
                 </Image>
               </View>
 

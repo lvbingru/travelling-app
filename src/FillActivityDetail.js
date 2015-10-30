@@ -55,11 +55,13 @@ var FillActivityDetail = React.createClass({
   mixins: [BaseMixin, DetailMixin],
 
   getInitialState: function() {
-    return {};
+    return {
+      startDate: this.props.data.startDate
+    };
   },
 
   componentDidMount: function() {
-    this.props.events.addListener('next', this._next.bind(this));
+    this.props.events.addListener('next', this._next);
   },
 
   _next: function() {

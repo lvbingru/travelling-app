@@ -118,13 +118,25 @@ var Home = React.createClass({
         };
     },
 
+    _testRoute: function() {
+        var Route = require('./src/FillActivityBrief');
+        var Route = require('./src/FillActivityDetail');
+        var Route = require('./src/ActivityFormSummary');
+        this.refs.navigator.replace(new Route({
+            startDate: new Date(2015, 9, 10)
+        }));
+    },
+
     componentDidMount: function() {
+        // return this._testRoute();
+
         Dispatcher.addListener('logout', function() {
             this.refs.navigator.resetTo(new SignIn)
         }.bind(this));
 
-        Dispatcher.addListener('onboarding-start', this._onStart);
-        Dispatcher.addListener('publish-activity-cancel', this._onPublishActivityCancel);
+        Dispatcher.addListener('onboarding:start', this._onStart);
+        Dispatcher.addListener('publish-activity:cancel', this._onPublishActivityCancel);
+        Dispatcher.addListener('publish-activity:done', this._onPublishActivityDone);
 
         if (config.platform === 'ios') {
             StatusBarIOS.setStyle('light-content');
@@ -143,14 +155,13 @@ var Home = React.createClass({
         }, function() {
             return 'onboarding';
         }).then(this._replaceRoute);
-
-        // var Route = require('./src/FillActivityBrief');
-        // var Route = require('./src/FillActivityDetail');
-        // var Route = require('./src/ActivityFormSummary');
-        // this.refs.navigator.replace(new Route({startDate: new Date(2015, 9, 10)}));
     },
 
     _onPublishActivityCancel: function() {
+        this.refs.navigator.popToRoute(this._homeRoute);
+    },
+
+    _onPublishActivityDone: function() {
         this.refs.navigator.popToRoute(this._homeRoute);
     },
 

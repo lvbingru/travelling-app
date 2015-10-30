@@ -328,7 +328,7 @@ class ActivityDetailRoute extends BaseRouteMapper {
             wrap,
             navBarRightButton
         } = this.styles;
-        
+
         var styles = StyleSheet.create({
             iconComments: {
                 ...su.size(17)
@@ -371,9 +371,7 @@ class ActivityDetailRoute extends BaseRouteMapper {
     }
 
     get style() {
-        return {
-            backgroundColor: 'transparent'
-        }
+        return this.styles.navBarTransparent;
     }
 
     renderScene() {
