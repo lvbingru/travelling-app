@@ -1,8 +1,10 @@
 var React = require('react-native');
 var {
     StyleSheet,
-    Text
+    View
 } = React;
+
+var Text = require('./widgets').BaseText;
 
 var stylesVar = require('./stylesVar');
 
@@ -27,9 +29,11 @@ class BaseRouteMapper {
     renderTitle(route, navigator, index, navState) {
         var styles = this.styles;
         return (
-          <Text style={[styles.navBarText, styles.navBarTitleText]}>
-            {route.title}
-          </Text>
+            <View style={styles.wrap}>
+              <Text style={[styles.navBarText]}>
+                {route.title}
+              </Text>
+            </View>
         );
     }
 
@@ -39,6 +43,11 @@ class BaseRouteMapper {
 
     get styles() {
         return StyleSheet.create({
+            wrap: {
+                flex: 1,
+                justifyContent: 'center'
+            },
+
             navBarTrasnparent: {
                 backgroundColor: 'transparent'
             },
@@ -47,28 +56,16 @@ class BaseRouteMapper {
             },
             navBarText: {
                 fontSize: 16,
-                marginVertical: 10,
-            },
-            navBarTitleText: {
-                color: '#fff',
-                height: 20,
-                marginVertical: 12,
-                fontSize: 16,
+                color: 'white'
             },
             navBarLeftButton: {
                 marginLeft: 10,
-                marginVertical: 14,
-                width: 18,
+                width: 17,
                 height: 16
             },
+
             navBarRightButton: {
                 marginRight: 10,
-            },
-            navBarButtonText: {
-                height: 20,
-                fontSize: 16,
-                marginVertical: 12,
-                color: '#fff'
             }
         });
     }

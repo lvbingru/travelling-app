@@ -11,6 +11,9 @@ var {
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
 var su = require('./styleUtils');
+var {
+    PenIcon
+} = require('./widgets');
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
@@ -37,7 +40,7 @@ var ActivityCoverInput = React.createClass({
         } else {
             return (
                 <Image source={this.props.value} style={styles.cover}>
-                    <Image source={require('image!icon-edit')} style={styles.iconEdit}/>
+                    <PenIcon/>
                 </Image>
             );
         }
@@ -105,12 +108,7 @@ var styles = {
         width: deviceWidth,
         height: deviceWidth * 9 / 16,
         resizeMode: 'cover',
-    },
-
-    iconEdit: {
-        ...su.size(32),
-        backgroundColor: 'transparent'
-    },
+    }
 }
 
 module.exports = ActivityCoverInput;

@@ -36,6 +36,62 @@ var {
     SimpleField
 } = require('./createActivity');
 
+var {
+    ArrowIcon,
+    PenIcon,
+    BaseText,
+    BaseTextInput
+} = require('./widgets');
+
+Text = BaseText;
+TextInput = BaseTextInput;
+
+var RouteField = React.createClass({
+    statics: {
+        styles: StyleSheet.create({
+            label: {
+                color: stylesVar('dark-mid'),
+                flex: 1,
+            },
+
+            bar: {
+                height: 45,
+                paddingLeft: 16,
+                paddingRight: 8,
+                flexDirection: 'row',
+                alignItems: 'center'
+            },
+
+            routeMap: {
+                ...su.size(deviceWidth, 135),
+                    resizeMode: 'cover',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+            }
+        })
+    },
+
+    render: function() {
+        return (
+            <TouchableOpacity activeOpacity={0.8} 
+                onPress={this.props.onPress}
+                style={this.props.style}>
+                <View style={RouteField.styles.bar}>
+                    <Text style={RouteField.styles.label}>
+                        选择{labels.routeMap}
+                    </Text>
+                    <ArrowIcon/>
+                </View>
+                {/*TODO: real route previewer*/}
+                <Image style={RouteField.styles.routeMap}
+                    source={require('image!space-header')}>
+                    <PenIcon/>
+                </Image>
+            </TouchableOpacity>
+        );
+    }
+});
+
 var ActivityFormSummaryScene = React.createClass({
 
     mixins: [BaseMixin, BriefMixin, DetailMixin],
@@ -45,7 +101,27 @@ var ActivityFormSummaryScene = React.createClass({
             ...this.props.data
         };
     },
-    
+
+    componentDidMount: function() {
+        this._subscribe = this.props.events.addListener('publish', this._publish);
+    },
+
+    componentWillUnmount: function() {
+        this._subscribe.remove();
+    },
+
+    _publish: function() {
+        try {
+            this._validateBrief();
+            this._validateDetail();
+            var activity = Object.assign({}, this.state);
+            console.log(activity);
+        } catch (e) {
+            console.trace(e);
+            AlertIOS.alert(e.message);
+        }
+    },
+
     render: function() {
         return (
             <ScrollView style={[styles.container, this.props.style]}>
@@ -92,103 +168,35 @@ var ActivityFormSummaryScene = React.createClass({
                         style={styles.lastField}
                         onPress={this._showMaxCarsPicker}/>
                 </View>
-            </ScrollView>            
+
+                <View style={[styles.section, styles.formGroup, {paddingLeft: 0}]}>
+                    <RouteField onPress={this._editRouteMap}/>
+                    <SimpleField
+                        multiline={true}
+                        label={labels.routeDesc}
+                        style={[styles.lastField, {paddingLeft: 16}]}
+                        value={this.state.routeDesc}
+                        onPress={this._editText('routeDesc')}/>
+                </View>
+
+                <View style={[styles.section, styles.formGroup]}>
+                    {this._renderMultilineField('partnerRequirements')}
+                    {this._renderMultilineField('equipementRequirements')}
+                    {this._renderMultilineField('costDesc')}
+                    {this._renderMultilineField('riskPrompt', true)}
+                </View>
+            </ScrollView>
         );
-    }
-});
-
-var FillActivityDetail = React.createClass({
-
-    getInitialState: function() {
-        return {};
     },
 
-    componentDidMount: function() {
-        this.props.events.addListener('next', this._next.bind(this));
-    },
-
-    _showDatePickerForEntryDeadline: function() {
-        this.props.navigator.push(new DatePickerRoute({
-            title: labels.entryDeadline,
-            onResult: this._saveEntryDeadline.bind(this),
-            maximumDate: this.props.brief.startDate
-        }));
-    },
-
-    _saveEntryDeadline: function(date) {
-        this.setState({
-            entryDeadline: date
-        });
-    },
-
-    _showMinCarsPicker: function() {
-        var modal = <ActivityCarsPicker onResult={this._save('maxCars')}/>;
-        this.props.openModal(modal);
-    },
-
-    _showMaxCarsPicker: function() {
-        var modal = <ActivityCarsPicker onResult={this._save('maxCars')}/>;
-        this.props.openModal(modal);
-    },
-
-    _next: function() {
-        var prop = _.find(_.keys(labels), function(key) {
-            return !this.state[key];
-        }, this);
-
-        if (prop) {
-            return AlertIOS.alert(labels[prop] + '没有填写');
-        }
-
-        if (this.state.maxCars < this.state.minCars) {
-            return AlertIOS.alert('最大车辆数太小');
-        }
-
-        var detail = _.extend({}, this.props.brief, this.state);
-        console.log(detail);
-    },
-
-    _save: function(key) {
-        return function(value) {
-            var partial = {};
-            partial[key] = String(value);
-            this.setState(partial);
-        }.bind(this)
-    },
-
-    _edit: function(entry) {
-        var navigator = this.props.navigator;
-        if (entry === 'routeMap') {
-            return navigator.push(new RoutePicker({
-                onResult: () => {
-                    var routeMap = {
-                        type: 'placeholder'
-                    };
-                    this.setState({routeMap});
-                }
-            }));
-        }
-
-        navigator.push(new TextInputRoute({
-            title: labels[entry],
-            initValue: this.state[entry],
-            onResult: this._save(entry)
-        }));
-    },
-
-    _formatDate: function(date) {
-        return date ? moment(date).format('YYYY-MM-DD') : '';
-    },
-
-    render: function() {
-        var {
-            minCars,
-            maxCars
-        } = this.state;
-
+    _renderMultilineField: function(key, last) {
         return (
-            <View style={[styles.container, this.props.style]}>
-            </View>
+            <SimpleField
+                multiline={true}
+                label={labels[key]}
+                style={last ? styles.lastField : null}
+                value={this.state[key]}
+                onPress={this._editText(key)}/>
         );
     }
 });
@@ -199,6 +207,11 @@ var styles = StyleSheet.create({
         backgroundColor: stylesVar('dark-lighter')
     },
 
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+
     section: {
         marginBottom: 20
     },
@@ -207,9 +220,9 @@ var styles = StyleSheet.create({
         backgroundColor: 'white',
         paddingLeft: 8,
         borderTopWidth: 1,
-        borderTopColor: stylesVar('dark-lighter'),
+        borderTopColor: stylesVar('dark-light'),
         borderBottomWidth: 1,
-        borderBottomColor: stylesVar('dark-lighter'),
+        borderBottomColor: stylesVar('dark-light'),
     },
 
     label: {
@@ -217,61 +230,8 @@ var styles = StyleSheet.create({
         color: stylesVar('dark-mid')
     },
 
-    field: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingRight: 8,
-        borderBottomWidth: 1 / PixelRatio.get(),
-        borderBottomColor: stylesVar('dark-light')
-    },
-
     lastField: {
         borderBottomWidth: 0
-    },
-
-    input: {
-        flex: 1,
-        fontSize: 14,
-        paddingHorizontal: 8,
-        height: 45
-    },
-
-    arrow: {
-        ...su.size(9, 15),
-        resizeMode: 'contain',
-    },
-
-    details: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        marginHorizontal: 10
-    },
-
-    detailEntry: {
-        width: (deviceWidth - 60) / 2,
-        ...su.margin(0, 10, 10),
-        backgroundColor: '#fff',
-        borderWidth: 1 / PixelRatio.get(),
-        borderColor: stylesVar('dark-light'),
-        paddingVertical: 20,
-        paddingLeft: 15,
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-
-    detailEntryReady: {
-        borderWidth: 1 / PixelRatio.get(),
-        borderColor: stylesVar('brand-primary'),
-    },
-
-    detailEntryIcon: {
-        ...su.size(18),
-        resizeMode: 'contain',
-        marginRight: 9
-    },
-
-    detailEntryText: {
-        color: stylesVar('dark-mid')
     }
 });
 
@@ -299,15 +259,16 @@ class ActivityFormSummaryRoute extends BaseRouteMapper {
     renderLeftButton(route, navigator, index, navState) {
         var styles = this.styles;
         return (
-            <View style={{flexDirection: 'row'}}>
+            <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
                 <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={() => navigator.pop()}>
-                    <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
+                    <Image style={[styles.navBarLeftButton, {margin: 0}]} source={require('image!back-icon')}/>
                 </TouchableOpacity>
                 <TouchableOpacity
+                    style={{marginLeft: 5}}
                     activeOpacity={0.8}>
-                    <Text style={styles.navBarButtonText}>取消</Text>
+                    <Text style={[styles.navBarText, {height: 16, margin: 0}]}>取消</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -316,12 +277,14 @@ class ActivityFormSummaryRoute extends BaseRouteMapper {
     renderRightButton(route, navigator, index, navState) {
         var styles = this.styles;
         return (
-            <TouchableOpacity
-                style={styles.navBarRightButton}
-                onPress={this._publish.bind(this)}
-                activeOpacity={0.8}>
-                <Text style={styles.navBarButtonText}>发布</Text>
-            </TouchableOpacity>
+            <View style={styles.wrap}>
+                <TouchableOpacity
+                    style={styles.navBarRightButton}
+                    onPress={this._publish.bind(this)}
+                    activeOpacity={0.8}>
+                    <Text style={styles.navBarText}>发布</Text>
+                </TouchableOpacity>
+            </View>
         );
     }
 

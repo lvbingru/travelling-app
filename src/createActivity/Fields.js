@@ -6,10 +6,18 @@ var {
     Image,
     PixelRatio,
     StyleSheet,
-    Text,
-    TextInput,
     TouchableOpacity,
+    View
 } = React;
+
+var {
+    ArrowIcon,
+    BaseText,
+    BaseTextInput
+} = require('../widgets');
+
+var Text = BaseText;
+var TextInput = BaseTextInput;
 
 var su = require('../styleUtils');
 var stylesVar = require('../stylesVar');
@@ -18,55 +26,92 @@ var SimpleField = React.createClass({
     propTypes: {
         onPress: React.PropTypes.func,
         onChange: React.PropTypes.func,
+        multiline: React.PropTypes.boolean,
         label: React.PropTypes.string.isRequired,
         value: React.PropTypes.string.isRequired,
     },
 
+    getDefaultProps: function() {
+        return {
+            multiline: false
+        };
+    },
+
     render: function() {
-        var activeOpacity = this.props.onPress ? 0.8 : 1;
+        var activeOpacity = this.props.onPress ? 0.8 : null;
+        var Container = this.props.onPress ? TouchableOpacity : View;
         var editable = !this.props.onPress;
+        var fieldStyle = this.props.multiline ? styles.multiField : styles.field;
+        var labelStyle = this.props.multiline ? styles.multiLabel : styles.label;
+        // FIXME: hack arrow now
+        var arrowStyle = this.props.multiline ? {marginTop: 6} : {};
+
         return (
-            <TouchableOpacity 
-                activeOpacity={this.props.activeOpacity} 
+            <Container 
+                activeOpacity={activeOpacity} 
                 onPress={this.props.onPress}
-                style={[styles.field, this.props.style]}>
-                <Text style={[styles.label, this.props.labelStyle]}>{
+                style={[fieldStyle, this.props.style]}>
+                <Text style={[labelStyle, this.props.labelStyle]}>{
                     this.props.label}
                 </Text>
                 <TextInput 
                     value={this.props.value} 
+                    multiline={this.props.multiline}
                     editable={editable}
-                    style={styles.input}/>
-                <Image style={styles.arrow} source={require('image!icon-arrow')}/>
-            </TouchableOpacity>
+                    style={this.props.multiline ? styles.multiInput : styles.input}/>
+                <ArrowIcon style={arrowStyle}/>
+            </Container>
         );
     }
 });
 
+var fieldBase = {
+    flexDirection: 'row',
+    paddingRight: 8,
+    paddingLeft: 8,
+    borderBottomWidth: 1 / PixelRatio.get(),
+    borderBottomColor: stylesVar('dark-light')
+}
+
+var labelBase = {
+    width: 90,
+    color: stylesVar('dark-mid')
+}
+
 var styles = StyleSheet.create({
     label: {
-        width: 90,
-        color: stylesVar('dark-mid')
+        ...labelBase    
+    },
+
+    multiLabel: {
+        ...labelBase,
+        lineHeight: 20
     },
 
     field: {
-        flexDirection: 'row',
+        ...fieldBase,
         alignItems: 'center',
-        paddingRight: 8,
-        borderBottomWidth: 1 / PixelRatio.get(),
-        borderBottomColor: stylesVar('dark-light')
+    },
+
+    multiField: {
+        ...fieldBase,
+        paddingTop: 10,
+        paddingBottom: 10
     },
 
     input: {
         flex: 1,
         fontSize: 14,
+        lineHeight: 20,
         paddingHorizontal: 8,
         height: 45
     },
 
-    arrow: {
-        ...su.size(9, 15),
-        resizeMode: 'contain',
+    multiInput: {
+        flex: 1,
+        fontSize: 14,
+        paddingHorizontal: 8,
+        height: 60
     }
 });
 
