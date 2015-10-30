@@ -123,9 +123,7 @@ var BaseRouteMapper = require('./BaseRouteMapper');
 class FillActivityBriefRoute extends BaseRouteMapper {
 
   get style() {
-    return {
-      backgroundColor: stylesVar('brand-primary')
-    }
+    return this.styles.navBar
   }
 
   get title() {

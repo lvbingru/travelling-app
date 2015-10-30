@@ -1,4 +1,6 @@
 var config = {
+    'brand-primary': '#0087fa',
+    
     'bg-gray': '#f4f5f6',
     'bg-primary': '#0087fa',
 

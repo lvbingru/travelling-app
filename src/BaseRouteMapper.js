@@ -92,7 +92,7 @@ var styles = StyleSheet.create({
         backgroundColor: 'transparent'
     },
     navBar: {
-        backgroundColor: stylesVar('brand-primary')
+        backgroundColor: stylesVar('bg-primary')
     },
     navBarEmpty: {
         opacity: 0

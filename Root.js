@@ -192,47 +192,41 @@ var Home = React.createClass({
 
     render: function() {
         var routeMapper = {
-            RightButton(route) {
-                    return route.renderRightButton.apply(route, arguments);
-                },
+            RightButton: function(route) {
+                return route.renderRightButton.apply(route, arguments);
+            },
 
-                Title(route) {
-                    return route.renderTitle.apply(route, arguments);
-                },
+            Title: function(route) {
+                return route.renderTitle.apply(route, arguments);
+            },
 
-                Style(route) {
-                    return route.style;
-                },
+            Style: function(route) {
+                return route.style;
+            },
 
-                LeftButton(route) {
-                    return route.renderLeftButton.apply(route, arguments);
-                }
+            LeftButton: function(route) {
+                return route.renderLeftButton.apply(route, arguments);
+            }
         };
-
-        var navbar = (
-            <NavBar
-                style={styles.navBar} 
-                routeMapper={routeMapper}/>
-        );
 
         return (
             <View style={styles.container}>
-            <Navigator
-              ref="navigator"
-              navigationBar={navbar}
-              style={styles.container}
-              initialRoute={new EmptyRoute}
-              configureScene={this._configureScene}
-              renderScene={this.renderScene}/>
+                <Navigator
+                  ref="navigator"
+                  navigationBar={<NavBar routeMapper={routeMapper}/>}
+                  style={styles.container}
+                  initialRoute={new EmptyRoute}
+                  configureScene={this._configureScene}
+                  renderScene={this.renderScene}/>
 
-            {this.state.modal && 
-            <View style={[styles.modal, this.state.modalStyle]}>
-                <TopModal 
-                    view={this.state.modalView} 
-                    closeModal={() => this.setState({modal: false})}/>
+                {this.state.modal && 
+                <View style={[styles.modal, this.state.modalStyle]}>
+                    <TopModal 
+                        view={this.state.modalView} 
+                        closeModal={() => this.setState({modal: false})}/>
+                </View>
+                }
             </View>
-            }
-          </View>
         );
     },
 
@@ -313,35 +307,6 @@ var styles = StyleSheet.create({
         margin: 10,
     },
 
-    navBarTrasnparent: {
-        backgroundColor: 'transparent'
-    },
-
-    navBar: {
-        backgroundColor: '#0087fa'
-    },
-
-    navBarText: {
-        fontSize: 16,
-        marginVertical: 10,
-    },
-    navBarTitleText: {
-        color: '#fff',
-        height: 16,
-        marginVertical: 14,
-    },
-    navBarLeftButton: {
-        marginLeft: 10,
-        marginVertical: 14,
-        width: 17,
-        height: 16
-    },
-    navBarRightButton: {
-        paddingRight: 10,
-    },
-    navBarButtonText: {
-        color: '#fff'
-    },
     scene: {
         paddingTop: 64
     }

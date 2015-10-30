@@ -408,17 +408,7 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
     }
 
     renderLeftButton(route, navigator, index, navState) {
-        if (index === 0) {
-            return null;
-        }
-
-        var styles = this.styles;
-        return (
-            <TouchableOpacity
-                onPress={() => {this.resetScrollHandle(); navigator.pop();}}>
-                <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
-            </TouchableOpacity>
-        );
+        return this._renderBackButton(route, navigator, index, navState);
     }
 
     renderRightButton(route, navigator, index, navState) {
@@ -465,9 +455,7 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
     }
 
     get style() {
-        return {
-            backgroundColor: stylesVar('blue')
-        }
+        return this.styles.navBar;
     }
 
     renderScene() {
