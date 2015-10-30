@@ -68,8 +68,224 @@ var sms = {
 };
 
 var activity = {
-    PREPARING: 'preparing',
-    TRAVELLING: 'travelling',
+	PREPARING: 'preparing',
+	TRAVELLING: 'travelling',
+
+	fetch: function(params) {
+		// TOOD: implement activity query api
+
+		return new Promise(function(resolve, reject) {
+			var publishDate = moment('2015-10-08 12:00').toDate();
+			var startDate = moment('2015-10-09').toDate();
+			var endDate = moment('2015-10-12').toDate();
+			console.log(publishDate, startDate, endDate);
+
+			var data = {
+					results: [{
+						id: 1,
+						header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+						title: 'GO！一起去草原撒野',
+						status: 'preparing',
+						isEnter: '0',
+						isSponsor: '0',
+						tags: ['3-5车同行', '行程容易'],
+						route: '北京 - 天津 - 石家庄',
+						startDate: startDate,
+						endDate: endDate,
+						publishDate: publishDate,
+						user: {
+							username: 'Steven'
+						},
+						stars: 299
+					}, {
+						id: 2,
+						header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+						title: 'GO！一起去草原撒野',
+						status: 'travelling',
+						isEnter: '0',
+						isSponsor: '0',
+						tags: ['3-5车同行', '行程容易'],
+						route: '北京 - 天津 - 石家庄',
+						startDate: startDate,
+						endDate: endDate,
+						publishDate: publishDate,
+						user: {
+							username: 'Steven'
+						},
+						stars: 299
+					}, {
+						id: 3,
+						header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+						title: 'GO！一起去草原撒野',
+						status: 'preparing',
+						isEnter: '1',
+						isSponsor: '0',
+						tags: ['3-5车同行', '行程容易'],
+						route: '北京 - 天津 - 石家庄',
+						startDate: startDate,
+						endDate: endDate,
+						publishDate: publishDate,
+						user: {
+							username: 'Steven'
+						},
+						stars: 299
+					}, {
+						id: 4,
+						header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+						title: 'GO！一起去草原撒野',
+						status: 'travelling',
+						isEnter: '1',
+						isSponsor: '1',
+						tags: ['3-5车同行', '行程容易'],
+						route: '北京 - 天津 - 石家庄',
+						startDate: startDate,
+						endDate: endDate,
+						publishDate: publishDate,
+						user: {
+							username: 'Steven'
+						},
+						stars: 299
+					}]
+			}
+
+			var region = params.region;
+			if (region && region !== 'all') {
+				data.results.splice(0, 2);
+			}
+
+			setTimeout(function() {
+				resolve(data);
+			}, 0);
+		});
+
+		// return fetch("https://api.leancloud.cn/1.1/classes/Activity", {
+		// 	headers: commonHeaders,
+		// 	params: {
+		// 		region: region
+		// 	}
+		// }).then(function(response) {
+		//     if (response.status === 200) {
+		// 		return response.json();
+		//     } else {
+		// 		var e = Error('ERROR ' + data.code + ' ' + data.error);
+		// 		e.response = response;
+		// 		e.data = data;
+		// 		throw e;
+		//     }
+		// });
+	},
+	fetchDetail: function() {
+		return new Promise(function(resolve, reject) {
+			var moment = require('moment');
+
+			var detail = {
+				id: 3,
+            	header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+            	title: 'GO！一起去草原撒野',
+            	status: 'preparing',
+            	tags: ['3-5车同行', '行程容易'],
+            	route: '北京 - 天津 - 石家庄',
+            	startDate: moment('2015-09-03').toDate(),
+            	endDate: moment('2015-09-10').toDate(),
+            	publishDate: moment('2015-08-09'),
+            	user: {
+                	username: 'Steven',
+                	avatar: 'http://localhost:8081/img/avatar-placeholder.png'
+            	},
+            	stars: 299,
+            	remainDay: 8,
+            	deadline: '9月1日12:00',
+            	haveCar: 2,
+            	needCar: 3,
+            	remainSeat: 12,
+            	photos: 2,
+            	journeys: 2,
+            	annotations: 3
+			}
+
+			setTimeout(function() {
+				resolve(detail);
+			}, 0);
+		});
+	},
+	fetchMoreDetail: {
+		fetchRoute: function(query) {
+			return new Promise(function(resolve, reject) {
+				var datas = {
+					routeImg: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+					info: '当离开这个荒芜的社会，进入繁华的沙漠时，一个人的思想就变了。只有在这里，你才能感受到自己的真实，而不是被社会被世俗所束缚的自己，你的思想才能变得丰富起来，同样在这里，你才能看到朋友真实的一面。'
+				}
+
+				setTimeout(function() {
+					resolve(datas);
+				}, 1000);
+			});
+		}, 
+		fetchDetail: function(query) {
+			return new Promise(function(resolve, reject) {
+				var datas = {
+					info: '当离开这个荒芜的社会，进入繁华的沙漠时，一个人的思想就变了。只有在这里，你才能感受到自己的真实，而不是被社会被世俗所束缚的自己，你的思想才能变得丰富起来，同样在这里，你才能看到朋友真实的一面。'
+				}
+
+				setTimeout(function() {
+					resolve(datas);
+				}, 1000);
+			});
+		},
+		fetchTips: function(query) {
+			return new Promise(function(resolve, reject) {
+				var datas = {
+					participantInfo: '当离开这个荒芜的社会，进入繁华的沙漠时，一个人的思想就变了。只有在这里，你才能感受到自己的真实，而不是被社会被世俗所束缚的自己，你的思想才能变得丰富起来，同样在这里，你才能看到朋友真实的一面。',
+					devInfo: '车辆类型：SUV/4驱SUV\n每车必备：车台/备胎/拖车绳\n车队至少有一套：充气泵/铁锹/维修工具',
+					moneyInfo: '本次活动费用预估1200元，包含汽油费、过路费、住宿费、门票费。'
+				}
+
+				setTimeout(function() {
+					resolve(datas);
+				}, 1000);
+			});
+		},
+		fetchDanger: function(query) {
+			return new Promise(function(resolve, reject) {
+				var datas = {
+					info: '当离开这个荒芜的社会，进入繁华的沙漠时，一个人的思想就变了。只有在这里，你才能感受到自己的真实，而不是被社会被世俗所束缚的自己，你的思想才能变得丰富起来，同样在这里，你才能看到朋友真实的一面。\n\n我知道不少人看完电影会问，最后他们走出沙漠了吗？'
+				}
+
+				setTimeout(function() {
+					resolve(datas);
+				}, 1000);
+			});
+		}
+	},
+	fetchComments: function() {
+		return new Promise(function(resolve, reject) {
+			var datas = [{
+				user: {
+					username: '赵鑫',
+					avatar: 'http://localhost:8081/img/avatar-placeholder.png'
+				},
+				info: '这里的风景真是好棒哦，太美了～',
+				publishDate: '下午 22：13',
+				star: 180,
+				isLike: '1',
+				images: []
+			}, {
+				user: {
+					username: '赵鑫',
+					avatar: 'http://localhost:8081/img/avatar-placeholder.png'
+				},
+				info: '今天和大家一起好开心，山清水秀好风光好景色，小赵同学是个吃货，以后不想和他一起出去玩。',
+				publishDate: '下午 22：13',
+				star: 180,
+				isLike: '1',
+				images: ['http://localhost:8081/img/page1.png', 'http://localhost:8081/img/signin-bg.png', 'http://localhost:8081/img/space-header.png']
+			}]
+
+			setTimeout(function() {
+				resolve(datas);
+			}, 1000);
+		});
+	}
 
     publish: function(data) {
     	var _activity = new Activity();
@@ -87,89 +303,7 @@ var activity = {
     		_activity.setACL(acl);
     		return _activity.save();
     	})
-    },
-
-    fetch: function(params) {
-        // TOOD: implement activity query api
-
-        return new Promise(function(resolve, reject) {
-            var publishDate = moment('2015-10-08 12:00').toDate();
-            var startDate = moment('2015-10-09').toDate();
-            var endDate = moment('2015-10-12').toDate();
-            console.log(publishDate, startDate, endDate);
-
-            var data = {
-                results: [{
-                    id: 1,
-                    header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-                    title: 'GO！一起去草原撒野',
-                    status: 'preparing',
-                    tags: ['3-5车同行', '行程容易'],
-                    route: '北京 - 天津 - 石家庄',
-                    startDate: startDate,
-                    endDate: endDate,
-                    publishDate: publishDate,
-                    user: {
-                        username: 'Steven'
-                    },
-                    stars: 299
-                }, {
-                    id: 2,
-                    header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-                    title: 'GO！一起去草原撒野',
-                    status: 'travelling',
-                    tags: ['3-5车同行', '行程容易'],
-                    route: '北京 - 天津 - 石家庄',
-                    startDate: startDate,
-                    endDate: endDate,
-                    publishDate: publishDate,
-                    user: {
-                        username: 'Steven'
-                    },
-                    stars: 299
-                }, {
-                    id: 3,
-                    header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-                    title: 'GO！一起去草原撒野',
-                    status: 'preparing',
-                    tags: ['3-5车同行', '行程容易'],
-                    route: '北京 - 天津 - 石家庄',
-                    startDate: startDate,
-                    endDate: endDate,
-                    publishDate: publishDate,
-                    user: {
-                        username: 'Steven'
-                    },
-                    stars: 299
-                }]
-            }
-
-            var region = params.region;
-            if (region && region !== 'all') {
-                data.results.splice(0, 2);
-            }
-
-            setTimeout(function() {
-                resolve(data);
-            }, 0);
-        });
-
-        // return fetch("https://api.leancloud.cn/1.1/classes/Activity", {
-        // 	headers: commonHeaders,
-        // 	params: {
-        // 		region: region
-        // 	}
-        // }).then(function(response) {
-        //     if (response.status === 200) {
-        // 		return response.json();
-        //     } else {
-        // 		var e = Error('ERROR ' + data.code + ' ' + data.error);
-        // 		e.response = response;
-        // 		e.data = data;
-        // 		throw e;
-        //     }
-        // });
-    },
+    }
 };
 
 var journey = {

@@ -26,6 +26,10 @@ var ActivityPublishDate = React.createClass({
             endDate
         } = this.props.data;
 
+        if (!startDate || !endDate) {
+            return null;
+        }
+
         var days = Math.floor((endDate.getTime() - startDate.getTime()) / (3600 * 1000 * 24)) + 1;
         if (days > 1) {
           var duration = "（" + days + "天" + (days-1) + "晚）";

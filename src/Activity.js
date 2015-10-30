@@ -212,9 +212,9 @@ var ActivityList = React.createClass({
 
         return (
             <View style={styles.wrap}>
-          <Text style={styles.loading}>刷新活动</Text>
-          <ActivityIndicatorIOS size="small"/>
-        </View>
+                <Text style={styles.loading}>刷新活动</Text>
+                <ActivityIndicatorIOS size="small"/>
+            </View>
         );
     },
 
@@ -285,18 +285,18 @@ var ActivityList = React.createClass({
     },
 
     _renderRow: function(data) {
-        return ( < Activity key = {
-                data.id
-            }
-            data = {
-                data
-            }
-            onPress = {
-                () => {
-                    this.props.navigator.push(new ActivityDetail(data.id));
-                }
-            }
-            />
+        return (
+            <Activity 
+                key={data.id} 
+                data={data} 
+                onPress={() => {
+                    this.props.navigator.push(new ActivityDetail({
+                        id: data.id, 
+                        status: data.status, 
+                        isEnter: data.isEnter,
+                        isSponsor: data.isSponsor
+                    }));
+                }}/>
         );
     },
 });
