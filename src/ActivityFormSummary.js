@@ -43,6 +43,8 @@ var {
     BaseTextInput
 } = require('./widgets');
 
+var Dispatcher = require('./Dispatcher');
+
 Text = BaseText;
 TextInput = BaseTextInput;
 
@@ -103,11 +105,13 @@ var ActivityFormSummaryScene = React.createClass({
     },
 
     componentDidMount: function() {
-        this._subscribe = this.props.events.addListener('publish', this._publish);
+        this._publishSub = this.props.events.addListener('publish', this._publish);
+        this._cancelSub = this.props.events.addListener('cancel', this._cancel);
     },
 
     componentWillUnmount: function() {
-        this._subscribe.remove();
+        this._publishSub.remove();
+        this._cancelSub.remove();
     },
 
     _publish: function() {
@@ -120,6 +124,10 @@ var ActivityFormSummaryScene = React.createClass({
             console.trace(e);
             AlertIOS.alert(e.message);
         }
+    },
+
+    _cancel: function() {
+        Dispatcher.emit('publish-activity-cancel');
     },
 
     render: function() {
@@ -259,7 +267,7 @@ class ActivityFormSummaryRoute extends BaseRouteMapper {
     renderLeftButton(route, navigator, index, navState) {
         var styles = this.styles;
         return (
-            <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+            <View style={styles.wrap}>
                 <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={() => navigator.pop()}>
@@ -267,6 +275,7 @@ class ActivityFormSummaryRoute extends BaseRouteMapper {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{marginLeft: 5}}
+                    onPress={() => this.emitter.emit('cancel')}
                     activeOpacity={0.8}>
                     <Text style={[styles.navBarText, {height: 16, margin: 0}]}>取消</Text>
                 </TouchableOpacity>
@@ -274,18 +283,11 @@ class ActivityFormSummaryRoute extends BaseRouteMapper {
         );
     }
 
+
     renderRightButton(route, navigator, index, navState) {
-        var styles = this.styles;
-        return (
-            <View style={styles.wrap}>
-                <TouchableOpacity
-                    style={styles.navBarRightButton}
-                    onPress={this._publish.bind(this)}
-                    activeOpacity={0.8}>
-                    <Text style={styles.navBarText}>发布</Text>
-                </TouchableOpacity>
-            </View>
-        );
+        return React.cloneElement(this._renderRightButton('发布'), {
+            onPress: this._publish.bind(this)
+        });
     }
 
     renderScene() {

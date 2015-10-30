@@ -26,7 +26,7 @@ var SimpleField = React.createClass({
     propTypes: {
         onPress: React.PropTypes.func,
         onChange: React.PropTypes.func,
-        multiline: React.PropTypes.boolean,
+        multiline: React.PropTypes.bool,
         label: React.PropTypes.string.isRequired,
         value: React.PropTypes.string.isRequired,
     },
@@ -58,6 +58,7 @@ var SimpleField = React.createClass({
                     value={this.props.value} 
                     multiline={this.props.multiline}
                     editable={editable}
+                    onChangeText={this.props.onChange}
                     style={this.props.multiline ? styles.multiInput : styles.input}/>
                 <ArrowIcon style={arrowStyle}/>
             </Container>

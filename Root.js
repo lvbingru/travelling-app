@@ -123,37 +123,38 @@ var Home = React.createClass({
             this.refs.navigator.resetTo(new SignIn)
         }.bind(this));
 
-        Dispatcher.addListener('onboarding-start', this.onStart.bind(this));
+        Dispatcher.addListener('onboarding-start', this._onStart);
+        Dispatcher.addListener('publish-activity-cancel', this._onPublishActivityCancel);
 
         if (config.platform === 'ios') {
             StatusBarIOS.setStyle('light-content');
         }
 
-        // AsyncStorage.getItem('userstamp').then(function(userstamp) {
-        //     if (!userstamp) {
-        //         return 'onboarding';
-        //     }
+        AsyncStorage.getItem('userstamp').then(function(userstamp) {
+            if (!userstamp) {
+                return 'onboarding';
+            }
 
-        //     return user.currentUser().then(function(user) {
-        //         return user ? 'playing' : 'signin'
-        //     }, function(e) {
-        //         return 'signin';
-        //     });
-        // }, function() {
-        //     return 'onboarding';
-        // }).then(this._replaceRoute);
+            return user.currentUser().then(function(user) {
+                return user ? 'playing' : 'signin'
+            }, function(e) {
+                return 'signin';
+            });
+        }, function() {
+            return 'onboarding';
+        }).then(this._replaceRoute);
 
         // var Route = require('./src/FillActivityBrief');
         // var Route = require('./src/FillActivityDetail');
-        var Route = require('./src/ActivityFormSummary');
-        this.refs.navigator.replace(new Route({startDate: new Date(2015, 9, 10)}));
+        // var Route = require('./src/ActivityFormSummary');
+        // this.refs.navigator.replace(new Route({startDate: new Date(2015, 9, 10)}));
     },
 
-    componentWillUnmount: function() {
-        this._navigationSubscription.remove();
+    _onPublishActivityCancel: function() {
+        this.refs.navigator.popToRoute(this._homeRoute);
     },
 
-    onStart: function() {
+    _onStart: function() {
         AsyncStorage.setItem('userstamp', "" + Date.now()).catch(function(e) {
             console.trace(e);
         });
@@ -172,7 +173,7 @@ var Home = React.createClass({
         } else if (status === 'onboarding') {
             route = new Onboarding();
         } else {
-            route = new HomePage(this.refs.navigator);
+            route = this._homeRoute = new HomePage(this.refs.navigator);
         }
 
         this.refs.navigator.replace(route);

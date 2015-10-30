@@ -58,9 +58,7 @@ class SpaceRoute extends BaseRouteMapper {
     }
 
     get style() {
-        return {
-            'opacity': 0
-        }
+        return this.styles.navBarTransparent;
     }
 }
 
@@ -147,10 +145,6 @@ var Space = React.createClass({
               </TouchableOpacity>
             </View>
         );
-    },
-
-    getRoute: function() {
-        return this.route;
     }
 });
 

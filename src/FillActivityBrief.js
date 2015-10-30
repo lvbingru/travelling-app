@@ -36,7 +36,7 @@ var FillActivityBrief = React.createClass({
   },
 
   componentDidMount: function() {
-    this.props.events.addListener('next', this._next.bind(this));
+    this.props.events.addListener('next', this._next);
   },
 
   _next: function() {
@@ -57,7 +57,7 @@ var FillActivityBrief = React.createClass({
           value={this.state.cover}
           onChange={(cover) => this.setState({cover})}/>
 
-        <View style={styles.info}>
+        <View style={styles.formGroup}>
           <SimpleField
             label={briefLabels.title}
             value={this.state.title}
@@ -72,18 +72,16 @@ var FillActivityBrief = React.createClass({
 
           <SimpleField
             label={briefLabels.startDate}
-            value={this.state.startDate}
+            value={this._formatDate(this.state.startDate)}
             labelStyle={styles.label}
-            onPress={this._showDatePickerForStartDate}
-            onChange={this._save('startDate')}/>
+            onPress={this._showDatePickerForStartDate}/>
 
           <SimpleField
             label={briefLabels.endDate}
-            value={this.state.endDate}
+            value={this._formatDate(this.state.endDate)}
             labelStyle={styles.label}
             style={styles.last}
-            onPress={this._showDatePickerForEndDate}
-            onChange={this._save('endDate')}/>
+            onPress={this._showDatePickerForEndDate}/>
         </View>
       </View>
     );
@@ -108,9 +106,9 @@ var styles = StyleSheet.create({
     marginBottom: 20,
   },
 
-  info: {
+  formGroup: {
     backgroundColor: '#fff',
-    paddingLeft: 15,
+    paddingLeft: 8,
 
     borderBottomWidth: 1 / PixelRatio.get(),
     borderBottomColor: stylesVar('dark-light'),
@@ -140,26 +138,13 @@ class FillActivityBriefRoute extends BaseRouteMapper {
   }
 
   renderLeftButton(route, navigator, index, navState) {
-    var styles = this.styles;
-    return (
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => navigator.pop()}>
-        <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
-      </TouchableOpacity>
-    );
+    return this._renderBackButton(route, navigator, index, navState);
   }
 
   renderRightButton(route, navigator, index, navState) {
-    var styles = this.styles;
-    return (
-      <TouchableOpacity
-        style={styles.navBarRightButton}
-        onPress={this._next.bind(this)}
-        activeOpacity={0.8}>
-        <Text style={styles.navBarButtonText}>下一步</Text>
-      </TouchableOpacity>
-    );
+    return React.cloneElement(this._renderRightButton('下一步'), {
+      onPress: this._next.bind(this)
+    });
   }
 
   renderScene() {

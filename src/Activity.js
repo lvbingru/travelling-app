@@ -71,7 +71,7 @@ class ActivityListRoute extends BaseRouteMapper {
     }
 
     on() {
-      this._emitter.addListener.apply(this._emitter, arguments);
+        this._emitter.addListener.apply(this._emitter, arguments);
     }
 
     get title() {
@@ -102,37 +102,21 @@ class ActivityListRoute extends BaseRouteMapper {
     }
 
     renderLeftButton(route, navigator, index, navState) {
-        var styles = StyleSheet.create({
-            regionFilter: {
-                marginVertical: 12,
-                marginLeft: 10,
-            },
-            regionFilterInner: {
-                alignItems: 'center',
-                flexDirection: 'row'
-            },
-            filterIcon: {
-                ...su.size(15, 20),
-                    marginRight: 5
-            },
-            region: {
-                color: '#fff',
-                fontSize: 14
-            }
-        });
+        var styles = this.styles;
+        var filterIcon = {
+            ...su.size(15, 20),
+            marginRight: 5
+        }
 
         return (
             <TouchableOpacity 
               activeOpacity={0.8} 
-              style={styles.regionFilter} 
+              style={[styles.wrap, styles.left]} 
               onPress={this._toggleRegions.bind(this)}>
-
-              <View style={styles.regionFilterInner}>
-                <Image style={styles.filterIcon} source={require('image!icon-annotation')}/>
-                <Text style={styles.region}>
+                <Image style={filterIcon} source={require('image!icon-annotation')}/>
+                <Text style={styles.navBarText}>
                   {this._filterEnabled ? '取消' : this._region.name}
                 </Text>
-              </View>
             </TouchableOpacity>
         );
     }
@@ -150,9 +134,9 @@ var ActivityList = React.createClass({
 
     getInitialState: function() {
         try {
-          this.route = new ActivityListRoute(this.props.navigator);
-        } catch(e) {
-          console.trace(e);
+            this.route = new ActivityListRoute(this.props.navigator);
+        } catch (e) {
+            console.trace(e);
         }
 
         return {
@@ -166,23 +150,23 @@ var ActivityList = React.createClass({
 
     componentDidMount: function() {
         try {
-          this._fetchData({
-              region: this.state.region
-          });
+            this._fetchData({
+                region: this.state.region
+            });
 
-          this.route.on('regions-show', function() {
-              this.setState({
-                  filterShown: true
-              });
-          }.bind(this));
+            this.route.on('regions-show', function() {
+                this.setState({
+                    filterShown: true
+                });
+            }.bind(this));
 
-          this.route.on('regions-cancel', function() {
-              this.setState({
-                  filterShown: false
-              });
-          }.bind(this));
-        } catch(e) {
-          console.trace(e);
+            this.route.on('regions-cancel', function() {
+                this.setState({
+                    filterShown: false
+                });
+            }.bind(this));
+        } catch (e) {
+            console.trace(e);
         }
     },
 
@@ -270,7 +254,7 @@ var ActivityList = React.createClass({
 
     render: function() {
         return (
-          <View style={[styles.container, this.props.style]}>
+            <View style={[styles.container, this.props.style]}>
                 <RefreshableListView
                   renderHeaderWrapper={this._renderHeaderWrapper}
                   renderSeparator={this._renderSeparator}
@@ -301,14 +285,18 @@ var ActivityList = React.createClass({
     },
 
     _renderRow: function(data) {
-        return (
-            <Activity 
-                key={data.id} 
-                data={data} 
-                onPress={() => {
+        return ( < Activity key = {
+                data.id
+            }
+            data = {
+                data
+            }
+            onPress = {
+                () => {
                     this.props.navigator.push(new ActivityDetail(data.id));
                 }
-            }/>
+            }
+            />
         );
     },
 });

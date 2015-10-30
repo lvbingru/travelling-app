@@ -1,10 +1,12 @@
 var React = require('react-native');
 var {
+    Image,
     StyleSheet,
+    TouchableOpacity,
     View
 } = React;
 
-var Text = require('./widgets').BaseText;
+var BaseText = require('./widgets').BaseText;
 
 var stylesVar = require('./stylesVar');
 
@@ -15,7 +17,7 @@ class BaseRouteMapper {
     }
 
     get style() {
-        return {};
+        return null;
     }
 
     renderLeftButton() {
@@ -30,10 +32,35 @@ class BaseRouteMapper {
         var styles = this.styles;
         return (
             <View style={styles.wrap}>
-              <Text style={[styles.navBarText]}>
+              <BaseText style={[styles.navBarText]}>
                 {route.title}
-              </Text>
+              </BaseText>
             </View>
+        );
+    }
+
+    _renderBackButton(route, navigator, index, navState) {
+        var styles = this.styles;
+        return (
+            <View style={styles.wrap}>
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => navigator.pop()}>
+                    <Image style={styles.navBarLeftButton} 
+                        source={require('image!back-icon')}/>
+                </TouchableOpacity>    
+            </View>
+        );
+    }
+
+    _renderRightButton(text) {
+        var styles = this.styles;
+        return (
+            <TouchableOpacity
+              style={[styles.wrap, styles.navBarRightButton]}
+              activeOpacity={0.8}>
+              <BaseText style={styles.navBarText}>{text}</BaseText>
+            </TouchableOpacity>
         );
     }
 
@@ -42,33 +69,43 @@ class BaseRouteMapper {
     }
 
     get styles() {
-        return StyleSheet.create({
-            wrap: {
-                flex: 1,
-                justifyContent: 'center'
-            },
-
-            navBarTrasnparent: {
-                backgroundColor: 'transparent'
-            },
-            navBar: {
-                backgroundColor: stylesVar('brand-primary')
-            },
-            navBarText: {
-                fontSize: 16,
-                color: 'white'
-            },
-            navBarLeftButton: {
-                marginLeft: 10,
-                width: 17,
-                height: 16
-            },
-
-            navBarRightButton: {
-                marginRight: 10,
-            }
-        });
+        return styles;
     }
 }
+
+var styles = StyleSheet.create({
+    wrap: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'row'
+    },
+
+    left: {
+        marginLeft: 10
+    },
+
+    right: {
+        marginRight: 10
+    },
+
+    navBarTransparent: {
+        backgroundColor: 'transparent'
+    },
+    navBar: {
+        backgroundColor: stylesVar('brand-primary')
+    },
+    navBarText: {
+        fontSize: 16,
+        color: 'white'
+    },
+    navBarLeftButton: {
+        marginLeft: 10,
+        width: 18,
+        height: 16
+    },
+    navBarRightButton: {
+        marginRight: 10,
+    }
+});
 
 module.exports = BaseRouteMapper;

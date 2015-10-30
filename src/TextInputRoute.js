@@ -84,26 +84,13 @@ class TextInputRoute extends BaseRouteMapper {
     }
 
     renderLeftButton(route, navigator, index, navState) {
-        var styles = this.styles;
-        return (
-            <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigator.pop()}>
-            <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
-          </TouchableOpacity>
-        );
+        return this._renderBackButton(route, navigator, index, navState);
     }
 
     renderRightButton(route, navigator, index, navState) {
-        var styles = this.styles;
-        return (
-            <TouchableOpacity 
-            activeOpacity={0.8} 
-            style={styles.navBarRightButton}
-            onPress={this._onSave.bind(this)}>
-            <Text style={styles.navBarButtonText}>确认</Text>
-          </TouchableOpacity>
-        );
+        return React.cloneElement(this._renderRightButton('确认'), {
+            onPress: this._onSave.bind(this)
+        })
     }
 
     renderScene() {

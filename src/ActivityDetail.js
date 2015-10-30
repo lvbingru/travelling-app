@@ -320,21 +320,15 @@ class ActivityDetailRoute extends BaseRouteMapper {
     }
 
     renderLeftButton(route, navigator, index, navState) {
-        if (index === 0) {
-            return null;
-        }
-
-        var styles = this.styles;
-        return (
-            <TouchableOpacity
-                onPress={() => navigator.pop()}>
-                <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
-            </TouchableOpacity>
-        );
+        return this._renderBackButton(route, navigator, index, navState);
     }
 
     renderRightButton(route, navigator, index, navState) {
-        var navBarRightButton = this.styles.navBarRightButton;
+        var {
+            wrap,
+            navBarRightButton
+        } = this.styles;
+        
         var styles = StyleSheet.create({
             iconComments: {
                 ...su.size(17)
@@ -364,7 +358,7 @@ class ActivityDetailRoute extends BaseRouteMapper {
         });
 
         return (
-            <View style={navBarRightButton}>
+            <View style={[wrap, navBarRightButton]}>
                 <View style={styles.navbarRight}>
                     <Image style={styles.iconComments} source={require('image!icon-comments')}/>
                     <Text style={styles.navbarText}>127</Text>

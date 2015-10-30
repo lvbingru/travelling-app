@@ -81,21 +81,21 @@ var HomePage = React.createClass({
     renderMovie: function(data) {
         return (
             <TouchableHighlight onPress={() => {this.onTouch(data)}} underlayColor="#efefef">
-      <View style={styleListView.container}>
-        <View style={styleListView.rightContainer}>
-          <Text style={styleListView.title}>{data.title}</Text>
-          <Text style={styleListView.content}>{data.content}</Text>
-        </View>
-      </View>
-      </TouchableHighlight>
+              <View style={styleListView.container}>
+                <View style={styleListView.rightContainer}>
+                  <Text style={styleListView.title}>{data.title}</Text>
+                  <Text style={styleListView.content}>{data.content}</Text>
+                </View>
+              </View>
+            </TouchableHighlight>
         );
     },
 
     renderHeader: function(title) {
         return (
             <View style={style.headerContainer}>
-        <Text style={style.header}>{title}</Text>
-      </View>
+                <Text style={style.header}>{title}</Text>
+            </View>
         )
     },
 
@@ -110,7 +110,6 @@ var HomePage = React.createClass({
     },
 
     _onActivitiesSelect: function() {
-        var previousTab = this._getPreviousTab();
         this.setState({
             selectedTab: 'activities'
         }, function() {
@@ -119,7 +118,6 @@ var HomePage = React.createClass({
     },
 
     _onJourneySelect: function() {
-        var previousTab = this._getPreviousTab();
         this.setState({
             selectedTab: 'journeys'
         }, function() {
@@ -128,7 +126,6 @@ var HomePage = React.createClass({
     },
 
     _onSpaceSelect: function() {
-        var previousTab = this._getPreviousTab();
         this.setState({
             selectedTab: 'space'
         }, function() {

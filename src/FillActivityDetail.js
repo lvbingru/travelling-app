@@ -189,9 +189,7 @@ var BaseRouteMapper = require('./BaseRouteMapper');
 class FillActivityDetailRoute extends BaseRouteMapper {
 
   get style() {
-    return {
-      backgroundColor: stylesVar('brand-primary')
-    }
+    return this.styles.navBar;
   }
 
   get title() {
@@ -205,26 +203,13 @@ class FillActivityDetailRoute extends BaseRouteMapper {
   }
 
   renderLeftButton(route, navigator, index, navState) {
-    var styles = this.styles;
-    return (
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => navigator.pop()}>
-        <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
-      </TouchableOpacity>
-    );
+    return this._renderBackButton(route, navigator, index, navState);
   }
 
   renderRightButton(route, navigator, index, navState) {
-    var styles = this.styles;
-    return (
-      <TouchableOpacity
-        style={styles.navBarRightButton}
-        onPress={this._next.bind(this)}
-        activeOpacity={0.8}>
-        <Text style={styles.navBarButtonText}>下一步</Text>
-      </TouchableOpacity>
-    );
+    return React.cloneElement(this._renderRightButton('下一步'), {
+      onPress: this._next.bind(this)
+    });
   }
 
   renderScene() {

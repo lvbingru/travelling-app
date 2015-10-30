@@ -8,6 +8,8 @@ var {
     TouchableOpacity
 } = React;
 
+var BaseText = require('./widgets').BaseText;
+
 var Tabs = require('react-native-tabs');
 var stylesVar = require('./stylesVar');
 
@@ -34,7 +36,7 @@ var RoutePickerScene = React.createClass({
                     onPress={this._onResult}
                     activeOpacity={0.8} 
                     style={styles.button}>
-                    <Text style={styles.buttonText}>选择轨迹</Text>
+                    <BaseText style={styles.buttonText}>选择轨迹</BaseText>
                 </TouchableOpacity>
             </View>
         );
@@ -51,9 +53,7 @@ class RoutePickerRoute extends BaseRouteMapper {
     }
 
     get style() {
-        return {
-            backgroundColor: stylesVar('brand-primary')
-        }
+        return this.styles.navBar;
     }
 
     get title() {
@@ -61,14 +61,7 @@ class RoutePickerRoute extends BaseRouteMapper {
     }
 
     renderLeftButton(route, navigator, index, navState) {
-        var styles = this.styles;
-        return (
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigator.pop()}>
-            <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
-          </TouchableOpacity>
-        );
+        return this._renderBackButton(route, navigator, index, navState);
     }
 
     renderScene() {
