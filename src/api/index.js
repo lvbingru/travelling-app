@@ -13,7 +13,36 @@ var moment = require('moment');
 var user = require('./user');
 
 var Photo = AV.Object.extend("Photo");
-var Activity = AV.Object.extend("Activity");
+var Activity = AV.Object.extend("Activity", {
+    getCarsTag: function() {
+        var minCars = this.get('minCars');
+        var maxCars = this.get('maxCars');
+        if (minCars === maxCars) {
+            var carsTag = minCars + '车同行';
+        } else {
+            var carsTag = minCars + '-' + maxCars + '车同行';
+        }
+        return carsTag;
+    },
+
+    getRouteTag: function() {
+        // TODO: 这个tag是怎么来的？
+        var routeTag = '行车容易';
+        return routeTag;
+    },
+
+    getState: function() {
+        var now = Date.now();
+        if (now < this.get('entryDeadline')) {
+            return Activity.PREPARING
+        } else {
+            return Activity.TRAVELLING
+        }
+    }
+}, {
+    PREPARING: 'preparing',
+    TRAVELLING: 'travelling'
+});
 
 var commonHeaders = {
     'X-LC-Id': AppID,
@@ -68,95 +97,106 @@ var sms = {
 };
 
 var activity = {
-    PREPARING: 'preparing',
-    TRAVELLING: 'travelling',
+    PREPARING: Activity.PREPARING,
+    TRAVELLING: Activity.TRAVELLING,
 
     fetch: function(params) {
+        // TODO: filter by region
+        return new Promise(function(resolve, reject) {
+            var query = new AV.Query(Activity);
+            query.find({
+                success: function(activities) {
+                    resolve(activities);
+                },
+                error: reject
+            })
+        });
+
         // TOOD: implement activity query api
 
-        return new Promise(function(resolve, reject) {
-            var publishDate = moment('2015-10-08 12:00').toDate();
-            var startDate = moment('2015-10-09').toDate();
-            var endDate = moment('2015-10-12').toDate();
-            console.log(publishDate, startDate, endDate);
+        // return new Promise(function(resolve, reject) {
+        //     var publishDate = moment('2015-10-08 12:00').toDate();
+        //     var startDate = moment('2015-10-09').toDate();
+        //     var endDate = moment('2015-10-12').toDate();
+        //     console.log(publishDate, startDate, endDate);
 
-            var data = {
-                results: [{
-                    id: 1,
-                    header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-                    title: 'GO！一起去草原撒野',
-                    status: 'preparing',
-                    isEnter: '0',
-                    isSponsor: '0',
-                    tags: ['3-5车同行', '行程容易'],
-                    route: '北京 - 天津 - 石家庄',
-                    startDate: startDate,
-                    endDate: endDate,
-                    publishDate: publishDate,
-                    user: {
-                        username: 'Steven'
-                    },
-                    stars: 299
-                }, {
-                    id: 2,
-                    header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-                    title: 'GO！一起去草原撒野',
-                    status: 'travelling',
-                    isEnter: '0',
-                    isSponsor: '0',
-                    tags: ['3-5车同行', '行程容易'],
-                    route: '北京 - 天津 - 石家庄',
-                    startDate: startDate,
-                    endDate: endDate,
-                    publishDate: publishDate,
-                    user: {
-                        username: 'Steven'
-                    },
-                    stars: 299
-                }, {
-                    id: 3,
-                    header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-                    title: 'GO！一起去草原撒野',
-                    status: 'preparing',
-                    isEnter: '1',
-                    isSponsor: '0',
-                    tags: ['3-5车同行', '行程容易'],
-                    route: '北京 - 天津 - 石家庄',
-                    startDate: startDate,
-                    endDate: endDate,
-                    publishDate: publishDate,
-                    user: {
-                        username: 'Steven'
-                    },
-                    stars: 299
-                }, {
-                    id: 4,
-                    header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-                    title: 'GO！一起去草原撒野',
-                    status: 'travelling',
-                    isEnter: '1',
-                    isSponsor: '1',
-                    tags: ['3-5车同行', '行程容易'],
-                    route: '北京 - 天津 - 石家庄',
-                    startDate: startDate,
-                    endDate: endDate,
-                    publishDate: publishDate,
-                    user: {
-                        username: 'Steven'
-                    },
-                    stars: 299
-                }]
-            }
+        //     var data = {
+        //         results: [{
+        //             id: 1,
+        //             header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+        //             title: 'GO！一起去草原撒野',
+        //             status: 'preparing',
+        //             isEnter: '0',
+        //             isSponsor: '0',
+        //             tags: ['3-5车同行', '行程容易'],
+        //             route: '北京 - 天津 - 石家庄',
+        //             startDate: startDate,
+        //             endDate: endDate,
+        //             publishDate: publishDate,
+        //             user: {
+        //                 username: 'Steven'
+        //             },
+        //             stars: 299
+        //         }, {
+        //             id: 2,
+        //             header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+        //             title: 'GO！一起去草原撒野',
+        //             status: 'travelling',
+        //             isEnter: '0',
+        //             isSponsor: '0',
+        //             tags: ['3-5车同行', '行程容易'],
+        //             route: '北京 - 天津 - 石家庄',
+        //             startDate: startDate,
+        //             endDate: endDate,
+        //             publishDate: publishDate,
+        //             user: {
+        //                 username: 'Steven'
+        //             },
+        //             stars: 299
+        //         }, {
+        //             id: 3,
+        //             header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+        //             title: 'GO！一起去草原撒野',
+        //             status: 'preparing',
+        //             isEnter: '1',
+        //             isSponsor: '0',
+        //             tags: ['3-5车同行', '行程容易'],
+        //             route: '北京 - 天津 - 石家庄',
+        //             startDate: startDate,
+        //             endDate: endDate,
+        //             publishDate: publishDate,
+        //             user: {
+        //                 username: 'Steven'
+        //             },
+        //             stars: 299
+        //         }, {
+        //             id: 4,
+        //             header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+        //             title: 'GO！一起去草原撒野',
+        //             status: 'travelling',
+        //             isEnter: '1',
+        //             isSponsor: '1',
+        //             tags: ['3-5车同行', '行程容易'],
+        //             route: '北京 - 天津 - 石家庄',
+        //             startDate: startDate,
+        //             endDate: endDate,
+        //             publishDate: publishDate,
+        //             user: {
+        //                 username: 'Steven'
+        //             },
+        //             stars: 299
+        //         }]
+        //     }
 
-            var region = params.region;
-            if (region && region !== 'all') {
-                data.results.splice(0, 2);
-            }
+        //     var region = params.region;
+        //     if (region && region !== 'all') {
+        //         data.results.splice(0, 2);
+        //     }
 
-            setTimeout(function() {
-                resolve(data);
-            }, 0);
-        });
+        //     setTimeout(function() {
+        //         resolve(data);
+        //     }, 0);
+        // });
 
         // return fetch("https://api.leancloud.cn/1.1/classes/Activity", {
         //  headers: commonHeaders,
@@ -290,7 +330,7 @@ var activity = {
     publish: function(data) {
         var _activity = new Activity();
         _.each(data, function(value, key) {
-            _activity.set(key, value instanceof Date ? value.getTime() : value);
+            _activity.set(key, value);
         });
 
         return AV.User.currentAsync().then(function(user) {
@@ -299,6 +339,7 @@ var activity = {
             _activity.set('createBy', _user);
             var acl = new AV.ACL();
             acl.setPublicWriteAccess(false);
+            acl.setPublicReadAccess(true);
             acl.setWriteAccess(user, true);
             _activity.setACL(acl);
             return _activity.save();

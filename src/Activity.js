@@ -173,8 +173,9 @@ var ActivityList = React.createClass({
     _fetchData: function(region) {
         return activity.fetch({
             region: region ? region.tag : null
-        }).then(function(data) {
-            var dataSource = this.state.dataSource.cloneWithRows(data.results);
+        }).then(function(results) {
+            console.log(results);
+            var dataSource = this.state.dataSource.cloneWithRows(results);
             this.setState({
                 dataSource: dataSource
             });
@@ -287,7 +288,7 @@ var ActivityList = React.createClass({
     _renderRow: function(data) {
         return (
             <Activity 
-                key={data.id} 
+                key={'activity-' + data.id} 
                 data={data} 
                 onPress={() => {
                     this.props.navigator.push(new ActivityDetail({
@@ -303,20 +304,40 @@ var ActivityList = React.createClass({
 
 var Activity = React.createClass({
     getInitialState: function() {
-        return {}
+        return {
+            user: {}
+        }
+    },
+
+    componentDidMount: function() {
+        var _activity = this.props.data;
+        user = _activity.get('user');
+        user.fetch({
+            success: function(user) {
+                this.setState({user});
+            }.bind(this),
+            error: (e) => console.trace(e)
+        });
+
+
+        // TODO: fetch stars
+        this.setState({
+            stars: 299
+        });
     },
 
     _renderTags: function() {
-        var data = this.props.data;
+        var _activity = this.props.data;
 
-        var tags = data.tags.map(function(tag) {
-            return (<Tag style={styles.tag} key={tag}>{tag}</Tag>);
-        });
+        var tags = [
+            <Tag style={styles.tag} key='tag-cars'>{_activity.getCarsTag()}</Tag>,
+            <Tag style={styles.tag} key='tag-route'>{_activity.getRouteTag()}</Tag>,
+        ];
 
-        if (data.status === activity.PREPARING) {
-            tags = [<Tag key={activity.PREPARING} style={styles.tagHot}>火热报名中</Tag>].concat(tags);
+        if (_activity.getState() === _activity.PREPARING) {
+            tags = [<Tag key='tag-state' style={styles.tagHot}>火热报名中</Tag>].concat(tags);
         } else {
-            tags = [<Tag key={activity.TRAVELLING} style={styles.tagDue}>报名已截止</Tag>].concat(tags);
+            tags = [<Tag key='tag-state' style={styles.tagDue}>报名已截止</Tag>].concat(tags);
         }
 
         return (
@@ -325,34 +346,41 @@ var Activity = React.createClass({
     },
 
     render: function() {
-        var data = this.props.data;
-        var user = data.user;
+        var _activity = this.props.data;
+        var user = this.state.user;
         var avatar = user.avatar ? {
             url: user.avatar
         } : require('image!avatar-placeholder');
+
+        // TODO: use real cover
+        var coverPlaceholder = 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg';
+        // TODO: fetch starred
+        var iconStar = _activity.starred ? require('image!icon-starred') : require('image!icon-star')
 
         return (
             <TouchableHighlight underlayColor='#f3f5f6' onPress={this.props.onPress}>
                 <View style={styles.row}>
                   <View style={styles.brief}>
-                    <Image style={styles.bg} source={{uri: data.header}}>
+                    <Image style={styles.bg} source={{uri: coverPlaceholder}}>
                       <View style={styles.info}>
-                        <Text style={styles.title}>{data.title}</Text>
-                        {this._renderTags(data)}
+                      <Text style={styles.title}>{_activity.get('title')}</Text>
+                      {this._renderTags()}
                       </View>
                     </Image>
                   </View>
 
-                  <ActivitySchedule data={data} style={{paddingLeft: 16}}/>
+                  <ActivitySchedule data={_activity} style={{paddingLeft: 16}}/>
                   
                   <View style={styles.user}>
                     <Image style={styles.avatar} source={avatar}/>
-                    <Text style={[styles.username, styles.baseText]}>{data.user.username}</Text>
-                    <Text style={[styles.publishDate]}>发布于 {moment(data.publishDate).format('YYYY-MM-DD HH:mm')}</Text>
+                    <Text style={[styles.username, styles.baseText]}>{user.username || ""}</Text>
+                    <Text style={[styles.publishDate]}>
+                        发布于 {moment(_activity.get('createdAt')).format('YYYY-MM-DD HH:mm')}
+                    </Text>
 
                     <View style={styles.star}>
-                      <Image style={styles.iconStar} source={data.starred ? require('image!icon-starred') : require('image!icon-star')}/>
-                      <Text style={[styles.baseText, styles.stars]}>{data.stars}</Text>
+                      <Image style={styles.iconStar} source={iconStar}/>
+                      <Text style={[styles.baseText, styles.stars]}>{this.state.stars}</Text>
                     </View>
                   </View>
                 </View>

@@ -154,5 +154,4 @@ class FillActivityBriefRoute extends BaseRouteMapper {
   }
 }
 
-
 module.exports = FillActivityBriefRoute;

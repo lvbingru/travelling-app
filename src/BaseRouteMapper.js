@@ -94,6 +94,7 @@ var styles = StyleSheet.create({
     navBar: {
         backgroundColor: stylesVar('bg-primary')
     },
+
     navBarEmpty: {
         opacity: 0
     },
@@ -102,11 +103,13 @@ var styles = StyleSheet.create({
         fontSize: 16,
         color: 'white'
     },
+
     navBarLeftButton: {
         marginLeft: 10,
         width: 18,
         height: 16
     },
+
     navBarRightButton: {
         marginRight: 10,
     }
