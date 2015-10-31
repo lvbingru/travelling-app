@@ -8,6 +8,7 @@
   "dependencies": {
     "avoscloud-sdk": "^1.0.0-rc3",
     "color": "^0.10.1",
+    "debug": "^2.2.0",
     "ext-name": "^3.0.0",
     "immutable": "^3.7.5",
     "moment": "^2.10.6",

@@ -17,7 +17,7 @@ class BaseRouteMapper {
     }
 
     get style() {
-        return null;
+        return this.styles.navBar;
     }
 
     renderLeftButton() {

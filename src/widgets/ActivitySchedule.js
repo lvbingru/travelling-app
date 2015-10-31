@@ -15,10 +15,10 @@ var ActivityPublishDate = require('./ActivityPublishDate');
 var ActivitySchedule = React.createClass({
 
     render: function() {
-        var {route} = this.props.data;
+        var _activity = this.props.data;
         return (
             <View style={[{marginBottom: 10}, this.props.style]}>
-                <ActivityRoute style={{marginBottom: 10}} route={route}/>
+                <ActivityRoute style={{marginBottom: 10}} route={_activity.get('route')}/>
                 <ActivityPublishDate data={this.props.data}/>
             </View>
         );

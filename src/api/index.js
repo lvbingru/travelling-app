@@ -4,7 +4,6 @@ var AppKey = 'bm0vszz9zd521yw8l40k6wdh6vsqq5aht92fdohlgzvwrgl4';
 var AV = require('avoscloud-sdk');
 AV.initialize(AppID, AppKey);
 
-
 var _ = require('underscore');
 var extName = require('ext-name');
 var shortid = require('shortid');
@@ -13,6 +12,7 @@ var moment = require('moment');
 var user = require('./user');
 
 var Photo = AV.Object.extend("Photo");
+var Region = AV.Object.extend("Region");
 var Activity = AV.Object.extend("Activity", {
     getCarsTag: function() {
         var minCars = this.get('minCars');
@@ -104,9 +104,16 @@ var activity = {
         // TODO: filter by region
         return new Promise(function(resolve, reject) {
             var query = new AV.Query(Activity);
+            if (params.latestDate) {
+                query.lessThan('createdAt', params.latestDate);
+            }
+            query.limit(params.limit || 5);
+            query.descending('createdAt');
             query.find({
                 success: function(activities) {
-                    resolve(activities);
+                    setTimeout(function() {
+                        resolve(activities);
+                    }, 1000);
                 },
                 error: reject
             })
@@ -452,11 +459,59 @@ function uploadPhoto(path) {
     });
 }
 
+var REGIONS = [{
+    tag: 'all',
+    name: '全部',
+    icon: require('image!icon-region-shanxi')
+}, {
+    tag: 'beijing',
+    name: '北京',
+    icon: require('image!icon-region-beijing'),
+}, {
+    tag: 'hebei',
+    name: '河北',
+    icon: require('image!icon-region-hebei'),
+}, {
+    tag: 'shandong',
+    name: '山东',
+    icon: require('image!icon-region-shandong'),
+}, {
+    tag: 'tianjin',
+    name: '天津',
+    icon: require('image!icon-region-tianjin'),
+}, {
+    tag: 'neimenggu',
+    name: '内蒙古',
+    icon: require('image!icon-region-neimenggu'),
+}];
+
+var _regions, _loadingRegions = false;
+
+function regions() {
+    // TODO: fetch regions from leancloud
+    // if (_regions) {
+    //     return _regions;
+    // }
+
+    // if (!_loadingRegions) {
+    //     _loadingRegions = true;
+    //     var query = new AV.Query(region);
+    //     query.find().then(function(regions) {
+    //         _regions = regions.map((item) => item.toJSON());
+    //     }).finally(function() {
+    //         _loadingRegions = false;
+    //     });
+    // }
+
+    return REGIONS;
+}
+
 module.exports = {
     user,
     sms,
     activity,
     userinfo,
     journey,
-    uploadPhoto
+    uploadPhoto,
+    regions
 };
