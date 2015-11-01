@@ -277,7 +277,7 @@ var activity = {
                 info: '今天和大家一起好开心，山清水秀好风光好景色，小赵同学是个吃货，以后不想和他一起出去玩。',
                 publishDate: '下午 22：13',
                 star: 180,
-                isLike: '1',
+                isLike: '0',
                 images: ['http://localhost:8081/img/page1.png', 'http://localhost:8081/img/signin-bg.png', 'http://localhost:8081/img/space-header.png']
             }]
 

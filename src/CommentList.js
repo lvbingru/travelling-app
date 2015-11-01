@@ -1,5 +1,4 @@
 var React = require('react-native');
-var Lightbox = require('react-native-lightbox');
 
 var {
 	View,
@@ -17,6 +16,7 @@ var su = require('./styleUtils');
 var RefreshableListView = require('react-native-refreshable-listview');
 var stylesVar = require('./stylesVar'); 
 var activityApi = require('./api').activity;
+var LightBox = require('./LightBox');
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
@@ -93,7 +93,7 @@ var CommentList = React.createClass({
 
     _renderRow: function(data) {
     	return (
-    		<CommentItem data={data} />
+    		<CommentItem data={data} navigator={this.props.navigator} fresh={this._onRefresh}/>
     	);
     },
 
@@ -123,6 +123,11 @@ var CommentList = React.createClass({
 });
 
 var CommentItem = React.createClass({
+	starHandle: function() {
+		//todo
+		this.props.fresh();
+	},
+
 	render: function() {
 		var data = this.props.data;
 		
@@ -136,21 +141,23 @@ var CommentItem = React.createClass({
 					</View>
 					<View style={styles.star}>
 						<Text style={styles.starText}>{data.star}</Text>
-						<Image style={styles.starIcon} source={data.isLike === '1' ? require('image!like-red') : require('image!like-gray')} />
+						{() => function() {
+							if (data.isLike === '1') {
+								return <Image style={styles.starIcon} source={require('image!like-red')} />
+							} else {
+								return (
+									<TouchableOpacity onPress={this.starHandle}>
+										<Image style={styles.starIcon} source={require('image!like-gray')} />
+									</TouchableOpacity>
+								);
+							}
+						}}
 					</View>
 				</View>
 				<View style={styles.info}>
 					<Text style={styles.infoText}>{data.info}</Text>	
 				</View>
-				<View style={styles.images}>
-					{data.images && data.images.length !== 0 && data.images.map(function(item) {
-						return (
-							<Lightbox underlayColor="white" navigator={this.props.navigator}>
-								<Image resizeMode="cover" style={styles.iconImage} source={{uri: item}} />
-							</Lightbox>
-						);
-					}.bind(this))}
-				</View>
+				<LightBox imagesArray={data.images} navigator={this.props.navigator}/>
 				<View style={styles.publishDate}>
 					<Text style={styles.publishDateText}>{data.publishDate}</Text>
 				</View>
@@ -249,17 +256,6 @@ var styles = StyleSheet.create({
     	marginTop: 11
     },
 
-    images: {
-    	flex: 1,
-    	flexDirection: 'row',
-    	marginLeft: 35
-    },
-
-    iconImage: {
-    	...su.size(iconImageSize),
-    	marginRight: 5
-    },
-
     bottomBar: {
     	position: 'absolute',
     	bottom: 0,
@@ -304,7 +300,7 @@ class CommentListRoute extends BaseRouteMapper {
 		return '评论(' + this.count + ')';
 	}
 
-	renderScene(route, navigator) {
+	renderScene(navigator) {
 		return <CommentList id={this.id} navigator={navigator} />
 	}
 }
