@@ -408,7 +408,10 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
     }
 
     renderLeftButton(route, navigator, index, navState) {
-        return this._renderBackButton(route, navigator, index, navState);
+        return this._renderBackButton(route, navigator, index, navState, function() {
+            this.resetScrollHandle();
+            navigator.pop();
+        }.bind(this));
     }
 
     renderRightButton(route, navigator, index, navState) {

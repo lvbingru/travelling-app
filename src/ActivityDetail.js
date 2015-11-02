@@ -206,10 +206,7 @@ var ActivityDetail = React.createClass({
         var height = e.contentOffset.y + e.layoutMeasurement.height;
         var contentHeight = e.contentSize.height;
 
-        if (height >= contentHeight) {
-            console.log('scroll to bottom');
-            
-            this.scrollHandleCopy = this.scrollHandle;
+        if (height >= contentHeight) {            
             this.scrollHandle = null;
             this.props.navigator.push(new ActivityMoreDetail({
                 id: this.props.id, 
@@ -222,6 +219,7 @@ var ActivityDetail = React.createClass({
     },
 
     resetScrollHandle: function() {
+        this.refs.scroll.scrollTo();
         this.scrollHandle = this.scrollHandleCopy;
     },
 
@@ -233,6 +231,7 @@ var ActivityDetail = React.createClass({
             <View style={styles.container}>
                 <Animated.View style={[styles.partContainer, {transform: [{translateY: this.state.translateY}]}]} >
                 <ScrollView style={styles.scrollContainer} 
+                    ref="scroll"
                     onScroll={this.scrollHandle}
                     scrollEventThrottle={16}
                     onScrollAnimationEnd={this.scrollEndHandle}>
