@@ -21,6 +21,7 @@ var su = require('./styleUtils');
 var stylesVar = require('./stylesVar');
 var activityApi = require('./api').activity;
 var ActivityMoreDetail = require('./ActivityMoreDetail');
+var ActivityApply = require('./ActivityApply');
 var CommentList = require('./CommentList');
 
 var {
@@ -131,6 +132,10 @@ var ActivityDetail = React.createClass({
         }
     },
 
+    applyHandle: function() {
+        this.props.navigator.push(new ActivityApply({id: this.props.id}));
+    },
+
     renderBottom: function() {
         var status = this.props.status;
         var isEnter = this.props.isEnter;
@@ -142,7 +147,7 @@ var ActivityDetail = React.createClass({
                             <Image source={require('image!icon-information')} style={styles.iconInformation}/>
                             <Text style={styles.informationText}>咨询楼主</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.apply} activeOpacity={0.9}>
+                        <TouchableOpacity style={styles.apply} activeOpacity={0.9} onPress={this.applyHandle}>
                             <Text style={styles.applyText}>我要报名</Text>
                         </TouchableOpacity>
                     </View>
@@ -204,6 +209,7 @@ var ActivityDetail = React.createClass({
         if (height >= contentHeight) {
             console.log('scroll to bottom');
             
+            this.scrollHandleCopy = this.scrollHandle;
             this.scrollHandle = null;
             this.props.navigator.push(new ActivityMoreDetail({
                 id: this.props.id, 
@@ -684,11 +690,12 @@ class ActivityDetailRoute extends BaseRouteMapper {
         return this.styles.navBarTransparent;
     }
 
-    renderScene() {
+    renderScene(navigator) {
         return <ActivityDetail id={this.id} 
                     status={this.status} 
                     isEnter={this.isEnter}
-                    isSponsor={this.isSponsor}/>
+                    isSponsor={this.isSponsor}
+                    navigator={navigator}/>
     }
 }
 
