@@ -1,8 +1,9 @@
-var AppID = '5jqgy6q659ljyldiik70cev6d8n7t1ixolt6rd7k6p1n964d';
-var AppKey = 'bm0vszz9zd521yw8l40k6wdh6vsqq5aht92fdohlgzvwrgl4';
-
-var AV = require('avoscloud-sdk');
-AV.initialize(AppID, AppKey);
+var {
+    Photo,
+    Region,
+    Activity,
+    AV
+} = require('./models');
 
 var _ = require('underscore');
 var extName = require('ext-name');
@@ -11,44 +12,11 @@ var rnfs = require('react-native-fs');
 var moment = require('moment');
 var user = require('./user');
 
-var Photo = AV.Object.extend("Photo");
-var Region = AV.Object.extend("Region");
-var Activity = AV.Object.extend("Activity", {
-    getCarsTag: function() {
-        var minCars = this.get('minCars');
-        var maxCars = this.get('maxCars');
-        if (minCars === maxCars) {
-            var carsTag = minCars + '车同行';
-        } else {
-            var carsTag = minCars + '-' + maxCars + '车同行';
-        }
-        return carsTag;
-    },
-
-    getRouteTag: function() {
-        // TODO: 这个tag是怎么来的？
-        var routeTag = '行车容易';
-        return routeTag;
-    },
-
-    getState: function() {
-        var now = Date.now();
-        if (now < this.get('entryDeadline')) {
-            return Activity.PREPARING
-        } else {
-            return Activity.TRAVELLING
-        }
-    }
-}, {
-    PREPARING: 'preparing',
-    TRAVELLING: 'travelling'
-});
-
-var commonHeaders = {
-    'X-LC-Id': AppID,
-    'X-LC-Key': AppKey,
-    'Content-Type': 'application/json'
-}
+// var commonHeaders = {
+//     'X-LC-Id': AppID,
+//     'X-LC-Key': AppKey,
+//     'Content-Type': 'application/json'
+// }
 
 var sms = {
     requestSmsCode: function(phone) {
@@ -102,11 +70,12 @@ var activity = {
 
     fetch: function(params) {
         // TODO: filter by region
-        return new Promise(function(resolve, reject) {
+        var _fetchActivities = new Promise(function(resolve, reject) {
             var query = new AV.Query(Activity);
             if (params.latestDate) {
                 query.lessThan('createdAt', params.latestDate);
             }
+
             query.limit(params.limit || 5);
             query.descending('createdAt');
             query.find({
@@ -119,108 +88,37 @@ var activity = {
             })
         });
 
-        // TOOD: implement activity query api
-
-        // return new Promise(function(resolve, reject) {
-        //     var publishDate = moment('2015-10-08 12:00').toDate();
-        //     var startDate = moment('2015-10-09').toDate();
-        //     var endDate = moment('2015-10-12').toDate();
-        //     console.log(publishDate, startDate, endDate);
-
-        //     var data = {
-        //         results: [{
-        //             id: 1,
-        //             header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-        //             title: 'GO！一起去草原撒野',
-        //             status: 'preparing',
-        //             isEnter: '0',
-        //             isSponsor: '0',
-        //             tags: ['3-5车同行', '行程容易'],
-        //             route: '北京 - 天津 - 石家庄',
-        //             startDate: startDate,
-        //             endDate: endDate,
-        //             publishDate: publishDate,
-        //             user: {
-        //                 username: 'Steven'
-        //             },
-        //             stars: 299
-        //         }, {
-        //             id: 2,
-        //             header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-        //             title: 'GO！一起去草原撒野',
-        //             status: 'travelling',
-        //             isEnter: '0',
-        //             isSponsor: '0',
-        //             tags: ['3-5车同行', '行程容易'],
-        //             route: '北京 - 天津 - 石家庄',
-        //             startDate: startDate,
-        //             endDate: endDate,
-        //             publishDate: publishDate,
-        //             user: {
-        //                 username: 'Steven'
-        //             },
-        //             stars: 299
-        //         }, {
-        //             id: 3,
-        //             header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-        //             title: 'GO！一起去草原撒野',
-        //             status: 'preparing',
-        //             isEnter: '1',
-        //             isSponsor: '0',
-        //             tags: ['3-5车同行', '行程容易'],
-        //             route: '北京 - 天津 - 石家庄',
-        //             startDate: startDate,
-        //             endDate: endDate,
-        //             publishDate: publishDate,
-        //             user: {
-        //                 username: 'Steven'
-        //             },
-        //             stars: 299
-        //         }, {
-        //             id: 4,
-        //             header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-        //             title: 'GO！一起去草原撒野',
-        //             status: 'travelling',
-        //             isEnter: '1',
-        //             isSponsor: '1',
-        //             tags: ['3-5车同行', '行程容易'],
-        //             route: '北京 - 天津 - 石家庄',
-        //             startDate: startDate,
-        //             endDate: endDate,
-        //             publishDate: publishDate,
-        //             user: {
-        //                 username: 'Steven'
-        //             },
-        //             stars: 299
-        //         }]
-        //     }
-
-        //     var region = params.region;
-        //     if (region && region !== 'all') {
-        //         data.results.splice(0, 2);
-        //     }
-
-        //     setTimeout(function() {
-        //         resolve(data);
-        //     }, 0);
-        // });
-
-        // return fetch("https://api.leancloud.cn/1.1/classes/Activity", {
-        //  headers: commonHeaders,
-        //  params: {
-        //      region: region
-        //  }
-        // }).then(function(response) {
-        //     if (response.status === 200) {
-        //      return response.json();
-        //     } else {
-        //      var e = Error('ERROR ' + data.code + ' ' + data.error);
-        //      e.response = response;
-        //      e.data = data;
-        //      throw e;
-        //     }
-        // });
+        var user, activities;
+        return AV.User.currentAsync().then(function(_user) {
+            user = _user;
+            return _fetchActivities;
+        }).then(function(_activities) {
+            activities = _activities
+            return Promise.all(activities.map(function(activity) {
+                var creator = activity.get('createBy');
+                return creator.fetch();
+            }));
+        }).then(function() {
+            // stars
+            return Promise.all(activities.map(function(activity) {
+                return activity.fetchStars().then(function(stars) {
+                    activity.setStars(stars);
+                    return activity;
+                });
+            }));
+        }).then(function() {
+            // starred
+            return Promise.all(activities.map(function(activity) {
+                return activity.isUserStarred(user).then(function(starred) {
+                    activity.setStarred(starred);
+                    return activity;
+                });
+            }));
+        }).then(function() {
+            return activities;
+        });
     },
+
     fetchDetail: function() {
         return new Promise(function(resolve, reject) {
             var moment = require('moment');
@@ -513,5 +411,6 @@ module.exports = {
     userinfo,
     journey,
     uploadPhoto,
-    regions
+    regions,
+    AV
 };

@@ -257,7 +257,7 @@ class SignUpRoute extends BaseRouteMapper {
 	}
 
 	get style() {
-		return this.navBarTransparent;
+		return this.styles.navBar;
 	}
 
 	renderLeftButton(route, navigator, index, navState) {

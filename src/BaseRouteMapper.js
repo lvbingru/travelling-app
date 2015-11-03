@@ -24,10 +24,6 @@ class BaseRouteMapper {
         return null;
     }
 
-    renderTitle() {
-        return null;
-    }
-
     renderTitle(route, navigator, index, navState) {
         var styles = this.styles;
         return (

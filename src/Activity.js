@@ -1,6 +1,8 @@
 'use strict';
 
-var debug = require('./debug')('ActivityTab:log');
+var debug = require('./debug');
+var log = debug('ActivityTab:log');
+var error = debug('ActivityTab:error');
 
 var moment = require('moment');
 var React = require('react-native');
@@ -23,9 +25,11 @@ var RefreshableListView = require('react-native-refreshable-listview');
 var su = require('./styleUtils');
 var Navbars = require('./Navbars');
 var ActivityDetail = require('./ActivityDetail');
+
+var AV = require('avoscloud-sdk');
 var {
     activity,
-    regions
+    regions,
 } = require('./api');
 
 var initialRegion = regions()[0];
@@ -103,6 +107,8 @@ var {
     Tag
 } = require('./widgets');
 
+var ActivityTags = require('./ActivityTags');
+
 
 var ActivityList = React.createClass({
 
@@ -119,6 +125,11 @@ var ActivityList = React.createClass({
         };
     },
 
+    componentWillUnmount: function() {
+        // this._navSub.remove();
+        // this._unsubscribe();
+    },
+
     componentDidMount: function() {
         this.route.on('regions-show', function() {
             this.setState({
@@ -133,7 +144,6 @@ var ActivityList = React.createClass({
         }.bind(this));
 
         this.refs.list.handleRefresh();
-        // this._refresh();
     },
 
     _hideRegions: function() {
@@ -143,7 +153,6 @@ var ActivityList = React.createClass({
         });
     },
 
-
     _renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
         if (rowID == this.state.dataSource.getRowCount() - 1) {
             return null;
@@ -152,22 +161,16 @@ var ActivityList = React.createClass({
         }
     },
 
-    _getLastRow: function() {
-        var lengths = this.state.dataSource.getSectionLengths();
-        var lastSectionID = this.state.dataSource.getSectionID
-        var lastRowLength = lengths[lengths - 1];
-    },
-
     _loadMore: function() {
         if (this.state.loadingMore) {
-            return debug('Invalid operation, loading now');
+            return error('Invalid operation, loading now');
         }
 
         this.setState({
             loadingMore: true
         });
 
-        debug('load more data');
+        log('load more data');
         var region = this.state.region;
 
         var lastActivity = this.state.activities[this.state.activities.length - 1];
@@ -176,19 +179,17 @@ var ActivityList = React.createClass({
             latestDate: lastActivity.getCreatedAt()
         }).then(function(_activities) {
             if (_activities.length === 0) {
-                return debug('No more activities');
+                return error('No more activities');
             }
 
             var activities = this.state.activities.concat(_activities);
-            debug('activities: ', activities.map((item) => item.id).join(','));
+            log('activities: ', activities.map((item) => item.id).join(','));
             var dataSource = this.state.dataSource.cloneWithRows(activities);
             this.setState({
                 dataSource: dataSource,
                 activities: activities
             });
-        }.bind(this), function(e) {
-            debug(e);
-        }).finally(function() {
+        }.bind(this), error).finally(function() {
             this.setState({
                 loadingMore: false
             });
@@ -199,7 +200,6 @@ var ActivityList = React.createClass({
         this.route.setRegion(region);
         this.state.region = region;
         this._hideRegions();
-        // this._refresh();
         this.refs.list.handleRefresh();
     },
 
@@ -273,37 +273,28 @@ var ActivityList = React.createClass({
     },
 
     _refresh: function() {
-        var region = this.state.region;
         return activity.fetch({
-            region: region ? region.tag : null,
-            latestDate: new Date(),
+            region: this.state.region
         }).then(function(activities) {
-            try {
-                debug('activities:', activities.map((item) => item.attributes));
-            } catch (e) {
-                console.trace(e);
-            }
+            log('activities:', activities.map((item) => item.attributes));
             var dataSource = this.state.dataSource.cloneWithRows(activities);
             this.setState({
                 dataSource: dataSource,
                 activities: activities
             });
-        }.bind(this), debug);
+        }.bind(this));
     },
 
-    _toDetail: function() {
+    _toDetail: function(activity) {
         this.props.navigator.push(new ActivityDetail({
-            id: data.id,
-            status: data.status,
-            isEnter: data.isEnter,
-            isSponsor: data.isSponsor
-        }));
+            activity
+        }, this.props.navigator));
     },
 
-    _renderRow: function(data) {
+    _renderRow: function(_activity) {
         return (
-            <Activity key={'activity-' + data.id}
-                data={data} onPress={this._toDetail}/>
+            <Activity key={'activity-' + _activity.id}
+                data={_activity} onPress={() => this._toDetail(_activity)}/>
         );
     }
 });
@@ -312,67 +303,31 @@ var Activity = React.createClass({
 
     getInitialState: function() {
         return {
-            user: {}
+            creator: new AV.User(),
+            currentUser: new AV.User(),
+            starred: false,
+            stars: 0
         }
     },
 
     componentDidMount: function() {
-        var _activity = this.props.data;
-        var user = _activity.get('createBy');
-        user.fetch({
-            success: function(user) {
-                if (!this.isMounted()) {
-                    return;
-                }
-
-                // TODO: add avatar
-                this.setState({
-                    user: {
-                        username: user.get('username'),
-                        avatar: null
-                    }
-                });
-            }.bind(this),
-
-            error: debug
-        });
-
-        // TODO: fetch stars
-        this.setState({
-            stars: 299
-        });
-    },
-
-    _renderTags: function() {
-        var _activity = this.props.data;
-
-        var tags = [
-            <Tag style={styles.tag} key='tag-cars'>{_activity.getCarsTag()}</Tag>,
-            <Tag style={styles.tag} key='tag-route'>{_activity.getRouteTag()}</Tag>,
-        ];
-
-        if (_activity.getState() === _activity.PREPARING) {
-            tags = [<Tag key='tag-state' style={styles.tagHot}>火热报名中</Tag>].concat(tags);
-        } else {
-            tags = [<Tag key='tag-state' style={styles.tagDue}>报名已截止</Tag>].concat(tags);
-        }
-
-        return (
-            <View style={styles.tags}>{tags}</View>
-        );
+        log('Cmponent Activity mount');
     },
 
     render: function() {
         var _activity = this.props.data;
-        var user = this.state.user;
-        var avatar = user.avatar ? {
-            url: user.avatar
-        } : require('image!avatar-placeholder');
+        log('activity data', _activity);
+        var creator = _activity.get('createBy');
+
+        // var avatar = creator.avatar ? {
+        // url: creator.avatar
+        // } : require('image!avatar-placeholder');
+        var avatar = require('image!avatar-placeholder');
 
         // TODO: use real cover
         var coverPlaceholder = 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg';
         // TODO: fetch starred
-        var iconStar = _activity.starred ? require('image!icon-starred') : require('image!icon-star')
+        var iconStar = _activity.getStarred() ? require('image!icon-star') : require('image!icon-stars');
 
         return (
             <TouchableHighlight underlayColor='#f3f5f6' onPress={this.props.onPress}>
@@ -381,7 +336,7 @@ var Activity = React.createClass({
                     <Image style={styles.bg} source={{uri: coverPlaceholder}}>
                       <View style={styles.info}>
                       <Text style={styles.title}>{_activity.get('title')}</Text>
-                      {this._renderTags()}
+                      <ActivityTags data={_activity} style={styles.tags}/>
                       </View>
                     </Image>
                   </View>
@@ -390,14 +345,16 @@ var Activity = React.createClass({
                   
                   <View style={styles.user}>
                     <Image style={styles.avatar} source={avatar}/>
-                    <Text style={[styles.username, styles.baseText]}>{user.username || ""}</Text>
+                    <Text style={[styles.username, styles.baseText]}>
+                        {creator.get('username') || ""}
+                    </Text>
                     <Text style={[styles.publishDate]}>
                         发布于 {moment(_activity.getCreatedAt()).format('YYYY-MM-DD HH:mm')}
                     </Text>
 
                     <View style={styles.star}>
                       <Image style={styles.iconStar} source={iconStar}/>
-                      <Text style={[styles.baseText, styles.stars]}>{this.state.stars}</Text>
+                      <Text style={[styles.baseText, styles.stars]}>{_activity.getStars()}</Text>
                     </View>
                   </View>
                 </View>
@@ -471,24 +428,6 @@ var styles = StyleSheet.create({
 
     tags: {
         marginBottom: 15,
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-
-    tag: {
-        marginRight: 5,
-    },
-
-    tagHot: {
-        marginRight: 5,
-        borderColor: '#f03a47',
-        backgroundColor: '#f03a47'
-    },
-
-    tagDue: {
-        marginRight: 5,
-        borderColor: '#34be9a',
-        backgroundColor: '#34be9a'
     },
 
     user: {

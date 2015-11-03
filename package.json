@@ -27,6 +27,9 @@
     "react-native-vector-icons": "^0.7.1",
     "react-native-viewpager": "^0.1.2",
     "react-timer-mixin": "^0.13.3",
+    "redux": "^3.0.4",
+    "redux-logger": "^2.0.4",
+    "redux-thunk": "^1.0.0",
     "shortid": "^2.2.4",
     "underscore": "^1.8.3"
   }

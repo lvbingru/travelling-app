@@ -1,9 +1,10 @@
 var React = require('react-native');
 var {
-  StyleSheet,
-  Dimensions,
-  View,
-  Image
+    AsyncStorage,
+    StyleSheet,
+    Dimensions,
+    View,
+    Image
 } = React;
 
 var deviceWidth = Dimensions.get('window').width;
@@ -12,65 +13,76 @@ var BaseRouteMapper = require('./BaseRouteMapper');
 var ViewPager = require('react-native-viewpager');
 var Button = require('./widgets').Button;
 var HomePage = require('./HomePage');
-var Dispatcher = require('./Dispatcher');
+
+var store = require('./store');
+var {
+    updateSession
+} = require('./actions');
 
 var IMGS = [
-	require('image!page1'),
-	require('image!page2'),
-	require('image!page3'),
+    require('image!page1'),
+    require('image!page2'),
+    require('image!page3'),
 ];
 
 var Onboarding = React.createClass({
-  render: function() {
+    render: function() {
 
-    var dataSource = new ViewPager.DataSource({
-      pageHasChanged: (p1, p2) => p1 !== p2,
-    });
+        var dataSource = new ViewPager.DataSource({
+            pageHasChanged: (p1, p2) => p1 !== p2,
+        });
 
-    return (
-    	<ViewPager 
-    		dataSource={dataSource.cloneWithPages(IMGS)} 
-    		renderPage={this._renderPage}/>
-    );
-  },
+        return (
+            <ViewPager 
+              dataSource={dataSource.cloneWithPages(IMGS)} 
+              renderPage={this._renderPage}/>
+        );
+    },
 
-  _onStart: function() {
-    Dispatcher.emit('onboarding:start');
-  },
+    _onStart: function() {
+        var userstamp = Date.now();
+        AsyncStorage.setItem('userstamp', String(userstamp)).catch(function(e) {
+            console.trace(e);
+        });
 
-  _renderPage: function(data, pageID) {
-  	return (
-  		<Image source={data} style={styles.page}>
-  			{pageID == IMGS.length - 1&& 
-  			<View style={styles.buttonWrap}>
-	  			<Button style={styles.button} onPress={this._onStart}>马上出发</Button>
-	  		</View>}
-  		</Image>
-  	);
-  }
+        store.dispatch(updateSession({
+            userstamp: userstamp
+        }));
+    },
+
+    _renderPage: function(data, pageID) {
+        return (
+            <Image source={data} style={styles.page}>
+              {pageID == IMGS.length - 1&& 
+              <View style={styles.buttonWrap}>
+                <Button style={styles.button} onPress={this._onStart}>马上出发</Button>
+              </View>}
+            </Image>
+        );
+    }
 });
 
 var styles = StyleSheet.create({
-	page: {
-		width: deviceWidth,
-		height: deviceHeight
-	},
-	buttonWrap: {
-		backgroundColor: 'transparent',
-		position: 'absolute',
-		bottom: 40,
-		left: 0,
-		right: 0,
-		justifyContent: 'center',
-		flexDirection: 'row'
-	},
-	button: {
-		borderWidth: 1,
-		borderColor: '#fff',
-		width: 200,
-		textAlign: 'center',
-		borderRadius: 6,
-	}
+    page: {
+        width: deviceWidth,
+        height: deviceHeight
+    },
+    buttonWrap: {
+        backgroundColor: 'transparent',
+        position: 'absolute',
+        bottom: 40,
+        left: 0,
+        right: 0,
+        justifyContent: 'center',
+        flexDirection: 'row'
+    },
+    button: {
+        borderWidth: 1,
+        borderColor: '#fff',
+        width: 200,
+        textAlign: 'center',
+        borderRadius: 6,
+    }
 });
 
 class OnboardingRoute extends BaseRouteMapper {

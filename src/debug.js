@@ -1,6 +1,6 @@
 var debug = require('debug');
 
-debug.enable('ActivityTab:*');
+debug.enable('*:*');
 
 debug.useColors = function() {
     return false;

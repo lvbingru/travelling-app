@@ -23,11 +23,15 @@ console.log('device height', deviceHeight);
 var su = require('./styleUtils');
 var BaseRouteMapper = require('./BaseRouteMapper');
 var ActivityScene = require('./ActivityScene');
-var Dispatcher = require('./Dispatcher');
+
+var store = require('./store');
+var {updateSession} = require('./actions');
 
 var api = require('./api');
 var user = api.user
 var fetchInfo = api.userinfo;
+var debug = require('./debug');
+var log = debug('SpaceTab:log');
 
 var Entry = React.createClass({
     getInitialState: function() {
@@ -78,6 +82,10 @@ var Space = React.createClass({
         this.fetchData();
     },
 
+    componentWillUnmout: function() {
+        log('Space tab will mount!');
+    },
+
     _goto: function(entry) {
         return function() {
             if (entry === 'activity') {
@@ -98,7 +106,9 @@ var Space = React.createClass({
 
     _logout: function() {
         user.logout().then(function() {
-            Dispatcher.emit('logout');
+            store.dispatch(updateSession({
+                user: null
+            }));
         }, function(e) {
             console.trace(e);
             return AlertIOS.alert(e.reason);
@@ -140,7 +150,8 @@ var Space = React.createClass({
                 <Entry label='账单' icon={require('image!icon-bills')} count={info.bills || ''} style={styles.last}/>
               </View>
 
-              <TouchableOpacity style={{margin: 20}} activeOpacity={0.9} onPress={this._logout}>
+              <TouchableOpacity style={{margin: 20}} 
+                activeOpacity={0.9} onPress={this._logout}>
                 <Text style={styles.logout}>退出</Text>
               </TouchableOpacity>
             </View>

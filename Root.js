@@ -14,8 +14,14 @@ var Onboarding = require('./src/Onboarding');
 var NavBar = require('./src/NavBar');
 
 var Dispatcher = require('./src/Dispatcher');
+var store = require('./src/store');
+var {buildSession} = require('./src/actions');
 
+var debug = require('./src/debug');
+var log = debug('Root:log');
 var api = require('./src/api');
+var AV = api.AV;
+
 var Navbars = require('./src/Navbars');
 var {
     user
@@ -127,6 +133,28 @@ var Home = React.createClass({
         }));
     },
 
+    _handleChange: function() {
+        var state = store.getState();
+        var prevSession = this.state.session;
+        var session = state.session;
+
+        if (prevSession === session) {
+            return;
+        }
+
+        this.state.session = session;
+        if (!session.userstamp) {
+            log('route to onboarding');
+            this.refs.navigator.replace(new Onboarding());
+        } else if(!session.user) {
+            log('route to signin');
+            this.refs.navigator.replace(new SignIn());
+        } else {
+            log('route to playing');
+            this.refs.navigator.replace(new HomePage(this.refs.navigator));
+        }
+    },
+
     componentDidMount: function() {
         // return this._testRoute();
 
@@ -134,7 +162,6 @@ var Home = React.createClass({
             this.refs.navigator.resetTo(new SignIn)
         }.bind(this));
 
-        Dispatcher.addListener('onboarding:start', this._onStart);
         Dispatcher.addListener('publish-activity:cancel', this._onPublishActivityCancel);
         Dispatcher.addListener('publish-activity:done', this._onPublishActivityDone);
 
@@ -142,19 +169,19 @@ var Home = React.createClass({
             StatusBarIOS.setStyle('light-content');
         }
 
-        AsyncStorage.getItem('userstamp').then(function(userstamp) {
-            if (!userstamp) {
-                return 'onboarding';
-            }
+        this._unsubscribe = store.subscribe(this._handleChange);
 
-            return user.currentUser().then(function(user) {
-                return user ? 'playing' : 'signin'
-            }, function(e) {
-                return 'signin';
-            });
-        }, function() {
-            return 'onboarding';
-        }).then(this._replaceRoute);
+        Promise.all([
+            AsyncStorage.getItem("userstamp"),
+            AV.User.currentAsync()
+        ]).then(function(values) {
+            var [userstamp, user] = values;
+            store.dispatch(buildSession(userstamp, user));
+        });
+    },
+
+    componentWilUnmount: function() {
+        this._unsubscribe();
     },
 
     _onPublishActivityCancel: function() {
