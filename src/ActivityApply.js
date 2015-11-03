@@ -21,7 +21,15 @@ var ActivityApply = React.createClass({
 		return {
 			tab: 0,
 			share: true,
-			canDrive: true
+			canDrive: true,
+			carType: this.props.carType || '',
+			carNumber: this.props.carNumber || '',
+			phone: this.props.phone || '',
+			peopleNum: this.props.peopleNum || '',
+			childNum: this.props.childNum || '',
+			seat: this.props.seat || '',
+			share: this.props.share || true,
+			canDrive: this.props.canDrive || true
 		}
 	},
 
@@ -323,8 +331,10 @@ var styles = StyleSheet.create({
 var BaseRouteMapper = require('./BaseRouteMapper');
 
 class ActivityApplyRoute extends BaseRouteMapper {
-	constructor(data) {
-		super()
+	constructor(datas) {
+		super();
+
+		this.datas = datas;
 	}
 
 	renderLeftButton(route, navigator, index, navState) {
@@ -348,7 +358,7 @@ class ActivityApplyRoute extends BaseRouteMapper {
 	}
 
 	renderScene(navigator) {
-		return <ActivityApply ref={(component) => this._root = component} navigator={navigator}/>
+		return <ActivityApply ref={(component) => this._root = component} navigator={navigator} {...this.datas}/>
 	}
 }
 

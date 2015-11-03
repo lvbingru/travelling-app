@@ -23,6 +23,7 @@ var activityApi = require('./api').activity;
 var ActivityMoreDetail = require('./ActivityMoreDetail');
 var ActivityApply = require('./ActivityApply');
 var CommentList = require('./CommentList');
+var ActivityApplyInfo = require('./ActivityApplyInfo');
 
 var {
     Tag,
@@ -41,7 +42,7 @@ var ActivityDetail = React.createClass({
 
     componentDidMount: function() {
         this.scrollHandleCopy = this.scrollHandle;
-        activityApi.fetchDetail().then(function(data) {
+        activityApi.fetchDetail(this.props.id).then(function(data) {
             this.setState({
                 data: data
             });
@@ -136,6 +137,10 @@ var ActivityDetail = React.createClass({
         this.props.navigator.push(new ActivityApply({id: this.props.id}));
     },
 
+    applyInfoHandle: function() {
+        this.props.navigator.push(new ActivityApplyInfo({ownCar: this.state.data.ownCar}));
+    },
+
     renderBottom: function() {
         var status = this.props.status;
         var isEnter = this.props.isEnter;
@@ -159,7 +164,8 @@ var ActivityDetail = React.createClass({
                             <Image source={require('image!icon-activity-circle-trans')} style={styles.iconActivityCircle}/>
                             <Text style={styles.informationText}>活动圈子</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.apply} activeOpacity={0.9}>
+                        <TouchableOpacity style={styles.apply} activeOpacity={0.9}
+                            onPress={this.applyInfoHandle}>
                             <Text style={styles.applyText}>我的报名信息</Text>
                         </TouchableOpacity>
                     </View>

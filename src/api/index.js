@@ -133,6 +133,22 @@ var activity = {
                     id: 4,
                     header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
                     title: 'GO！一起去草原撒野',
+                    status: 'preparing',
+                    isEnter: '1',
+                    isSponsor: '0',
+                    tags: ['3-5车同行', '行程容易'],
+                    route: '北京 - 天津 - 石家庄',
+                    startDate: startDate,
+                    endDate: endDate,
+                    publishDate: publishDate,
+                    user: {
+                        username: 'Steven'
+                    },
+                    stars: 299
+                }, {
+                    id: 5,
+                    header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+                    title: 'GO！一起去草原撒野',
                     status: 'travelling',
                     isEnter: '1',
                     isSponsor: '1',
@@ -174,11 +190,11 @@ var activity = {
         //     }
         // });
     },
-    fetchDetail: function() {
+    fetchDetail: function(id) {
         return new Promise(function(resolve, reject) {
             var moment = require('moment');
 
-            var detail = {
+            var detail1 = {
                 id: 3,
                 header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
                 title: 'GO！一起去草原撒野',
@@ -200,12 +216,45 @@ var activity = {
                 remainSeat: 12,
                 photos: 2,
                 journeys: 2,
-                annotations: 3
+                annotations: 3,
+                ownCar: '1'
             }
 
-            setTimeout(function() {
-                resolve(detail);
-            }, 0);
+            var detail2 = {
+                id: 4,
+                header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+                title: 'GO！一起去草原撒野',
+                status: 'preparing',
+                tags: ['3-5车同行', '行程容易'],
+                route: '北京 - 天津 - 石家庄',
+                startDate: moment('2015-09-03').toDate(),
+                endDate: moment('2015-09-10').toDate(),
+                publishDate: moment('2015-08-09'),
+                user: {
+                    username: 'Steven',
+                    avatar: 'http://localhost:8081/img/avatar-placeholder.png'
+                },
+                stars: 299,
+                remainDay: 8,
+                deadline: '9月1日12:00',
+                haveCar: 2,
+                needCar: 3,
+                remainSeat: 12,
+                photos: 2,
+                journeys: 2,
+                annotations: 3,
+                ownCar: '0'
+            }
+
+            if (id == 3) {
+                setTimeout(function() {
+                    resolve(detail1);
+                }, 0);
+            } else {
+                setTimeout(function() {
+                    resolve(detail2);
+                }, 0);
+            }
         });
     },
     fetchMoreDetail: {
