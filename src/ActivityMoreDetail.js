@@ -21,6 +21,7 @@ var su = require('./styleUtils');
 var stylesVar = require('./stylesVar');
 var fetchMoreDetail = require('./api').activity.fetchMoreDetail;
 var Tab = require('./widgets/Tab');
+var CommentList = require('./CommentList');
 
 var {
     UserInfo,
@@ -60,7 +61,7 @@ var ActivityMoreDetail = React.createClass({
             } else if (isEnter === '1') {//已经报名
                 return (
                     <View style={styles.bottomBar}>
-                        <TouchableOpacity style={styles.information, styles.activityCircle} activeOpacity={0.9}>
+                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
                             <Image source={require('image!icon-activity-circle-trans')} style={styles.iconActivityCircle}/>
                             <Text style={styles.informationText}>活动圈子</Text>
                         </TouchableOpacity>
@@ -447,7 +448,9 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
         return (
             <View style={navBarRightButton}>
                 <View style={styles.navbarRight}>
-                    <Image style={styles.iconComments} source={require('image!icon-comments')}/>
+                    <TouchableOpacity activeOpacity={1} onPress={this.commentHandle.bind(this, navigator)}>
+                        <Image style={styles.iconComments} source={require('image!icon-comments')}/>
+                    </TouchableOpacity>
                     <Text style={styles.navbarText}>127</Text>
                     <Image style={styles.iconStars} source={require('image!icon-stars-o')}/>
                     <Text style={styles.navbarText}>19</Text>
@@ -455,6 +458,13 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
                 </View>
             </View>
         );
+    }
+
+    commentHandle(navigator) {
+        navigator.push(new CommentList({
+            id: this.id,
+            count: 127
+        }))
     }
 
     get style() {

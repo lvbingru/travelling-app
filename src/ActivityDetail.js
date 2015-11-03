@@ -155,7 +155,7 @@ var ActivityDetail = React.createClass({
             } else if (isEnter === '1') {//已经报名
                 return (
                     <View style={styles.bottomBar}>
-                        <TouchableOpacity style={styles.information, styles.activityCircle} activeOpacity={0.9}>
+                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
                             <Image source={require('image!icon-activity-circle-trans')} style={styles.iconActivityCircle}/>
                             <Text style={styles.informationText}>活动圈子</Text>
                         </TouchableOpacity>
