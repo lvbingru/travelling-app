@@ -1,3 +1,5 @@
+var AV = require('avoscloud-sdk');
+var _ = require('underscore');
 var React = require('react-native');
 
 var {
@@ -28,82 +30,26 @@ var {
     ActivityPublishDate,
 } = require('./widgets');
 
+var ActivityDetailMixin = require('./ActivityDetailMixin');
+
 var ActivityMoreDetail = React.createClass({
+
+    mixins: [ActivityDetailMixin],
+
     getInitialState: function() {
         return {
+            activity: this.props.activity,
             datas: {},
             translateY: 0,
-            tab: '0'
+            tab: 0
         }
     },
 
     componentDidMount: function() {
-        this.routeHandle();
-    },
-
-    renderBottom: function() {
-        var status = this.props.status;
-        var isEnter = this.props.isEnter;
-        if (status === 'preparing') { //活动没有结束
-            if (isEnter === '0') { //没有报名
-                return (
-                    <View style={styles.bottomBar}>
-                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
-                            <Image source={require('image!icon-information')} style={styles.iconInformation}/>
-                            <Text style={styles.informationText}>咨询楼主</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.apply} activeOpacity={0.9}>
-                            <Text style={styles.applyText}>我要报名</Text>
-                        </TouchableOpacity>
-                    </View>
-                );
-            } else if (isEnter === '1') {//已经报名
-                return (
-                    <View style={styles.bottomBar}>
-                        <TouchableOpacity style={styles.information, styles.activityCircle} activeOpacity={0.9}>
-                            <Image source={require('image!icon-activity-circle-trans')} style={styles.iconActivityCircle}/>
-                            <Text style={styles.informationText}>活动圈子</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.apply} activeOpacity={0.9}>
-                            <Text style={styles.applyText}>我的报名信息</Text>
-                        </TouchableOpacity>
-                    </View>
-                );
-            }
-            
-        } else if (status === 'travelling') {
-            if (isEnter === '0') {
-                return (
-                    <View style={styles.bottomBar}>
-                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
-                            <Image source={require('image!icon-information')} style={styles.iconInformation} />
-                            <Text style={styles.informationText}>咨询楼主</Text>
-                        </TouchableOpacity>
-                    </View>
-                );
-            } else if (isEnter === '1') {
-                return (
-                    <View style={styles.bottomBar}>
-                        <TouchableOpacity style={[styles.information, styles.blueLight]} activeOpacity={0.9}>
-                            <Image source={require('image!icon-activity-circle-trans')} style={styles.iconActivityCircle} />
-                            <Text style={styles.informationText}>活动圈子</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.information, styles.green]} activeOpacity={0.9}>
-                            <Image source={require('image!icon-picture-trans')} style={styles.iconPictureTrans} />
-                            <Text style={styles.informationText}>分享照片</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.information, styles.red]} activeOpacity={0.9}>
-                            <Image source={require('image!icon-journey-trans')} style={styles.iconJourneyTrans} />
-                            <Text style={styles.informationText}>写游记</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.information, styles.orange]} activeOpacity={0.9}>
-                            <Image source={require('image!icon-annotation-trans')} style={styles.iconAnnotationTrans} />
-                            <Text style={styles.informationText}>上传轨迹</Text>
-                        </TouchableOpacity>
-                    </View>
-                );
-            }
-        }
+        this.scrollHandleCopy = this.scrollHandle;
+        AV.User.currentAsync().then(function(user) {
+            this.setState({user});
+        }.bind(this));
     },
 
     scrollHandle: function(e) {
@@ -119,94 +65,52 @@ var ActivityMoreDetail = React.createClass({
         }
     },
 
-    routeHandle: function(){
-        fetchMoreDetail.fetchRoute({
-            id: this.props.id
-        }).then(function(datas) {
-            this.setState({
-                datas: datas,
-                tab: 0
-            });
-        }.bind(this), function(e) {
-            console.log(e);
-        })
-    },
-
-    detailHandle: function() {
-        fetchMoreDetail.fetchDetail({
-            id: this.props.id
-        }).then(function(datas) {
-            this.setState({
-                datas: datas,
-                tab: 1
-            });
-        }.bind(this), function(e) {
-            console.log(e);
-        });
-    },
-
-    tipsHandle: function() {
-        fetchMoreDetail.fetchTips({
-            id: this.props.id
-        }).then(function(datas) {
-            this.setState({
-                datas: datas,
-                tab: 2
-            });
-        }.bind(this), function(e) {
-            console.log(e);
-        });
-    },
-
-    dangerHandle: function() {
-        fetchMoreDetail.fetchDanger({
-            id: this.props.id
-        }).then(function(datas) {
-            this.setState({
-                datas: datas,
-                tab: 3
-            });
-        }.bind(this), function(e) {
-            console.log(e);
-        });
-    },
-
     renderContent: function() {
+        var _activity = this.props.activity;
         var datas = this.state.datas;
         var tab = this.state.tab;
-        
+
         if (tab === 0) {
+            // TODO: 显示轨迹图
             return (
                 <View>
-                    <Image source={datas.routeImg ? {uri: datas.routeImg} : require('image!banner-activity-placeholder')} 
+                    <Image source={require('image!banner-activity-placeholder')} 
                         style={styles.banner}/>
                     <View style={styles.contentRow}>
-                        <Text style={styles.text}>{datas.info}</Text>
+                        <Text style={styles.text}>{_activity.get('route')}</Text>
                     </View>
                 </View>
             );
-        } else if (tab === 1 || tab === 3) {
+        } else if (tab === 1) {
+            return (
+                <View>
+                    <View style={styles.contentRow}>
+                        <Text style={styles.text}>{_activity.get('routeDesc')}</Text>
+                    </View>
+                </View>
+            );
+        } else if (tab === 3) {
             return (
                 <View style={styles.contentRow}>
-                    <Text style={styles.text}>{datas.info}</Text>
-                </View>
+                    <Text style={styles.text}>{_activity.get('riskPrompt')}</Text>
+                   </View>
             );
         } else if (tab === 2) {
             return (
                 <View>
                     <View style={styles.contentRow}>
                         <Text style={styles.titleText}>参与者要求</Text>
-                        <Text style={styles.text}>{datas.participantInfo}</Text>
+                        <Text style={styles.text}>{_activity.get('partnerRequirements')}</Text>
                     </View>
                     <View style={styles.separator}></View>
                     <View style={styles.contentRow}>
                         <Text style={styles.titleText}>装备要求</Text>
-                        <Text style={styles.text}>{datas.devInfo}</Text>
+                        <Text style={styles.text}>{_activity.get('equipmentRequirements')}</Text>
                     </View>
                     <View style={styles.separator}></View>
                     <View style={styles.contentRow}>
                         <Text style={styles.titleText}>费用说明</Text>
-                        <Text style={styles.text}>{datas.moneyInfo}</Text>
+                        <Text style={styles.text}>{_activity.get('costDesc')}</Text>
                     </View>
                 </View>
             );
@@ -214,15 +118,23 @@ var ActivityMoreDetail = React.createClass({
     },
 
     render: function() {
+        if (!this.state.user) {
+            return null;
+        }
+        
         var isSponsor = this.props.isSponsor;
         var data = this.state.data;
+
+        var callbacks = _.range(4).map(function(tab) {
+            return () => this.setState({tab});
+        }, this);
 
         return (
             <View style={styles.container}>
                 <Animated.View style={[styles.partContainer, {transform: [{translateY: this.state.translateY}]}]} >
                 <ScrollView style={styles.scrollContainer} >
                     <Tab datas={['路线说明', '详细行程', '注意事项', '风险提示']}
-                        callbacks={[this.routeHandle, this.detailHandle, this.tipsHandle, this.dangerHandle]} />
+                        callbacks={callbacks} />
                     {this.renderContent()}
                 </ScrollView>
                 </Animated.View>  
@@ -280,7 +192,7 @@ var styles = StyleSheet.create({
         ...su.size(17, 15),
             marginLeft: 10,
     },
-    
+
     banner: {
         height: 180,
         flex: 1,
@@ -305,8 +217,8 @@ var styles = StyleSheet.create({
     },
 
     iconInformation: {
-        width: 22, 
-        height: 22, 
+        width: 22,
+        height: 22,
         marginBottom: 5
     },
 
@@ -331,7 +243,7 @@ var styles = StyleSheet.create({
 
     iconPictureTrans: {
         ...su.size(22, 16),
-        marginBottom: 5
+            marginBottom: 5
     },
 
     red: {
@@ -340,7 +252,7 @@ var styles = StyleSheet.create({
 
     iconJourneyTrans: {
         ...su.size(16, 18),
-        marginBottom: 5
+            marginBottom: 5
     },
 
     orange: {
@@ -349,7 +261,7 @@ var styles = StyleSheet.create({
 
     iconAnnotationTrans: {
         ...su.size(15, 20),
-        marginBottom: 5
+            marginBottom: 5
     },
 
     apply: {
@@ -400,6 +312,7 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
     constructor(data) {
         super()
 
+        this.activity = data.activity;
         this.id = data.id;
         this.status = data.status;
         this.isEnter = data.isEnter;
@@ -459,7 +372,9 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
     }
 
     renderScene() {
-        return <ActivityMoreDetail id={this.id} 
+        return <ActivityMoreDetail
+                    id={this.id} 
+                    activity={this.activity}
                     status={this.status} 
                     isEnter={this.isEnter}
                     isSponsor={this.isSponsor}/>

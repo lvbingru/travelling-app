@@ -12,6 +12,8 @@ var error = require('../debug')('api:error');
 
 var Photo = AV.Object.extend("Photo");
 var Region = AV.Object.extend("Region");
+var Partner = AV.Object.extend("Partner");
+
 var Activity = AV.Object.extend("Activity", {
     getCarsTag: function() {
         var minCars = this.get('minCars');
@@ -65,6 +67,10 @@ var Activity = AV.Object.extend("Activity", {
         }
     },
 
+    getCreator: function() {
+        return this.get('createBy');
+    },
+
     daysLeftForApply: function() {
         var deadline = this.get('entryDeadline');
         var now = new Date();
@@ -79,6 +85,7 @@ var Activity = AV.Object.extend("Activity", {
                     debug('users', count);
                     resolve(count);
                 },
+
                 error: function(e) {
                     error('fail to fetch stars');
                     error(e);
@@ -106,11 +113,19 @@ var Activity = AV.Object.extend("Activity", {
                 }
             });
         });
+    },
+
+    addPartner: function(user) {
+        var partner = new Partner();
+        partner.set('activity', this);
+        partner.set('user', user);
+        return partner.save();
     }
 }, {
     PREPARING: 'preparing',
     TRAVELLING: 'travelling'
 });
+
 
 module.exports = {
     Photo,

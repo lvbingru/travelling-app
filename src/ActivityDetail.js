@@ -26,6 +26,7 @@ var userApi = require('./api').user;
 var ActivityMoreDetail = require('./ActivityMoreDetail');
 var ActivityTags = require('./ActivityTags');
 var CommentList = require('./CommentList');
+var ActivityDetailMixin = require('./ActivityDetailMixin');
 
 var {
     Tag,
@@ -41,18 +42,26 @@ var error = debug('ActivityDetail:error');
 var ActivityEntries = React.createClass({
     renderCountdown: function() {
         var _activity = this.props.activity;
-
-        return (
-            <View style={styles.row}>
-                <Image style={styles.countdown} source={require('image!icon-countdown')}/>
-                <Text style={styles.countdownText}>
-                    报名倒计时：{_activity.daysLeftForApply()}天
-                </Text>
-                <Text style={[styles.countdownText, styles.gray]}>
-                    （截止报名时间：{moment(_activity.get('entryDeadline')).format('YYYY-MM-DD')}）
-                </Text>
-            </View>
-        );
+        if (_activity.getState() === activityApi.TRAVELLING) {
+            return (
+                <View style={styles.row}>
+                    <Image style={styles.countdown} source={require('image!icon-countdown')}/>
+                    <Text style={styles.countdownText}>报名已结束</Text>
+                </View>
+            );
+        } else {
+            return (
+                <View style={styles.row}>
+                    <Image style={styles.countdown} source={require('image!icon-countdown')}/>
+                    <Text style={styles.countdownText}>
+                        报名倒计时：{_activity.daysLeftForApply()}天
+                    </Text>
+                    <Text style={[styles.countdownText, styles.gray]}>
+                        （截止报名时间：{moment(_activity.get('entryDeadline')).format('YYYY-MM-DD')}）
+                    </Text>
+                </View>
+            );
+        }
     },
 
     renderSupplies: function() {
@@ -149,83 +158,42 @@ var ActivityEntries = React.createClass({
 });
 
 var ActivityDetail = React.createClass({
+    mixins: [ActivityDetailMixin],
+
     getInitialState: function() {
-        var activity = this.props.activity;
         return {
-            activity: activity,
+            activity: this.props.activity,
             data: {},
+            user: null,
             translateY: 0
         }
     },
 
     componentDidMount: function() {
         this.scrollHandleCopy = this.scrollHandle;
+        AV.User.currentAsync().then(function(user) {
+            this.setState({user});
+        }.bind(this));
     },
 
-    renderBottom: function() {
-        var _activity = this.state.activity;
-        var state = _activity.getState();
-        // var isEnter = this.props.isEnter;
-        var isEnter = '0';
-        if (state === activityApi.PREPARING) { //活动没有结束
-            if (isEnter === '0') { //没有报名
-                return (
-                    <View style={styles.bottomBar}>
-                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
-                            <Image source={require('image!icon-information')} style={styles.iconInformation}/>
-                            <Text style={styles.informationText}>咨询楼主</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.apply} activeOpacity={0.9}>
-                            <Text style={styles.applyText}>我要报名</Text>
-                        </TouchableOpacity>
-                    </View>
-                );
-            } else if (isEnter === '1') {//已经报名
-                return (
-                    <View style={styles.bottomBar}>
-                        <TouchableOpacity style={styles.information, styles.activityCircle} activeOpacity={0.9}>
-                            <Image source={require('image!icon-activity-circle-trans')} style={styles.iconActivityCircle}/>
-                            <Text style={styles.informationText}>活动圈子</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.apply} activeOpacity={0.9}>
-                            <Text style={styles.applyText}>我的报名信息</Text>
-                        </TouchableOpacity>
-                    </View>
-                );
-            }
-        } else if (state === activityApi.TRAVELLING) {
-            if (isEnter === '0') {
-                return (
-                    <View style={styles.bottomBar}>
-                        <TouchableOpacity style={styles.information} activeOpacity={0.9}>
-                            <Image source={require('image!icon-information')} style={styles.iconInformation} />
-                            <Text style={styles.informationText}>咨询楼主</Text>
-                        </TouchableOpacity>
-                    </View>
-                );
-            } else if (isEnter === '1') {
-                return (
-                    <View style={styles.bottomBar}>
-                        <TouchableOpacity style={[styles.information, styles.blueLight]} activeOpacity={0.9}>
-                            <Image source={require('image!icon-activity-circle-trans')} style={styles.iconActivityCircle} />
-                            <Text style={styles.informationText}>活动圈子</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.information, styles.green]} activeOpacity={0.9}>
-                            <Image source={require('image!icon-picture-trans')} style={styles.iconPictureTrans} />
-                            <Text style={styles.informationText}>分享照片</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.information, styles.red]} activeOpacity={0.9}>
-                            <Image source={require('image!icon-journey-trans')} style={styles.iconJourneyTrans} />
-                            <Text style={styles.informationText}>写游记</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.information, styles.orange]} activeOpacity={0.9}>
-                            <Image source={require('image!icon-annotation-trans')} style={styles.iconAnnotationTrans} />
-                            <Text style={styles.informationText}>上传轨迹</Text>
-                        </TouchableOpacity>
-                    </View>
-                );
-            }
-        }
+    _applyActivity: function() {
+        /*
+        var activity = this.state.activity;
+        AV.User.currentAsync().then(function(user) {
+            return activity.addPartner(user)
+        }).then(function() {
+
+        }.bind(this)).catch(error).final(function() {
+            if (!this.isMounted()) {
+                return;
+            };
+
+            this.setState({
+                applying: false,
+                isApplied: true
+            });
+        }.bind(this));
+        */
     },
 
     scrollHandle: function(e) {
@@ -235,13 +203,13 @@ var ActivityDetail = React.createClass({
 
         if (height >= contentHeight) {
             console.log('scroll to bottom');
-            
+
             this.scrollHandle = null;
             this.props.navigator.push(new ActivityMoreDetail({
-                id: this.props.id, 
-                status: this.props.status, 
+                activity: this.props.activity,
+                id: this.props.id,
+                status: this.props.status,
                 isEnter: this.props.isEnter,
-                isSponsor: this.props.isSponsor,
                 resetScrollHandle: this.resetScrollHandle
             }))
         }
@@ -252,7 +220,10 @@ var ActivityDetail = React.createClass({
     },
 
     render: function() {
-        var isSponsor = this.props.isSponsor;
+        if (!this.state.user) {
+            return null;
+        }
+
         var data = this.state.data;
         var _activity = this.state.activity;
         var creator = _activity.get('createBy');
@@ -263,6 +234,8 @@ var ActivityDetail = React.createClass({
         var coverPlaceholder = 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg';
         var cover = coverPlaceholder;
 
+        var isSponsor = this.state.user.id === creator.id;
+
         return (
             <View style={styles.container}>
                 <Animated.View style={[styles.partContainer, {transform: [{translateY: this.state.translateY}]}]} >
@@ -271,13 +244,13 @@ var ActivityDetail = React.createClass({
                     scrollEventThrottle={16}
                     onScrollAnimationEnd={this.scrollEndHandle}>
 
-                    <Image source={{uri: cover}} style={styles.banner}>
+                    <Image source={{uri: cover}} style={[styles.banner, this.state.bannerStyle]}>
                         <UserInfo 
                             style={styles.info}
                             username={creator.get('username')}
                             publishDate={_activity.getCreatedAt()}
                             avatar={creatorAvatar}/>
-                        {isSponsor === '1' && (
+                        {isSponsor && (
                             <View style={styles.manageInfo}>
                                 <Image source={require('image!icon-edit-white')} 
                                     style={styles.iconEditWhite}/>
@@ -387,10 +360,10 @@ var styles = StyleSheet.create({
 
     navBarLeftButton: {
         ...su.size(17, 15),
-        marginLeft: 10,
+            marginLeft: 10,
     },
 
-    
+
     banner: {
         height: 180,
         width: deviceWidth,
@@ -419,12 +392,12 @@ var styles = StyleSheet.create({
 
     iconEditWhite: {
         ...su.size(14),
-        marginRight: 5
+            marginRight: 5
     },
 
     iconManageWhite: {
         ...su.size(17),
-        marginRight: 5
+            marginRight: 5
     },
 
     editText: {
@@ -454,7 +427,7 @@ var styles = StyleSheet.create({
     },
 
     spaceNone: {
-        paddingLeft: 0, 
+        paddingLeft: 0,
         paddingVertical: 0
     },
 
@@ -517,100 +490,22 @@ var styles = StyleSheet.create({
 
     iconPhotoGreen: {
         ...su.size(27, 30),
-        marginBottom: 12
+            marginBottom: 12
     },
 
     iconJourneyRed: {
         ...su.size(22, 30),
-        marginBottom: 12
+            marginBottom: 12
     },
 
     iconAnnotationYello: {
         ...su.size(23, 30),
-        marginBottom: 12
+            marginBottom: 12
     },
 
     icon: {
         ...su.size(24),
             marginRight: 5
-    },
-
-    bottomBar: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 0,
-        flexDirection: 'row',
-        backgroundColor: 'transparent',
-    },
-
-    information: {
-        flex: 1,
-        height: 60,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: stylesVar('green')
-    },
-
-    iconInformation: {
-        width: 22, 
-        height: 22, 
-        marginBottom: 5
-    },
-
-    informationText: {
-        color: stylesVar('white'),
-        fontSize: 10
-    },
-
-    blueLight: {
-        backgroundColor: stylesVar('blue-light')
-    },
-
-    iconActivityCircle: {
-        width: 22,
-        height: 22,
-        marginBottom: 5
-    },
-
-    green: {
-        backgroundColor: stylesVar('green')
-    },
-
-    iconPictureTrans: {
-        ...su.size(22, 16),
-        marginBottom: 5
-    },
-
-    red: {
-        backgroundColor: stylesVar('red')
-    },
-
-    iconJourneyTrans: {
-        ...su.size(16, 18),
-        marginBottom: 5
-    },
-
-    orange: {
-        backgroundColor: stylesVar('orange')
-    },
-
-    iconAnnotationTrans: {
-        ...su.size(15, 20),
-        marginBottom: 5
-    },
-
-    apply: {
-        flex: 3,
-        height: 60,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: stylesVar('blue')
-    },
-
-    applyText: {
-        fontSize: 20,
-        color: stylesVar('white')
     },
 
     moreRow: {
