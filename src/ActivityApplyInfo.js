@@ -12,42 +12,39 @@ var {
 var stylesVar = require('./stylesVar');
 var Tag = require('./widgets/Tag');
 var ActivityApply = require('./ActivityApply');
+var activityApi = require('./api').activity;
 
 var ActivityApplyInfo = React.createClass({
 	getInitialState: function() {
 		return {
-			activityTitle: '最美的时光在路上',
-			status: '审核中',
-			carType: '牧马人／2014款',
-			carNumber: '京PN8S88',
-			phone: '152 1050 9888',
-			peopleNumber: '成人2/儿童0',
-			seat: '2',
-			share: '1',
-			canDrive: '1'
+			type: 0
 		}
 	},
 
-	getDatas: function() {
-		var index = this.state.peopleNumber.indexOf('/');
-		var peopleNum = this.state.peopleNumber.substring(0, index);
-		var childNum = this.state.peopleNumber.substring(index + 1);
-		return {
-			carType: '牧马人／2014款',
-			carNumber: '京PN8S88',
-			phone: '152 1050 9888',
-			peopleNum: peopleNum,
-			childNum: childNum,
-			seat: 2,
-			share: '1',
-			canDrive: '1'
-		}
+	componentDidMount: function() {
+		activityApi.fetchApplyInfo(this.props.id).then(function(datas) {
+			var type = datas.tab;
+
+			if (type === 0) {
+				this.setState({
+					type: type,
+					...datas.selfRideDatas
+				})
+			} else {
+				this.setState({
+					type: type,
+					...datas.freeRideDatas
+				});
+			}
+		}.bind(this), function(e) {
+			console.trace(e);
+		});
 	},
 
 	renderContent: function(){
-		var ownCar = this.props.ownCar;
+		var type = this.state.type;
 
-		if (ownCar === '1') {
+		if (type === 0) {
 			return (
 				<View style={styles.detailView}>
 					<View style={styles.itemView}>
@@ -64,7 +61,7 @@ var ActivityApplyInfo = React.createClass({
 					</View>
 					<View style={styles.itemView}>
 						<Text style={styles.itemLeft}>出行人数：</Text>
-						<Text style={styles.itemRight}>{this.state.peopleNumber}</Text>
+						<Text style={styles.itemRight}>{'成人' + this.state.peopleNum + '／儿童' + this.state.childNum}</Text>
 					</View>
 					<View style={styles.itemView}>
 						<Text style={styles.itemLeft}>空余座位：</Text>
@@ -85,7 +82,7 @@ var ActivityApplyInfo = React.createClass({
 					</View>
 					<View style={styles.itemView}>
 						<Text style={styles.itemLeft}>出行人数：</Text>
-						<Text style={styles.itemRight}>{this.state.peopleNumber}</Text>
+						<Text style={styles.itemRight}>{'成人' + this.state.peopleNum + '／儿童' + this.state.childNum}</Text>
 					</View>
 					<View style={styles.itemView}>
 						<Text style={styles.itemLeft}>是否能驾驶车辆：</Text>
@@ -231,7 +228,7 @@ class ActivityApplyInfoRoute extends BaseRouteMapper {
 	constructor(data) {
 		super();
 
-		this.ownCar = data.ownCar;
+		this.id = data.id;
 	}
 
 	renderLeftButton(route, navigator, index, navState) {
@@ -240,10 +237,8 @@ class ActivityApplyInfoRoute extends BaseRouteMapper {
 
     renderRightButton(route, navigator, index, navState) {
 		return (
-			<TouchableOpacity onPress={() => {
-				var datas = this._root.getDatas();
-				navigator.push(new ActivityApply(datas));
-			}} style={styles.rightButton}>
+			<TouchableOpacity onPress={() => navigator.push(new ActivityApply({id: this.id}))} 
+				style={styles.rightButton}>
 				<Text style={styles.modifyText}>修改</Text>
 			</TouchableOpacity>
 		);
@@ -258,7 +253,7 @@ class ActivityApplyInfoRoute extends BaseRouteMapper {
 	}
 
 	renderScene(navigator) {
-		return <ActivityApplyInfo ref={(component) => this._root = component} navigator={navigator} ownCar={this.ownCar}/>
+		return <ActivityApplyInfo navigator={navigator} id={this.id}/>
 	}
 }
 

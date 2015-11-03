@@ -138,7 +138,7 @@ var ActivityDetail = React.createClass({
     },
 
     applyInfoHandle: function() {
-        this.props.navigator.push(new ActivityApplyInfo({ownCar: this.state.data.ownCar}));
+        this.props.navigator.push(new ActivityApplyInfo({id: this.props.id}));
     },
 
     renderBottom: function() {

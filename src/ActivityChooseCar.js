@@ -14,9 +14,24 @@ var stylesVar = require('./stylesVar');
 
 var ActivityChooseCar = React.createClass({
 	getInitialState: function() {
+		var carArray = ['牧马人／2014款 （京PN8S88）', '牧马人／2015款 （京PN8S88）', '牧马人／2016款 （京PN8S88）'];
+		var chooseIndex = 0;
+		var car = this.props.car;
+		if (car) {
+			chooseIndex = (function() {
+				var length = carArray.length;
+				for (var i = 0; i < length; i++) {
+					if (car == carArray[i]) {
+						return i
+					}
+				}
+
+				return 0
+			}(this))
+		}
 		return {
-			carArray: ['牧马人／2014款 （京PN8S88）', '牧马人／2015款 （京PN8S88）', '牧马人／2016款 （京PN8S88）'],
-			chooseIndex: 0
+			carArray: carArray,
+			chooseIndex: chooseIndex
 		};
 	},
 
@@ -163,6 +178,7 @@ class ActivityChooseCarRoute extends BaseRouteMapper {
 		super();
 
 		this.getCarHandle = data.getCarHandle;
+		this.car = data.car;
 	}
 
 	renderLeftButton(route, navigator, index, navState) {
@@ -192,7 +208,7 @@ class ActivityChooseCarRoute extends BaseRouteMapper {
 	}
 
 	renderScene(navigator) {
-		return <ActivityChooseCar ref={(component) => this._root = component} />
+		return <ActivityChooseCar ref={(component) => this._root = component} car={this.car} />
 	}
 }
 

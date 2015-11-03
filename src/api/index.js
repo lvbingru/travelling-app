@@ -101,8 +101,8 @@ var activity = {
                     id: 2,
                     header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
                     title: 'GO！一起去草原撒野',
-                    status: 'travelling',
-                    isEnter: '0',
+                    status: 'preparing',
+                    isEnter: '1',
                     isSponsor: '0',
                     tags: ['3-5车同行', '行程容易'],
                     route: '北京 - 天津 - 石家庄',
@@ -133,6 +133,22 @@ var activity = {
                     id: 4,
                     header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
                     title: 'GO！一起去草原撒野',
+                    status: 'travelling',
+                    isEnter: '0',
+                    isSponsor: '0',
+                    tags: ['3-5车同行', '行程容易'],
+                    route: '北京 - 天津 - 石家庄',
+                    startDate: startDate,
+                    endDate: endDate,
+                    publishDate: publishDate,
+                    user: {
+                        username: 'Steven'
+                    },
+                    stars: 299
+                }, {
+                    id: 5,
+                    header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+                    title: 'GO！一起去草原撒野',
                     status: 'preparing',
                     isEnter: '1',
                     isSponsor: '0',
@@ -146,7 +162,23 @@ var activity = {
                     },
                     stars: 299
                 }, {
-                    id: 5,
+                    id: 6,
+                    header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+                    title: 'GO！一起去草原撒野',
+                    status: 'preparing',
+                    isEnter: '1',
+                    isSponsor: '0',
+                    tags: ['3-5车同行', '行程容易'],
+                    route: '北京 - 天津 - 石家庄',
+                    startDate: startDate,
+                    endDate: endDate,
+                    publishDate: publishDate,
+                    user: {
+                        username: 'Steven'
+                    },
+                    stars: 299
+                }, {
+                    id: 7,
                     header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
                     title: 'GO！一起去草原撒野',
                     status: 'travelling',
@@ -195,7 +227,7 @@ var activity = {
             var moment = require('moment');
 
             var detail1 = {
-                id: 3,
+                id: 5,
                 header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
                 title: 'GO！一起去草原撒野',
                 status: 'preparing',
@@ -221,7 +253,7 @@ var activity = {
             }
 
             var detail2 = {
-                id: 4,
+                id: 6,
                 header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
                 title: 'GO！一起去草原撒野',
                 status: 'preparing',
@@ -246,7 +278,7 @@ var activity = {
                 ownCar: '0'
             }
 
-            if (id == 3) {
+            if (id == 5) {
                 setTimeout(function() {
                     resolve(detail1);
                 }, 0);
@@ -329,6 +361,47 @@ var activity = {
                 isLike: '0',
                 images: ['http://localhost:8081/img/page1.png', 'http://localhost:8081/img/signin-bg.png', 'http://localhost:8081/img/space-header.png']
             }]
+
+            setTimeout(function() {
+                resolve(datas);
+            }, 1000);
+        });
+    },
+
+    fetchApplyInfo: function(id) {
+        return new Promise(function(resolve, reject) {
+            if (id === 1) {//第一个活动用户没有报名
+                var datas = {}
+            } else if (id === 2) {//第二个活动用户已报名，并且自己开车
+                var datas = {
+                    selfRideDatas: {
+                        activityTitle: '最美的时光在路上',
+                        status: '审核中',
+                        carType: '牧马人／2016款',
+                        carNumber: '京PN8S88',
+                        phone: '152 1050 9888',
+                        peopleNum: '2',
+                        childNum: '2',
+                        seat: '2',
+                        share: '1',
+                        canDrive: '1'
+                    },
+                    tab: 0
+                }
+            } else if (id === 3) {//第三个活动用户已报名，并且自己搭车
+                var datas = {
+                    freeRideDatas: {
+                        activityTitle: '最美的时光在路上',
+                        status: '审核中',
+                        phone: '152 1050 9888',
+                        emptySeats: '4',
+                        childNum: '3',
+                        peopleNum: '3',
+                        canDrive: '1'
+                    },
+                    tab: 1
+                }
+            }
 
             setTimeout(function() {
                 resolve(datas);

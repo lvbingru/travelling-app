@@ -15,22 +15,27 @@ var Tab = require('./widgets/Tab');
 var stylesVar = require('./stylesVar');
 var ActivityApplySuccess = require('./ActivityApplySuccess');
 var ActivityChooseCar = require('./ActivityChooseCar');
+var activityApi = require('./api').activity;
 
 var ActivityApply = React.createClass({
 	getInitialState: function() {
 		return {
 			tab: 0,
-			share: true,
-			canDrive: true,
-			carType: this.props.carType || '',
-			carNumber: this.props.carNumber || '',
-			phone: this.props.phone || '',
-			peopleNum: this.props.peopleNum || '',
-			childNum: this.props.childNum || '',
-			seat: this.props.seat || '',
-			share: this.props.share || true,
-			canDrive: this.props.canDrive || true
+			selfRideDatas: {},
+			freeRideDatas: {}
 		}
+	},
+
+	componentDidMount: function() {
+		activityApi.fetchApplyInfo(this.props.id).then(function(datas) {
+			this.setState({
+				tab: datas.tab || 0,
+				selfRideDatas: datas.selfRideDatas || {},
+				freeRideDatas: datas.freeRideDatas || {}
+			});
+		}.bind(this), function(e) {
+			console.log(e);
+		});
 	},
 
 	selfRideHandle: function() {
@@ -46,24 +51,23 @@ var ActivityApply = React.createClass({
 	},
 
 	submitHandle: function() {
-		var datas = {
-			type: this.state.tab,
-			carType: this.state.carType || '',
-			carNumber: this.state.carNumber,
-			phone: this.state.phone,
-			peopleNum: this.state.peopleNum,
-			childNum: this.state.childNum,
-			seat: this.state.seat,
-			share: this.state.share,
-			canDrive: this.state.canDrive
+		if (this.state.tab === 0) {
+			var datas = this.state.selfRideDatas;
+		} else {
+			var datas = this.state.freeRideDatas;
 		}
-
 		console.log(datas);
 
 		this.props.navigator.push(new ActivityApplySuccess({id: this.props.id}));
 	},
 
 	renderCommon: function() {
+		var tab = this.state.tab;
+		if (tab === 0) {
+			var datas = this.state.selfRideDatas;
+		} else {
+			var datas = this.state.freeRideDatas;
+		}
 		return (
 			<View>
 				<View style={styles.separator}></View>
@@ -71,8 +75,19 @@ var ActivityApply = React.createClass({
 					<View style={styles.subItemViewLast}>
 						<Text style={styles.subItemText}>手机号码</Text>
 						<TextInput style={styles.subItemEdit} 
-							onChangeText={(phone) => this.setState({phone})}
-							value={this.state.phone} 
+							onChangeText={(phone) => {
+								datas.phone = phone; 
+								if (tab === 0) {
+									this.setState({
+										selfRideDatas: datas
+									});
+								} else {
+									this.setState({
+										freeRideDatas: datas 
+									});
+								}
+							}}
+							value={datas.phone} 
 							keyboardType='numeric'/>
 					</View>
 				</View>
@@ -81,7 +96,7 @@ var ActivityApply = React.createClass({
 					{(() => {
 						if (this.state.tab === 1) {
 							return (
-								<Text style={[styles.titleText, styles.titleExtra]}>目前空余座位：{this.state.emptySeats || 0}</Text>
+								<Text style={[styles.titleText, styles.titleExtra]}>目前空余座位：{datas.emptySeats || 0}</Text>
 							);
 						}
 						return false
@@ -91,15 +106,37 @@ var ActivityApply = React.createClass({
 					<View style={styles.subItemView}>
 						<Text style={styles.subItemText}>成人</Text>
 						<TextInput style={styles.subItemEdit} 
-							onChangeText={(peopleNum) => this.setState({peopleNum})}
-							value={this.state.peopleNum} 
+							onChangeText={(peopleNum) => {
+								datas.peopleNum = peopleNum;
+								if (tab === 0) {
+									this.setState({
+										selfRideDatas: datas
+									});
+								} else {
+									this.setState({
+										freeRideDatas: datas
+									})
+								}
+							}}
+							value={datas.peopleNum} 
 							keyboardType='numeric'/>
 					</View>
 					<View style={styles.subItemViewLast}>
 						<Text style={styles.subItemText}>小孩</Text>
 						<TextInput style={styles.subItemEdit} 
-							onChangeText={(childNum) => this.setState({childNum})}
-							value={this.state.childNum} 
+							onChangeText={(childNum) => {
+								datas.childNum = childNum;
+								if (tab === 0) {
+									this.setState({
+										selfRideDatas: datas
+									});
+								} else {
+									this.setState({
+										freeRideDatas: datas
+									});
+								}
+							}}
+							value={datas.childNum} 
 							keyboardType='numeric'/>
 					</View>
 				</View>
@@ -108,7 +145,11 @@ var ActivityApply = React.createClass({
 	},
 
 	addCarHandle: function() {
-		this.props.navigator.push(new ActivityChooseCar({getCarHandle: this.getCarHandle}));
+		var carType = this.state.selfRideDatas.carType || '';
+		var carNumber = this.state.selfRideDatas.carNumber || '';
+
+		var car = carType && carNumber ? (carType + ' （' + carNumber + '）') : '';
+		this.props.navigator.push(new ActivityChooseCar({getCarHandle: this.getCarHandle, car: car}));
 	},
 
 	getCarHandle: function(data) {
@@ -116,16 +157,23 @@ var ActivityApply = React.createClass({
 
 		if (index != -1) {
 			var carType = data.substring(0, index);
-			var carNumber = data.substring(index + 2, data.length - 2);
+			var carNumber = data.substring(index + 2, data.length - 1);
+			var datas = this.state.selfRideDatas;
+			datas.carType = carType;
+			datas.carNumber = carNumber;
 			this.setState({
-				carType: carType,
-				carNumber: carNumber
+				selfRideDatas: datas
 			});
 		}
 	},
 
 	renderContent: function() {
 		var tab = this.state.tab;
+		if (tab === 0) {
+			var datas = this.state.selfRideDatas;
+		} else {
+			var datas = this.state.freeRideDatas;
+		}
 		if (tab === 0) {
 			return (
 				<View>
@@ -136,7 +184,7 @@ var ActivityApply = React.createClass({
 						<View style={styles.subItemView}>
 							<Text style={styles.subItemText}>出行车辆</Text>
 							<TouchableOpacity style={styles.subItemContentView} onPress={this.addCarHandle}>
-								<Text style={styles.carTypeText}>{this.state.carType}</Text>
+								<Text style={styles.carTypeText}>{datas.carType}</Text>
 								<View style={styles.imageView}>
 									<Image source={require('image!icon-arrow')} style={styles.iconArrow}></Image>
 								</View>
@@ -144,7 +192,7 @@ var ActivityApply = React.createClass({
 						</View>
 						<View style={styles.subItemViewLast}>
 							<Text style={styles.subItemText}>车辆牌照</Text>
-							<Text style={styles.subItemNoEdit}>{this.state.carNumber}</Text>
+							<Text style={styles.subItemNoEdit}>{datas.carNumber}</Text>
 						</View>
 					</View>
 					{this.renderCommon()}
@@ -153,15 +201,21 @@ var ActivityApply = React.createClass({
 						<View style={styles.subItemView}>
 							<Text style={styles.subItemText}>空余座位</Text>
 							<TextInput style={styles.subItemEdit} 
-								onChangeText={(seat) => this.setState({seat})}
-								value={this.state.seat} 
+								onChangeText={(seat) => {
+									datas.seat = seat;
+									this.setState({selfRideDatas: datas})
+								}}
+								value={datas.seat} 
 								keyboardType='numeric'/>
 						</View>
 						<View style={styles.subItemViewLast}>
 							<Text style={styles.subItemText}>是否愿意搭人</Text>
 							<SwitchIOS style={styles.share}
-								onValueChange={(share) => this.setState({share})}
-								value={this.state.share} />
+								onValueChange={(share) => {
+									datas.share = share;
+									this.setState({selfRideDatas: datas})
+								}}
+								value={datas.share || true} />
 						</View>
 					</View>
 				</View>
@@ -175,8 +229,11 @@ var ActivityApply = React.createClass({
 						<View style={styles.subItemViewLast}>
 							<Text style={styles.subItemText}>能否驾驶车辆</Text>
 							<SwitchIOS style={styles.share}
-								onValueChange={(canDrive) => this.setState({canDrive})}
-								value={this.state.canDrive} />
+								onValueChange={(canDrive) => {
+									datas.canDrive = canDrive;
+									this.setState({freeRideDatas: datas})
+								}}
+								value={datas.canDrive || true} />
 						</View>
 					</View>
 				</View>
@@ -189,7 +246,8 @@ var ActivityApply = React.createClass({
 			<View style={styles.container}>
 				<Tab datas={['自己开车', '搭顺风车']} 
 					callbacks={[this.selfRideHandle, this.freeRideHandle]}
-					styles={{tabTextFont: {fontSize: 14}}} />
+					styles={{tabTextFont: {fontSize: 14}}}
+					activeTab={this.state.tab} />
 				{this.renderContent()}
 			</View>
 		);

@@ -32,6 +32,14 @@ var Tab = React.createClass({
 		}.bind(this));
 	},
 
+	componentWillReceiveProps: function(props) {
+		if (props.activeTab !== this.state.activeTab) {
+			this.setState({
+				activeTab: props.activeTab
+			});
+		}
+	},
+
 	render: function() {
 		var activeTab = parseInt(this.state.activeTab);
 		var styleProps = this.props.styles;
