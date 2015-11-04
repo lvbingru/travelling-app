@@ -23,6 +23,7 @@ var su = require('./styleUtils');
 var stylesVar = require('./stylesVar');
 var fetchMoreDetail = require('./api').activity.fetchMoreDetail;
 var Tab = require('./widgets/Tab');
+var CommentList = require('./CommentList');
 
 var {
     UserInfo,
@@ -321,7 +322,10 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
     }
 
     renderLeftButton(route, navigator, index, navState) {
-        return this._renderBackButton(route, navigator, index, navState);
+        return this._renderBackButton(route, navigator, index, navState, function() {
+            this.resetScrollHandle();
+            navigator.pop();
+        }.bind(this));
     }
 
     renderRightButton(route, navigator, index, navState) {
@@ -357,7 +361,9 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
         return (
             <View style={navBarRightButton}>
                 <View style={styles.navbarRight}>
-                    <Image style={styles.iconComments} source={require('image!icon-comments')}/>
+                    <TouchableOpacity activeOpacity={1} onPress={this.commentHandle.bind(this, navigator)}>
+                        <Image style={styles.iconComments} source={require('image!icon-comments')}/>
+                    </TouchableOpacity>
                     <Text style={styles.navbarText}>127</Text>
                     <Image style={styles.iconStars} source={require('image!icon-stars-o')}/>
                     <Text style={styles.navbarText}>19</Text>
@@ -365,6 +371,13 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
                 </View>
             </View>
         );
+    }
+
+    commentHandle(navigator) {
+        navigator.push(new CommentList({
+            id: this.id,
+            count: 127
+        }))
     }
 
     get style() {

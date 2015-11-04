@@ -32,8 +32,23 @@ var Tab = React.createClass({
 		}.bind(this));
 	},
 
+	componentWillReceiveProps: function(props) {
+		if (props.activeTab !== this.state.activeTab) {
+			this.setState({
+				activeTab: props.activeTab
+			});
+		}
+	},
+
 	render: function() {
 		var activeTab = parseInt(this.state.activeTab);
+		var styleProps = this.props.styles;
+		var tabTextFont = {
+			fontSize: 10
+		};
+		if (styleProps && styleProps.tabTextFont) {
+			tabTextFont = styleProps.tabTextFont;
+		}
 		return (
 			<View style={styles.tabRow}>
 				{this.props.datas && this.props.datas.map(function(item, index) {
@@ -42,7 +57,7 @@ var Tab = React.createClass({
 							<TouchableOpacity activeOpacity={1}
 								onPress={this.pressHandle.bind(this, index)}
 								style={[styles.tabView, styles.tabViewActive]}>
-								<Text style={[styles.tabText, styles.tabTextActive]}>{item}</Text>
+								<Text style={[styles.tabText, tabTextFont, styles.tabTextActive]}>{item}</Text>
 							</TouchableOpacity>
 						)
 					} else {
@@ -50,7 +65,7 @@ var Tab = React.createClass({
 							<TouchableOpacity activeOpacity={1} 
 								onPress={this.pressHandle.bind(this, index)}
 								style={styles.tabView}>
-								<Text style={styles.tabText}>{item}</Text>
+								<Text style={[styles.tabText, tabTextFont]}>{item}</Text>
 							</TouchableOpacity>
 						)
 					}
@@ -66,7 +81,8 @@ var styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 15,
         borderBottomWidth: 1 / PixelRatio.get(),
-        borderBottomColor: stylesVar('dark-light')
+        borderBottomColor: stylesVar('dark-light'),
+        backgroundColor: '#fff'
 	},
 
 	tabView: {
@@ -78,7 +94,6 @@ var styles = StyleSheet.create({
     },
 
     tabText: {
-        fontSize: 10,
         color: stylesVar('dark-light-little'),
         fontWeight: "200"
     },

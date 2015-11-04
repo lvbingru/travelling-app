@@ -118,13 +118,13 @@ var activity = {
             return activities;
         });
     },
-
-    fetchDetail: function() {
+    
+    fetchDetail: function(id) {
         return new Promise(function(resolve, reject) {
             var moment = require('moment');
 
-            var detail = {
-                id: 3,
+            var detail1 = {
+                id: 5,
                 header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
                 title: 'GO！一起去草原撒野',
                 status: 'preparing',
@@ -145,12 +145,45 @@ var activity = {
                 remainSeat: 12,
                 photos: 2,
                 journeys: 2,
-                annotations: 3
+                annotations: 3,
+                ownCar: '1'
             }
 
-            setTimeout(function() {
-                resolve(detail);
-            }, 0);
+            var detail2 = {
+                id: 6,
+                header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
+                title: 'GO！一起去草原撒野',
+                status: 'preparing',
+                tags: ['3-5车同行', '行程容易'],
+                route: '北京 - 天津 - 石家庄',
+                startDate: moment('2015-09-03').toDate(),
+                endDate: moment('2015-09-10').toDate(),
+                publishDate: moment('2015-08-09'),
+                user: {
+                    username: 'Steven',
+                    avatar: 'http://localhost:8081/img/avatar-placeholder.png'
+                },
+                stars: 299,
+                remainDay: 8,
+                deadline: '9月1日12:00',
+                haveCar: 2,
+                needCar: 3,
+                remainSeat: 12,
+                photos: 2,
+                journeys: 2,
+                annotations: 3,
+                ownCar: '0'
+            }
+
+            if (id == 5) {
+                setTimeout(function() {
+                    resolve(detail1);
+                }, 0);
+            } else {
+                setTimeout(function() {
+                    resolve(detail2);
+                }, 0);
+            }
         });
     },
     fetchMoreDetail: {
@@ -222,9 +255,50 @@ var activity = {
                 info: '今天和大家一起好开心，山清水秀好风光好景色，小赵同学是个吃货，以后不想和他一起出去玩。',
                 publishDate: '下午 22：13',
                 star: 180,
-                isLike: '1',
+                isLike: '0',
                 images: ['http://localhost:8081/img/page1.png', 'http://localhost:8081/img/signin-bg.png', 'http://localhost:8081/img/space-header.png']
             }]
+
+            setTimeout(function() {
+                resolve(datas);
+            }, 1000);
+        });
+    },
+
+    fetchApplyInfo: function(id) {
+        return new Promise(function(resolve, reject) {
+            if (id === 1) {//第一个活动用户没有报名
+                var datas = {}
+            } else if (id === 2) {//第二个活动用户已报名，并且自己开车
+                var datas = {
+                    selfRideDatas: {
+                        activityTitle: '最美的时光在路上',
+                        status: '审核中',
+                        carType: '牧马人／2016款',
+                        carNumber: '京PN8S88',
+                        phone: '152 1050 9888',
+                        peopleNum: '2',
+                        childNum: '2',
+                        seat: '2',
+                        share: '1',
+                        canDrive: '1'
+                    },
+                    tab: 0
+                }
+            } else if (id === 3) {//第三个活动用户已报名，并且自己搭车
+                var datas = {
+                    freeRideDatas: {
+                        activityTitle: '最美的时光在路上',
+                        status: '审核中',
+                        phone: '152 1050 9888',
+                        emptySeats: '4',
+                        childNum: '3',
+                        peopleNum: '3',
+                        canDrive: '1'
+                    },
+                    tab: 1
+                }
+            }
 
             setTimeout(function() {
                 resolve(datas);

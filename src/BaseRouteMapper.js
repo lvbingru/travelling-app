@@ -35,13 +35,13 @@ class BaseRouteMapper {
         );
     }
 
-    _renderBackButton(route, navigator, index, navState) {
+    _renderBackButton(route, navigator, index, navState, callback) {
         var styles = this.styles;
         return (
             <View style={styles.wrap}>
                 <TouchableOpacity
                     activeOpacity={0.8}
-                    onPress={() => navigator.pop()}>
+                    onPress={() => callback ? callback() : navigator.pop()}>
                     <Image style={styles.navBarLeftButton} 
                         source={require('image!back-icon')}/>
                 </TouchableOpacity>    

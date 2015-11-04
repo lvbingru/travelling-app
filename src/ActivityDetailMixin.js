@@ -14,12 +14,24 @@ var {
     TouchableHighlight
 } = React;
 
+var ActivityApply = require('./ActivityApply');
+var ActivityApplyInfo = require('./ActivityApplyInfo');
+
 var activityApi = require('./api').activity;
 var stylesVar = require('./stylesVar');
 var su = require('./styleUtils');
 
 var Mixin = {
+    _apply: function() {
+        this.props.navigator.push(new ActivityApply());
+    },
+
+    _viewApplyInfo: function() {
+        this.props.navigator.push(new ActivityApplyInfo());
+    },
+
     renderBottom: function() {
+        try {
         var _activity = this.state.activity;
         var state = _activity.getState();
         var isSponsor = this.state.user.id === _activity.getCreator().id;
@@ -37,7 +49,7 @@ var Mixin = {
                         <TouchableOpacity 
                             style={styles.apply}
                             activeOpacity={0.8} 
-                            onPress={this._applyActivity}>
+                            onPress={this._apply}>
                             <Text style={styles.applyText}>我要报名</Text>
                         </TouchableOpacity>
                     </View>
@@ -45,11 +57,17 @@ var Mixin = {
             } else { //已经报名
                 return (
                     <View style={styles.bottomBar}>
-                        <TouchableOpacity style={[styles.information, styles.activityCircle]} activeOpacity={0.8}>
-                            <Image source={require('image!icon-activity-circle-trans')} style={styles.iconActivityCircle}/>
+                        <TouchableOpacity
+                            style={[styles.information, styles.activityCircle]}
+                            activeOpacity={0.8}>
+                            <Image source={require('image!icon-activity-circle-trans')}
+                                style={styles.iconActivityCircle}/>
                             <Text style={styles.informationText}>活动圈子</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.apply} activeOpacity={0.8}>
+                        <TouchableOpacity 
+                            onPress={this._viewApplyInfo}
+                            style={styles.apply}
+                            activeOpacity={0.8}>
                             <Text style={styles.applyText}>我的报名信息</Text>
                         </TouchableOpacity>
                     </View>
@@ -87,6 +105,9 @@ var Mixin = {
                     </View>
                 );
             }
+        }
+        } catch(e) {
+            console.trace(e);
         }
     }
 };

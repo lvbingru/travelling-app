@@ -25,8 +25,8 @@ var activityApi = require('./api').activity;
 var userApi = require('./api').user;
 var ActivityMoreDetail = require('./ActivityMoreDetail');
 var ActivityTags = require('./ActivityTags');
-var CommentList = require('./CommentList');
 var ActivityDetailMixin = require('./ActivityDetailMixin');
+var CommentList = require('./CommentList');
 
 var {
     Tag,
@@ -168,6 +168,14 @@ var ActivityDetail = React.createClass({
             translateY: 0
         }
     },
+    
+    applyHandle: function() {
+        this.props.navigator.push(new ActivityApply({id: this.props.id}));
+    },
+
+    applyInfoHandle: function() {
+        this.props.navigator.push(new ActivityApplyInfo({id: this.props.id}));
+    },
 
     componentDidMount: function() {
         this.scrollHandleCopy = this.scrollHandle;
@@ -201,9 +209,7 @@ var ActivityDetail = React.createClass({
         var height = e.contentOffset.y + e.layoutMeasurement.height;
         var contentHeight = e.contentSize.height;
 
-        if (height >= contentHeight) {
-            console.log('scroll to bottom');
-
+        if (height >= contentHeight) {            
             this.scrollHandle = null;
             this.props.navigator.push(new ActivityMoreDetail({
                 activity: this.props.activity,
@@ -216,6 +222,7 @@ var ActivityDetail = React.createClass({
     },
 
     resetScrollHandle: function() {
+        this.refs.scroll.scrollTo();
         this.scrollHandle = this.scrollHandleCopy;
     },
 
@@ -240,6 +247,7 @@ var ActivityDetail = React.createClass({
             <View style={styles.container}>
                 <Animated.View style={[styles.partContainer, {transform: [{translateY: this.state.translateY}]}]} >
                 <ScrollView style={styles.scrollContainer} 
+                    ref="scroll"
                     onScroll={this.scrollHandle}
                     scrollEventThrottle={16}
                     onScrollAnimationEnd={this.scrollEndHandle}>
