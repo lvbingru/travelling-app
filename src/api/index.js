@@ -120,6 +120,45 @@ var activity = {
         });
     },
 
+    editApply: function(user, activity, origin, type, datas) {
+        origin.clear();
+
+        origin.set('activity', activity);
+        origin.set('user', user);
+        origin.set('status', Partner.STATUS_IN_REVIEW);
+
+        origin.set('type', type);
+        origin.set('phone', datas.phone);
+
+        if (typeof datas.peopleNum === 'string') {
+            datas.peopleNum = parseInt(datas.peopleNum);
+        }
+        origin.set('peopleNum', datas.peopleNum);
+
+        datas.childNum = datas.childNum || 0;
+        if (typeof datas.childNum === 'string') {
+            datas.childNum = parseInt(datas.childNum);
+        }
+        origin.set('childNum', datas.childNum);
+
+        if (type === Partner.SELF_RIDE) {
+            origin.set('car', {
+                model: datas.carType,
+                number: datas.carNumber
+            });
+
+            if (typeof datas.leftSeats == 'string') {
+                datas.leftSeats = parseInt(datas.leftSeats);
+            }
+            origin.set('leftSeats', datas.leftSeats || 0);
+            origin.set('share', datas.share);
+        } else {
+            origin.set('canDrive', datas.canDrive);
+        }
+
+        return origin.save();
+    },
+
     apply: function(user, activity, type, datas) {
         var query = new AV.Query(Partner);
         query.equalTo('user', user);
@@ -132,10 +171,11 @@ var activity = {
             var partner = new Partner();
             partner.set('activity', activity);
             partner.set('user', user);
+            partner.set('status', Partner.STATUS_IN_REVIEW);
 
             partner.set('type', type);
             partner.set('phone', datas.phone);
-            
+
             if (typeof datas.peopleNum === 'string') {
                 datas.peopleNum = parseInt(datas.peopleNum);
             }
@@ -312,44 +352,15 @@ var activity = {
         });
     },
 
-    fetchApplyInfo: function(id) {
+    fetchApplyInfo: function(user, activity) {
         return new Promise(function(resolve, reject) {
-            if (id === 1) { //第一个活动用户没有报名
-                var datas = {}
-            } else if (id === 2) { //第二个活动用户已报名，并且自己开车
-                var datas = {
-                    selfRideDatas: {
-                        activityTitle: '最美的时光在路上',
-                        status: '审核中',
-                        carType: '牧马人／2016款',
-                        carNumber: '京PN8S88',
-                        phone: '152 1050 9888',
-                        peopleNum: '2',
-                        childNum: '2',
-                        seat: '2',
-                        share: '1',
-                        canDrive: '1'
-                    },
-                    tab: 0
-                }
-            } else if (id === 3) { //第三个活动用户已报名，并且自己搭车
-                var datas = {
-                    freeRideDatas: {
-                        activityTitle: '最美的时光在路上',
-                        status: '审核中',
-                        phone: '152 1050 9888',
-                        emptySeats: '4',
-                        childNum: '3',
-                        peopleNum: '3',
-                        canDrive: '1'
-                    },
-                    tab: 1
-                }
-            }
-
-            setTimeout(function() {
-                resolve(datas);
-            }, 1000);
+            var query = new AV.Query(Partner);
+            query.equalTo('user', user);
+            query.equalTo('activity', activity);
+            query.first({
+                success: resolve,
+                error: reject
+            });
         });
     },
 
@@ -533,5 +544,6 @@ module.exports = {
     journey,
     uploadPhoto,
     regions,
+    Partner,
     AV
 };

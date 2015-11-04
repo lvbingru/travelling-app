@@ -14,10 +14,19 @@ var error = require('../debug')('api:error');
 var Photo = AV.Object.extend("Photo");
 var Region = AV.Object.extend("Region");
 var Partner = AV.Object.extend("Partner", {
-
+    isFailed: function() {
+        var state = this.get('status');
+        return state === Partner.STATUS_REFUSED || state === Partner.STATUS_CANCELLED;
+    }
 }, {
     SELF_RIDE: 'selfRide',
-    FREE_RIDE: 'freeRide'
+    FREE_RIDE: 'freeRide',
+
+    STATUS_IN_REVIEW: 'in-review',
+    STATUS_REFUSED: 'refused',
+    STATUS_APPROVAL: 'approval',
+    STATUS_CANCELLED: 'cancelled',
+    STATUS_CONFIRMED: 'confirmed'
 });
 
 var Activity = AV.Object.extend("Activity", {
@@ -76,7 +85,7 @@ var Activity = AV.Object.extend("Activity", {
     getLeftSeats: function() {
         var query = new AV.Query(Partner);
         query.equalTo('activity', this);
-        query.notEqualTo('removed', true);
+        query.notEqualTo('status', Partner.STATUS_CONFIRMED);
         return new Promise(function(resolve, reject) {
             query.find({
                 success: function(partners) {
@@ -137,7 +146,6 @@ var Activity = AV.Object.extend("Activity", {
         var query = new AV.Query(Partner);
         query.equalTo('user', user);
         query.equalTo('activity', this);
-        query.notEqualTo('removed', true);
         return query.count().then(function(count) {
             return count > 0;
         });

@@ -46,9 +46,27 @@ var ActivityMoreDetail = React.createClass({
         }
     },
 
+    componentWillUnmount: function() {
+        this._navSub.remove();
+    },
+
     componentDidMount: function() {
         this.scrollHandleCopy = this.scrollHandle;
-        
+
+        var navigator = this.props.navigator;
+        var self = this;
+        this._navSub = navigator.navigationContext.addListener('didfocus', (e) => {
+            if (self.props.route !== e.data.route) {
+                return;
+            }
+
+            self._refresh();
+        });
+
+        this._refresh();
+    },
+
+    _refresh: function() {
         var activity = this.state.activity;
         var user, isEnter;
         AV.User.currentAsync().then(function(_user) {
@@ -387,12 +405,8 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
         }))
     }
 
-    get style() {
-        return this.styles.navBar;
-    }
-
     renderScene() {
-        return <ActivityMoreDetail activity={this.activity}/>
+        return <ActivityMoreDetail activity={this.activity} route={this}/>
     }
 }
 

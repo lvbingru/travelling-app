@@ -20,15 +20,39 @@ var ActivityChooseCar = require('./ActivityChooseCar');
 var activityApi = require('./api').activity;
 var AV = require('./api').AV;
 
+var labels = {
+    carType: '车辆信息',
+    carNumber: '车辆信息',
+    phone: '手机号码',
+    peopleNum: '成人数量'
+}
+
 var ActivityApply = React.createClass({
     getInitialState: function() {
-        var applyInfo = this.props.applyInfo;
+        var origin = this.props.partner;
+        var mode = origin ? 'edit' : 'create';
         var state = {
+            mode: mode,
             activity: this.props.activity,
-            applyType: 'selfRide',
-            common: applyInfo.common || {},
-            selfRideDatas: applyInfo.selfRide || {},
-            freeRideDatas: applyInfo.freeRide || {}
+            origin: origin,
+
+            applyType: origin ? origin.get('type') : 'selfRide',
+            common: origin ? {
+                phone: origin.get('phone'),
+                peopleNum: origin.get('peopleNum'),
+                childNum: origin.get('childNum')
+            } : {},
+
+            selfRideDatas: origin && origin.get('type') === 'selfRide' ? {
+                carType: origin.get('car').model,
+                carNumber: origin.get('car').number,
+                leftSeats: origin.get('leftSeats'),
+                share: origin.get('share')
+            } : {},
+
+            freeRideDatas: origin && origin.get('type') === 'freeRide' ? {
+                canDrive: origin.get('canDrive')
+            } : {}
         }
 
         if (state.selfRideDatas.share === undefined) {
@@ -40,12 +64,6 @@ var ActivityApply = React.createClass({
         }
 
         return state;
-    },
-
-    getDefaultProps: function() {
-        return {
-            applyInfo: {}
-        }
     },
 
     componentDidMount: function() {
@@ -92,69 +110,90 @@ var ActivityApply = React.createClass({
         });
     },
 
-    submitHandle: function() {
-        var labels = {
-            carType: '车辆信息',
-            carNumber: '车辆信息',
-            phone: '手机号码',
-            peopleNum: '成人数量'
-        }
-
-        // TODO: apply or edit
+    _validate: function(datas) {
         if (this.state.applyType === 'selfRide') {
-            var datas = Object.assign({}, this.state.selfRideDatas, this.state.common);
             var key = _.find(['carType', 'carNumber', 'phone', 'peopleNum'], function(key) {
                 return !datas[key]
             });
 
             if (key) {
-                return AlertIOS.alert(labels[key] + '没有填写');
+                throw new Error(labels[key] + '没有填写');
             }
-
-            if (datas.peopleNum == 0) {
-                return AlertIOS.alert('成人数量不能为0');
-            }
-
-            var {
-                user,
-                applyType
-            } = this.state;
-
-            activityApi.apply(user, this.props.activity, applyType, datas).then(function() {
-                this.props.navigator.push(new ActivityApplySuccess);
-            }.bind(this), function(e) {
-                console.trace(e);
-                AlertIOS.alert(e.message);
-            });
         } else {
-            var datas = Object.assign({}, this.state.freeRideDatas, this.state.common);
             var key = _.find(['phone', 'peopleNum'], function(key) {
                 return !datas[key]
             });
-
             if (key) {
-                return AlertIOS.alert(labels[key] + '没有填写');
+                throw new Error(labels[key] + '没有填写');
             }
+        }
 
-            if (datas.peopleNum == 0) {
-                return AlertIOS.alert('成人数量不能为0');
-            }
+        if (datas.peopleNum == 0) {
+            throw new Error('成人数量不能为0');
+        }
+    },
 
-            if (this._calLeftSeats() < 0) {
-                return AlertIOS.alert('座位数不够');
-            }
+    _edit: function() {
+        var origin = this.state.origin;
 
-            var {
-                user,
-                applyType
-            } = this.state;
+        if (this.state.applyType === 'selfRide') {
+            var datas = Object.assign({}, this.state.selfRideDatas, this.state.common);
+        } else {
+            var datas = Object.assign({}, this.state.freeRideDatas, this.state.common);
+        }
 
-            activityApi.apply(user, this.props.activity, applyType, datas).then(function() {
-                this.props.navigator.push(new ActivityApplySuccess);
-            }.bind(this), function(e) {
-                console.trace(e);
-                AlertIOS.alert(e.message);
-            });
+        try {
+            this._validate(datas);
+        } catch (e) {
+            AlertIOS.alert(e.message);
+            return;
+        }
+
+        var {
+            user,
+            applyType
+        } = this.state;
+
+        activityApi.editApply(user, this.props.activity, origin, applyType, datas).then(function() {
+            this.props.navigator.push(new ActivityApplySuccess);
+        }.bind(this), function(e) {
+            console.trace(e);
+            AlertIOS.alert(e.message);
+        });
+    },
+
+    _save: function() {
+        if (this.state.applyType === 'selfRide') {
+            var datas = Object.assign({}, this.state.selfRideDatas, this.state.common);
+        } else {
+            var datas = Object.assign({}, this.state.freeRideDatas, this.state.common);
+        }
+
+        try {
+            this._validate(datas);
+        } catch (e) {
+            AlertIOS.alert(e.message);
+            return;
+        }
+
+        var {
+            user,
+            applyType
+        } = this.state;
+
+        activityApi.apply(user, this.props.activity, applyType, datas).then(function() {
+            this.props.navigator.push(new ActivityApplySuccess);
+        }.bind(this), function(e) {
+            console.trace(e);
+            AlertIOS.alert(e.message);
+        });
+    },
+
+    submitHandle: function() {
+        if (this.state.mode === 'edit') {
+            this._edit();
+        } else {
+            this._save();
         }
     },
 
@@ -179,10 +218,10 @@ var ActivityApply = React.createClass({
 
     _changeCommon: function(key) {
         return (value) => {
-            var partial = {};
-            partial[key] = value;
             this.setState({
-                common: Object.assign({}, this.state.common, partial)
+                common: Object.assign({}, this.state.common, {
+                	[key]: value
+                })
             });
         }
     },
@@ -210,14 +249,14 @@ var ActivityApply = React.createClass({
 						<Text style={styles.subItemText}>成人</Text>
 						<TextInput style={styles.subItemEdit} 
 							onChangeText={this._changeCommon('peopleNum')}
-							value={this.state.common.peopleNum} 
+							value={String(this.state.common.peopleNum)} 
 							keyboardType='numeric'/>
 					</View>
 					<View style={styles.subItemViewLast}>
 						<Text style={styles.subItemText}>小孩</Text>
 						<TextInput style={styles.subItemEdit} 
 							onChangeText={this._changeCommon('childNum')}
-							value={this.state.common.childNum} 
+							value={String(this.state.common.childNum)} 
 							keyboardType='numeric'/>
 					</View>
 				</View>

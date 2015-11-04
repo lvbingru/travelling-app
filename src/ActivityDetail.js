@@ -199,7 +199,6 @@ var ActivityDetail = React.createClass({
             self._refresh();
         });
 
-
         this._refresh();
     },
 
@@ -218,26 +217,6 @@ var ActivityDetail = React.createClass({
         }.bind(this)).catch(function(e) {
             console.trace(e);
         });
-    },
-
-    _applyActivity: function() {
-        /*
-        var activity = this.state.activity;
-        AV.User.currentAsync().then(function(user) {
-            return activity.addPartner(user)
-        }).then(function() {
-
-        }.bind(this)).catch(error).final(function() {
-            if (!this.isMounted()) {
-                return;
-            };
-
-            this.setState({
-                applying: false,
-                isApplied: true
-            });
-        }.bind(this));
-        */
     },
 
     scrollHandle: function(e) {

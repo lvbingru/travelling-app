@@ -125,10 +125,6 @@ var ActivityList = React.createClass({
         };
     },
 
-    componentWillUnmount: function() {
-        this._navSub.remove();
-    },
-
     componentDidMount: function() {
         this.route.on('regions-show', function() {
             this.setState({

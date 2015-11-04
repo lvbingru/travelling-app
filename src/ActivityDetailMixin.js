@@ -30,7 +30,7 @@ var Mixin = {
     },
 
     _viewApplyInfo: function() {
-        this.props.navigator.push(new ActivityApplyInfo());
+        this.props.navigator.push(new ActivityApplyInfo(this.props.navigator, this.state.activity));
     },
 
     renderBottom: function() {
@@ -194,6 +194,5 @@ var styles = StyleSheet.create({
         color: stylesVar('white')
     }
 });
-
 
 module.exports = Mixin;
