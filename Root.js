@@ -125,9 +125,10 @@ var Home = React.createClass({
     },
 
     _testRoute: function() {
-        var Route = require('./src/FillActivityBrief');
-        var Route = require('./src/FillActivityDetail');
-        var Route = require('./src/ActivityFormSummary');
+        var Route = require('./src/TestStretchy');
+        // var Route = require('./src/FillActivityBrief');
+        // var Route = require('./src/FillActivityDetail');
+        // var Route = require('./src/ActivityFormSummary');
         this.refs.navigator.replace(new Route({
             startDate: new Date(2015, 9, 10)
         }));

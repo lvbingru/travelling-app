@@ -247,6 +247,7 @@ var ActivityList = React.createClass({
             <View style={[styles.container, this.props.style]}>
                 <RefreshableListView
                   ref="list"
+                  automaticallyAdjustContentInsets={false}
                   renderHeaderWrapper={this._renderHeaderWrapper}
                   renderSeparator={this._renderSeparator}
                   dataSource={this.state.dataSource}
