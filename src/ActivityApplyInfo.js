@@ -10,9 +10,12 @@ var {
 } = React;
 
 var stylesVar = require('./stylesVar');
-var Tag = require('./widgets/Tag');
 var ActivityApply = require('./ActivityApply');
 var activityApi = require('./api').activity;
+var {
+	Tag,
+	ItemInfo
+} = require('./widgets');
 
 var ActivityApplyInfo = React.createClass({
 	getInitialState: function() {
@@ -45,50 +48,41 @@ var ActivityApplyInfo = React.createClass({
 		var type = this.state.type;
 
 		if (type === 0) {
+			var datas = [{
+				title: '出行车辆：',
+				content: this.state.carType
+			}, {
+				title: '牌照：',
+				content: this.state.carNumber
+			}, {
+				title: '手机号码：',
+				content: this.state.phone
+			}, {
+				title: '出行人数：',
+				content: '成人' + this.state.peopleNum + '／儿童' + this.state.childNum
+			}, {
+				title: '空余座位：',
+				content: this.state.seat
+			}, {
+				title: '是否愿意搭人：',
+				content: this.state.share === '1' ? '是': '否'
+			}]
 			return (
-				<View style={styles.detailView}>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>出行车辆：</Text>
-						<Text style={styles.itemRight}>{this.state.carType}</Text>
-					</View>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>牌照：</Text>
-						<Text style={styles.itemRight}>{this.state.carNumber}</Text>
-					</View>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>手机号码：</Text>
-						<Text style={styles.itemRight}>{this.state.phone}</Text>
-					</View>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>出行人数：</Text>
-						<Text style={styles.itemRight}>{'成人' + this.state.peopleNum + '／儿童' + this.state.childNum}</Text>
-					</View>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>空余座位：</Text>
-						<Text style={styles.itemRight}>{this.state.seat}</Text>
-					</View>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>是否愿意搭人：</Text>
-						<Text style={styles.itemRight}>{this.state.share === '1' ? '是': '否'}</Text>
-					</View>
-				</View>
+				<ItemInfo datas={datas} />
 			);
 		} else {
+			var datas = [{
+				title: '手机号码：',
+				content: this.state.phone
+			},  {
+				title: '出行人数：',
+				content: '成人' + this.state.peopleNum + '／儿童' + this.state.childNum
+			}, {
+				title: '是否能驾驶车辆：',
+				content: this.state.canDrive === '1' ? '是': '否'
+			}];
 			return (
-				<View style={styles.detailView}>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>手机号码：</Text>
-						<Text style={styles.itemRight}>{this.state.phone}</Text>
-					</View>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>出行人数：</Text>
-						<Text style={styles.itemRight}>{'成人' + this.state.peopleNum + '／儿童' + this.state.childNum}</Text>
-					</View>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>是否能驾驶车辆：</Text>
-						<Text style={styles.itemRight}>{this.state.canDrive === '1' ? '是': '否'}</Text>
-					</View>
-				</View>
+				<ItemInfo datas={datas} />
 			);
 		}
 	},
@@ -155,39 +149,6 @@ var styles = StyleSheet.create({
 	tag: {
 		color: stylesVar('green'),
         borderColor: stylesVar('green')
-	},
-
-	detailView: {
-		flex: 1,
-		flexDirection: 'column',
-		paddingTop: 10,
-		paddingBottom: 40,
-		borderColor: '#f3f5f6',
-		borderBottomWidth: 1 / PixelRatio.get()
-	},
-
-	itemView: {
-		flex: 1,
-		flexDirection: 'row'
-	},
-
-	itemLeft: {
-		flex: 2,
-		textAlign: 'right',
-		fontSize: 13,
-		color: stylesVar('dark-mid'),
-		lineHeight: 30,
-		fontWeight: '300'
-	},
-
-	itemRight: {
-		flex: 3,
-		textAlign: 'left',
-		paddingLeft: 22,
-		lineHeight: 30,
-		fontWeight: '300',
-		fontSize: 13,
-		color: stylesVar('dark')
 	},
 
 	bottomView: {

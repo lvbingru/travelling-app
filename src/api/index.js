@@ -87,7 +87,7 @@ var activity = {
                     title: 'GO！一起去草原撒野',
                     status: 'preparing',
                     isEnter: '0',
-                    isSponsor: '0',
+                    isSponsor: '1',
                     tags: ['3-5车同行', '行程容易'],
                     route: '北京 - 天津 - 石家庄',
                     startDate: startDate,
@@ -402,6 +402,70 @@ var activity = {
                     tab: 1
                 }
             }
+
+            setTimeout(function() {
+                resolve(datas);
+            }, 1000);
+        });
+    },
+
+    fetchManageInfo: function() {
+        return new Promise(function(resolve, reject) {
+            var datas = [{
+                user: {
+                    username: 'Komi',
+                    avatar: 'http://localhost:8081/img/avatar-placeholder.png',
+                    publishDate: '2015-08-02 13:48'
+                },
+                hasCar: '1',
+                status: '0',//0代表审核中，1代表通过审核
+                carType: '牧马人／2014款',
+                carNumber: '京PN8S88',
+                phone: '152 1050 9888',
+                peopleNum: '2',
+                childNum: '2',
+                seat: 1,
+                share: '1'
+            }, {
+                user: {
+                    username: 'Komi',
+                    avatar: 'http://localhost:8081/img/avatar-placeholder.png',
+                    publishDate: '2015-08-02 13:48'
+                },
+                hasCar: '1',
+                status: '2',//0代表审核中，1代表通过审核
+                carType: '牧马人／2014款',
+                carNumber: '京PN8S88',
+                phone: '152 1050 9888',
+                peopleNum: '2',
+                childNum: '2',
+                seat: 1,
+                share: '1'
+            }, {
+                user: {
+                    username: 'Komi',
+                    avatar: 'http://localhost:8081/img/avatar-placeholder.png',
+                    publishDate: '2015-08-02 13:48'
+                },
+                hasCar: '0',
+                status: '0',
+                phone: '152 1050 9888',
+                peopleNum: '3',
+                childNum: '2',
+                canDrive: '1'
+            }, {
+                user: {
+                    username: 'Komi',
+                    avatar: 'http://localhost:8081/img/avatar-placeholder.png',
+                    publishDate: '2015-08-02 13:48'
+                },
+                hasCar: '0',
+                status: '1',
+                phone: '152 1050 9888',
+                peopleNum: '3',
+                childNum: '2',
+                canDrive: '1'
+            }];
 
             setTimeout(function() {
                 resolve(datas);
