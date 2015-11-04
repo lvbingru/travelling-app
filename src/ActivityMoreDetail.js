@@ -48,9 +48,21 @@ var ActivityMoreDetail = React.createClass({
 
     componentDidMount: function() {
         this.scrollHandleCopy = this.scrollHandle;
-        AV.User.currentAsync().then(function(user) {
-            this.setState({user});
-        }.bind(this));
+        
+        var activity = this.state.activity;
+        var user, isEnter;
+        AV.User.currentAsync().then(function(_user) {
+            user = _user;
+            return activity.isUserApplied(user);
+        }).then(function(applied) {
+            isEnter = applied;
+            this.setState({
+                isEnter,
+                user
+            });
+        }.bind(this)).catch(function(e) {
+            console.trace(e);
+        });
     },
 
     scrollHandle: function(e) {
@@ -314,16 +326,11 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
         super()
 
         this.activity = data.activity;
-        this.id = data.id;
-        this.status = data.status;
-        this.isEnter = data.isEnter;
-        this.isSponsor = data.isSponsor;
-        this.resetScrollHandle = data.resetScrollHandle;
     }
 
     renderLeftButton(route, navigator, index, navState) {
         return this._renderBackButton(route, navigator, index, navState, function() {
-            this.resetScrollHandle();
+            // this.resetScrollHandle();
             navigator.pop();
         }.bind(this));
     }
@@ -385,12 +392,7 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
     }
 
     renderScene() {
-        return <ActivityMoreDetail
-                    id={this.id} 
-                    activity={this.activity}
-                    status={this.status} 
-                    isEnter={this.isEnter}
-                    isSponsor={this.isSponsor}/>
+        return <ActivityMoreDetail activity={this.activity}/>
     }
 }
 

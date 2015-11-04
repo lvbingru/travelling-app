@@ -168,20 +168,56 @@ var ActivityDetail = React.createClass({
             translateY: 0
         }
     },
-    
+
     applyHandle: function() {
-        this.props.navigator.push(new ActivityApply({id: this.props.id}));
+        var activity = this.state.activity;
+        this.props.navigator.push(new ActivityApply({
+            activity
+        }));
     },
 
     applyInfoHandle: function() {
-        this.props.navigator.push(new ActivityApplyInfo({id: this.props.id}));
+        this.props.navigator.push(new ActivityApplyInfo({
+            id: this.props.id
+        }));
+    },
+
+    componentWillUnmount: function() {
+        this._navSub.remove();
     },
 
     componentDidMount: function() {
         this.scrollHandleCopy = this.scrollHandle;
-        AV.User.currentAsync().then(function(user) {
-            this.setState({user});
-        }.bind(this));
+
+        var navigator = this.props.navigator;
+        var self = this;
+        this._navSub = navigator.navigationContext.addListener('didfocus', (e) => {
+            if (self.props.route !== e.data.route) {
+                return;
+            }
+
+            self._refresh();
+        });
+
+
+        this._refresh();
+    },
+
+    _refresh: function() {
+        var activity = this.state.activity;
+        var user, isEnter;
+        AV.User.currentAsync().then(function(_user) {
+            user = _user;
+            return activity.isUserApplied(user);
+        }).then(function(applied) {
+            isEnter = applied;
+            this.setState({
+                isEnter,
+                user
+            });
+        }.bind(this)).catch(function(e) {
+            console.trace(e);
+        });
     },
 
     _applyActivity: function() {
@@ -206,19 +242,25 @@ var ActivityDetail = React.createClass({
 
     scrollHandle: function(e) {
         e = e.nativeEvent;
+        log(e.contentOffset, e.contentSize, e.layoutMeasurement);
         var height = e.contentOffset.y + e.layoutMeasurement.height;
         var contentHeight = e.contentSize.height;
+        log(height, contentHeight);
+        this.state.navigateToMoreDetail = height >= contentHeight;
+    },
 
-        if (height >= contentHeight) {            
-            this.scrollHandle = null;
-            this.props.navigator.push(new ActivityMoreDetail({
-                activity: this.props.activity,
-                id: this.props.id,
-                status: this.props.status,
-                isEnter: this.props.isEnter,
-                resetScrollHandle: this.resetScrollHandle
-            }))
+    _onScrollRelease: function(e) {
+        if (!this.state.navigateToMoreDetail) {
+            return;
         }
+
+        this.state.navigateToMoreDetail = false;
+        log('push more detail');
+        this.refs.scroll.scrollTo(0, 0);
+
+        this.props.navigator.push(new ActivityMoreDetail({
+            activity: this.state.activity
+        }));
     },
 
     resetScrollHandle: function() {
@@ -250,6 +292,7 @@ var ActivityDetail = React.createClass({
                     ref="scroll"
                     onScroll={this.scrollHandle}
                     scrollEventThrottle={16}
+                    onResponderRelease={this._onScrollRelease}
                     onScrollAnimationEnd={this.scrollEndHandle}>
 
                     <Image source={{uri: cover}} style={[styles.banner, this.state.bannerStyle]}>
@@ -654,7 +697,7 @@ class ActivityDetailRoute extends BaseRouteMapper {
     }
 
     renderScene() {
-        return <ActivityDetail activity={this.activity}/>;
+        return <ActivityDetail activity={this.activity} route={this}/>;
     }
 }
 

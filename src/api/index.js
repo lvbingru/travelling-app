@@ -2,6 +2,7 @@ var {
     Photo,
     Region,
     Activity,
+    Partner,
     AV
 } = require('./models');
 
@@ -118,7 +119,53 @@ var activity = {
             return activities;
         });
     },
-    
+
+    apply: function(user, activity, type, datas) {
+        var query = new AV.Query(Partner);
+        query.equalTo('user', user);
+        query.equalTo('activity', activity);
+        return query.count().then(function(count) {
+            if (count > 0) {
+                throw new Error('已经报过名了');
+            }
+        }).then(function() {
+            var partner = new Partner();
+            partner.set('activity', activity);
+            partner.set('user', user);
+
+            partner.set('type', type);
+            partner.set('phone', datas.phone);
+            
+            if (typeof datas.peopleNum === 'string') {
+                datas.peopleNum = parseInt(datas.peopleNum);
+            }
+            partner.set('peopleNum', datas.peopleNum);
+
+            datas.childNum = datas.childNum || 0;
+            if (typeof datas.childNum === 'string') {
+                datas.childNum = parseInt(datas.childNum);
+            }
+            partner.set('childNum', datas.childNum);
+
+            if (type === Partner.SELF_RIDE) {
+                partner.set('car', {
+                    model: datas.carType,
+                    number: datas.carNumber
+                });
+
+                if (typeof datas.leftSeats == 'string') {
+                    datas.leftSeats = parseInt(datas.leftSeats);
+                }
+                partner.set('leftSeats', datas.leftSeats || 0);
+                partner.set('share', datas.share);
+            } else {
+                partner.set('canDrive', datas.canDrive);
+            }
+
+            return partner.save();
+        });
+    },
+
     fetchDetail: function(id) {
         return new Promise(function(resolve, reject) {
             var moment = require('moment');
@@ -267,9 +314,9 @@ var activity = {
 
     fetchApplyInfo: function(id) {
         return new Promise(function(resolve, reject) {
-            if (id === 1) {//第一个活动用户没有报名
+            if (id === 1) { //第一个活动用户没有报名
                 var datas = {}
-            } else if (id === 2) {//第二个活动用户已报名，并且自己开车
+            } else if (id === 2) { //第二个活动用户已报名，并且自己开车
                 var datas = {
                     selfRideDatas: {
                         activityTitle: '最美的时光在路上',
@@ -285,7 +332,7 @@ var activity = {
                     },
                     tab: 0
                 }
-            } else if (id === 3) {//第三个活动用户已报名，并且自己搭车
+            } else if (id === 3) { //第三个活动用户已报名，并且自己搭车
                 var datas = {
                     freeRideDatas: {
                         activityTitle: '最美的时光在路上',

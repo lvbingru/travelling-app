@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var moment = require('moment');
 
 var AppID = '5jqgy6q659ljyldiik70cev6d8n7t1ixolt6rd7k6p1n964d';
@@ -12,7 +13,12 @@ var error = require('../debug')('api:error');
 
 var Photo = AV.Object.extend("Photo");
 var Region = AV.Object.extend("Region");
-var Partner = AV.Object.extend("Partner");
+var Partner = AV.Object.extend("Partner", {
+
+}, {
+    SELF_RIDE: 'selfRide',
+    FREE_RIDE: 'freeRide'
+});
 
 var Activity = AV.Object.extend("Activity", {
     getCarsTag: function() {
@@ -39,7 +45,7 @@ var Activity = AV.Object.extend("Activity", {
     },
 
     setStars: function(stars) {
-        this._ensureAppCache();        
+        this._ensureAppCache();
         this._appCache.stars = stars;
     },
 
@@ -49,7 +55,7 @@ var Activity = AV.Object.extend("Activity", {
     },
 
     setStarred: function(starred) {
-        this._ensureAppCache(); 
+        this._ensureAppCache();
         this._appCache.starred = starred;
     },
 
@@ -65,6 +71,38 @@ var Activity = AV.Object.extend("Activity", {
         } else {
             return Activity.TRAVELLING
         }
+    },
+
+    getLeftSeats: function() {
+        var query = new AV.Query(Partner);
+        query.equalTo('activity', this);
+        query.notEqualTo('removed', true);
+        return new Promise(function(resolve, reject) {
+            query.find({
+                success: function(partners) {
+                    var selfRidePartners = _.filter(partners, (partner) => {
+                        return partner.get('type') === Partner.SELF_RIDE;
+                    });
+
+                    var freeRidePartners = _.filter(partners, (partner) => {
+                        return partner.get('type') === Partner.FREE_RIDE;
+                    });
+
+                    var totalSeats = _.reduce(selfRidePartners, (memo, partner) => {
+                        return memo + partner.get('leftSeats');
+                    }, 0);
+
+                    var seats = _.reduce(freeRidePartners, (memo, partner) => {
+                        return memo + (partner.get('peopleNum') || 0) +
+                            (partner.get('childNum') || 0);
+                    }, 0);
+
+                    resolve(totalSeats - seats);
+                },
+
+                reject: reject
+            });
+        });
     },
 
     getCreator: function() {
@@ -92,6 +130,16 @@ var Activity = AV.Object.extend("Activity", {
                     resolve(0);
                 }
             });
+        });
+    },
+
+    isUserApplied: function(user) {
+        var query = new AV.Query(Partner);
+        query.equalTo('user', user);
+        query.equalTo('activity', this);
+        query.notEqualTo('removed', true);
+        return query.count().then(function(count) {
+            return count > 0;
         });
     },
 
@@ -131,5 +179,6 @@ module.exports = {
     Photo,
     Region,
     Activity,
+    Partner,
     AV
 };

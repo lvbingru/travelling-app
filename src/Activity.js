@@ -126,8 +126,7 @@ var ActivityList = React.createClass({
     },
 
     componentWillUnmount: function() {
-        // this._navSub.remove();
-        // this._unsubscribe();
+        this._navSub.remove();
     },
 
     componentDidMount: function() {
@@ -145,6 +144,7 @@ var ActivityList = React.createClass({
 
         this.refs.list.handleRefresh();
     },
+
 
     _hideRegions: function() {
         this.route._hideRegions();

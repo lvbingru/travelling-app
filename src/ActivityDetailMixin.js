@@ -23,7 +23,10 @@ var su = require('./styleUtils');
 
 var Mixin = {
     _apply: function() {
-        this.props.navigator.push(new ActivityApply());
+        var activity = this.state.activity;
+        this.props.navigator.push(new ActivityApply({
+            activity
+        }));
     },
 
     _viewApplyInfo: function() {
@@ -32,31 +35,31 @@ var Mixin = {
 
     renderBottom: function() {
         try {
-        var _activity = this.state.activity;
-        var state = _activity.getState();
-        var isSponsor = this.state.user.id === _activity.getCreator().id;
-        // TODO: fetch user relation
-        var isEnter = isSponsor || false;
+            var _activity = this.state.activity;
+            var state = _activity.getState();
+            var isSponsor = this.state.user.id === _activity.getCreator().id;
+            // TODO: fetch user relation
+            var isEnter = this.state.isEnter;
 
-        if (state === activityApi.PREPARING) { //活动没有结束
-            if (!isEnter) { //没有报名
-                return (
-                    <View style={styles.bottomBar}>
-                        <TouchableOpacity style={styles.information} activeOpacity={0.8}>
-                            <Image source={require('image!icon-information')} style={styles.iconInformation}/>
-                            <Text style={styles.informationText}>咨询楼主</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            style={styles.apply}
-                            activeOpacity={0.8} 
-                            onPress={this._apply}>
-                            <Text style={styles.applyText}>我要报名</Text>
-                        </TouchableOpacity>
-                    </View>
-                );
-            } else { //已经报名
-                return (
-                    <View style={styles.bottomBar}>
+            if (state === activityApi.PREPARING) { //活动没有结束
+                if (!isEnter) { //没有报名
+                    return (
+                        <View style={styles.bottomBar}>
+                            <TouchableOpacity style={styles.information} activeOpacity={0.8}>
+                                <Image source={require('image!icon-information')} style={styles.iconInformation}/>
+                                <Text style={styles.informationText}>咨询楼主</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={styles.apply}
+                                activeOpacity={0.8} 
+                                onPress={this._apply}>
+                                <Text style={styles.applyText}>我要报名</Text>
+                            </TouchableOpacity>
+                        </View>
+                    );
+                } else { //已经报名
+                    return (
+                        <View style={styles.bottomBar}>
                         <TouchableOpacity
                             style={[styles.information, styles.activityCircle]}
                             activeOpacity={0.8}>
@@ -71,21 +74,21 @@ var Mixin = {
                             <Text style={styles.applyText}>我的报名信息</Text>
                         </TouchableOpacity>
                     </View>
-                );
-            }
-        } else if (state === activityApi.TRAVELLING) {
-            if (!isEnter) {
-                return (
-                    <View style={styles.bottomBar}>
+                    );
+                }
+            } else if (state === activityApi.TRAVELLING) {
+                if (!isEnter) {
+                    return (
+                        <View style={styles.bottomBar}>
                         <TouchableOpacity style={styles.information} activeOpacity={0.8}>
                             <Image source={require('image!icon-information')} style={styles.iconInformation} />
                             <Text style={styles.informationText}>咨询楼主</Text>
                         </TouchableOpacity>
                     </View>
-                );
-            } else {
-                return (
-                    <View style={styles.bottomBar}>
+                    );
+                } else {
+                    return (
+                        <View style={styles.bottomBar}>
                         <TouchableOpacity style={[styles.information, styles.blueLight]} activeOpacity={0.8}>
                             <Image source={require('image!icon-activity-circle-trans')} style={styles.iconActivityCircle} />
                             <Text style={styles.informationText}>活动圈子</Text>
@@ -103,10 +106,10 @@ var Mixin = {
                             <Text style={styles.informationText}>上传轨迹</Text>
                         </TouchableOpacity>
                     </View>
-                );
+                    );
+                }
             }
-        }
-        } catch(e) {
+        } catch (e) {
             console.trace(e);
         }
     }
