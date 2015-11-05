@@ -10,10 +10,15 @@ var {
 } = React;
 
 var stylesVar = require('./stylesVar');
-var Tag = require('./widgets/Tag');
 var ActivityApply = require('./ActivityApply');
 var api = require('./api');
 var activityApi = require('./api').activity;
+
+var {
+    Tag,
+    ItemInfo
+} = require('./widgets');
+
 var AV = api.AV;
 var Partner = api.Partner;
 
@@ -54,54 +59,41 @@ var ActivityApplyInfo = React.createClass({
         var partner = this.state.partner;
 
         if (partner.get('type') === Partner.SELF_RIDE) {
+            var datas = [{
+                title: '出行车辆：',
+                content: partner.get('car').model
+            }, {
+                title: '牌照：',
+                content: partner.get('car').number
+            }, {
+                title: '手机号码：',
+                content: partner.get('phone')
+            }, {
+                title: '出行人数：',
+                content: '成人' + partner.get('peopleNum') + '／儿童' + partner.get('childNum')
+            }, {
+                title: '空余座位：',
+                content: partner.get('leftSeats')
+            }, {
+                title: '是否愿意搭人：',
+                content: partner.get('share') ? '是': '否'
+            }]
             return (
-                <View style={styles.detailView}>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>出行车辆：</Text>
-						<Text style={styles.itemRight}>{partner.get('car').model}</Text>
-					</View>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>牌照：</Text>
-						<Text style={styles.itemRight}>{partner.get('car').number}</Text>
-					</View>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>手机号码：</Text>
-						<Text style={styles.itemRight}>{partner.get('phone')}</Text>
-					</View>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>出行人数：</Text>
-						<Text style={styles.itemRight}>
-							{'成人' + partner.get('peopleNum') + '／儿童' + partner.get('childNum')}
-						</Text>
-					</View>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>空余座位：</Text>
-						<Text style={styles.itemRight}>{partner.get('leftSeats')}</Text>
-					</View>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>是否愿意搭人：</Text>
-						<Text style={styles.itemRight}>{partner.get('share') ? '是': '否'}</Text>
-					</View>
-				</View>
+                <ItemInfo datas={datas} />
             );
         } else {
+            var datas = [{
+                title: '手机号码：',
+                content: partner.get('phone')
+            },  {
+                title: '出行人数：',
+                content: '成人' + partner.get('peopleNum') + '／儿童' + partner.get('childNum')
+            }, {
+                title: '是否能驾驶车辆：',
+                content: partner.get('canDrive') ? '是': '否'
+            }];
             return (
-                <View style={styles.detailView}>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>手机号码：</Text>
-						<Text style={styles.itemRight}>{partner.get('phone')}</Text>
-					</View>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>出行人数：</Text>
-						<Text style={styles.itemRight}>
-							{'成人' + partner.get('peopleNum') + '／儿童' + partner.get('childNum')}
-						</Text>
-					</View>
-					<View style={styles.itemView}>
-						<Text style={styles.itemLeft}>是否能驾驶车辆：</Text>
-						<Text style={styles.itemRight}>{partner.get('canDrive') ? '是': '否'}</Text>
-					</View>
-				</View>
+                <ItemInfo datas={datas} />
             );
         }
     },
@@ -187,39 +179,6 @@ var styles = StyleSheet.create({
     tag: {
         color: stylesVar('green'),
         borderColor: stylesVar('green')
-    },
-
-    detailView: {
-        flex: 1,
-        flexDirection: 'column',
-        paddingTop: 10,
-        paddingBottom: 40,
-        borderColor: '#f3f5f6',
-        borderBottomWidth: 1 / PixelRatio.get()
-    },
-
-    itemView: {
-        flex: 1,
-        flexDirection: 'row'
-    },
-
-    itemLeft: {
-        flex: 2,
-        textAlign: 'right',
-        fontSize: 13,
-        color: stylesVar('dark-mid'),
-        lineHeight: 30,
-        fontWeight: '300'
-    },
-
-    itemRight: {
-        flex: 3,
-        textAlign: 'left',
-        paddingLeft: 22,
-        lineHeight: 30,
-        fontWeight: '300',
-        fontSize: 13,
-        color: stylesVar('dark')
     },
 
     bottomView: {

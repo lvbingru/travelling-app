@@ -359,6 +359,78 @@ var activity = {
         });
     },
 
+    fetchManageInfo: function(activity) {
+        return new Promise(function(resolve, reject) {
+            var query = new AV.Query(Partner);
+            query.equalTo('activity', activity);
+            query.include('user');
+
+            query.find({
+                success: function(partners) {
+                    var results = partners.map((item) => {
+                        var subItem = item.attributes;
+                        var user = subItem.user.attributes;
+                        var datas = {
+                            id: item.id,
+                            user: {
+                                username: user.username,
+                                avatar: user.avatar,
+                                publishDate: item.updatedAt
+                            },
+                            type: subItem.type,
+                            status: subItem.status,
+                            car: subItem.car,
+                            phone: subItem.phone,
+                            peopleNum: subItem.peopleNum,
+                            childNum: subItem.childNum,
+                            leftSeats: subItem.leftSeats,
+                            share: subItem.share,
+                            canDrive: subItem.canDrive
+                        };
+                        return datas;
+                    })
+                    resolve(results);
+                },
+                error: function(error) {
+                    reject("Error: " + error.code + " " + error.message);
+                }
+            });
+        });
+    },
+
+    changeManageStatus: function(id, status) {
+        return new Promise(function(resolve, reject) {
+            var query = new AV.Query(Partner);
+            query.equalTo('objectId', id);
+            query.find().then(function(results) {
+                results[0].set('status', status);
+                return results[0].save();
+            }).then(function() {
+                resolve('success');
+            }, function(e) {
+                reject(e);
+            })
+        });
+    },
+
+    ensureManage: function(id, peopleNum, childNum, childNum2) {
+        return new Promise(function(resolve, reject) {
+            var query = new AV.Query(Partner);
+            query.equalTo('objectId', id);
+            query.find().then(function(results) {
+                results[0].set('status', Partner.STATUS_CONFIRMED);
+                results[0].set('peopleNum', parseInt(peopleNum))
+                results[0].set('childNum', parseInt(childNum))
+                results[0].set('childNum2', parseInt(childNum2))
+                return results[0].save();
+            }).then(function() {
+                resolve('success');
+            }, function(e) {
+                reject(e);
+            })
+        });
+    },
+
     publish: function(data) {
         var cover = data.cover;
 

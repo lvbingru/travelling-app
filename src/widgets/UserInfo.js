@@ -16,13 +16,15 @@ var UserInfo = React.createClass({
         var avatar = this.props.avatar;
         var username = this.props.username;
         var publishDate = this.props.publishDate;
+        var usernameText = this.props.usernameText;
+        var publishDateText = this.props.publishDateText;
 
         return (
             <View style={[styles.container, this.props.style]}>
                 <Image source={avatar} style={styles.avatar}/>
                 <View>
-                    <Text style={styles.username}>{username}</Text>
-                    <Text style={styles.publishDate}>
+                    <Text style={usernameText ? [styles.username, usernameText]: styles.username}>{username}</Text>
+                    <Text style={publishDateText ? [styles.publishDate, publishDateText]: styles.publishDate }>
                         {moment(publishDate).format('YYYY-MM-DD HH:mm')}
                     </Text>
                 </View>

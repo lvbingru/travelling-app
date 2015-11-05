@@ -6,6 +6,7 @@ var ActivityPublishDate = require('./ActivityPublishDate');
 var Tag = require('./Tag');
 var icons = require('./icons');
 var baseComponents = require('./baseComponents');
+var ItemInfo = require('./ItemInfo');
 
 module.exports = {
     Button,
@@ -14,6 +15,7 @@ module.exports = {
     ActivitySchedule,
     ActivityRoute,
     ActivityPublishDate,
+    ItemInfo,
     ...icons,
     ...baseComponents
 };

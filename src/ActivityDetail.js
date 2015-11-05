@@ -27,6 +27,8 @@ var ActivityMoreDetail = require('./ActivityMoreDetail');
 var ActivityTags = require('./ActivityTags');
 var ActivityDetailMixin = require('./ActivityDetailMixin');
 var CommentList = require('./CommentList');
+var ActivityApplyInfo = require('./ActivityApplyInfo');
+var ActivityManage = require('./ActivityManage');
 
 var {
     Tag,
@@ -182,6 +184,14 @@ var ActivityDetail = React.createClass({
         }));
     },
 
+    manageHandle: function() {
+        this.props.navigator.push(new ActivityManage({activity: this.state.activity}));
+    },
+
+    editHandle: function() {
+
+    },
+
     componentWillUnmount: function() {
         this._navSub.remove();
     },
@@ -279,12 +289,14 @@ var ActivityDetail = React.createClass({
                             avatar={creatorAvatar}/>
                         {isSponsor && (
                             <View style={styles.manageInfo}>
-                                <Image source={require('image!icon-edit-white')} 
-                                    style={styles.iconEditWhite}/>
-                                <Text style={[styles.manageText, styles.editText]}>编辑</Text>
-                                <Image source={require('image!icon-manage-white')}
-                                    style={styles.iconManageWhite} />
-                                <Text style={styles.manageText}>管理</Text>
+                                <TouchableOpacity onPress={this.editHandle} style={styles.manageView}>
+                                    <Image source={require('image!icon-edit-white')} style={styles.iconEditWhite}/>
+                                    <Text style={[styles.manageText, styles.editText]}>编辑</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={this.manageHandle} style={styles.manageView}>
+                                    <Image source={require('image!icon-manage-white')} style={styles.iconManageWhite} />
+                                    <Text style={styles.manageText}>管理</Text>
+                                </TouchableOpacity>
                             </View>
                         )}
                     </Image>
@@ -410,6 +422,10 @@ var styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         height: 30
+    },
+
+    manageView: {
+        flexDirection: 'row'
     },
 
     manageText: {
