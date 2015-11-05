@@ -125,7 +125,8 @@ var Home = React.createClass({
     },
 
     _testRoute: function() {
-        var Route = require('./src/ActivityApply');
+        var Route = require('./src/TestCameraRoll');
+        // var Route = require('./src/ActivityApply');
         // var Route = require('./src/TestStretchy');
         // var Route = require('./src/FillActivityBrief');
         // var Route = require('./src/FillActivityDetail');
@@ -156,7 +157,7 @@ var Home = React.createClass({
     },
 
     componentDidMount: function() {
-        // return this._testRoute();
+        return this._testRoute();
 
         Dispatcher.addListener('logout', function() {
             this.refs.navigator.resetTo(new SignIn)

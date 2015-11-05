@@ -1,11 +1,164 @@
 var _ = require('underscore');
 var moment = require('moment');
+var mimeTypes = require('../mimetypes');
 
 var AppID = '5jqgy6q659ljyldiik70cev6d8n7t1ixolt6rd7k6p1n964d';
 var AppKey = 'bm0vszz9zd521yw8l40k6wdh6vsqq5aht92fdohlgzvwrgl4';
 
 var AV = require('avoscloud-sdk');
 AV.initialize(AppID, AppKey);
+
+var PrevFile = AV.File;
+
+/*
+ * FIXME: 暂时修改 leancloud 保存文件的方法，以支持在 react-native 中上传本地文件。
+ * react-native 目前不支持直接上传二进制文件包括 base64 数据，但是 react-native 能
+ * 在底层获取 uri 属性并将 uri 自动转换为文件
+ * 详情可以看这个 issue 的讨论: https://github.com/facebook/react-native/issues/201
+ * 
+ * 注意: 修改之后，File 的创建方法只支持下面这一种:
+ *
+ * ```js
+ * var file = new AV.File({
+ *   blob: {
+ *       name: name,
+ *       uri: uri,
+ *       type: 'image/jpeg'
+ *   }
+ * });
+ * ```
+ */
+var File = function(name, data, type) {
+    this._name = name;
+    this._metaData = {
+        owner: 'unknown'
+    };
+
+    // Guess the content type from the extension if we need to.
+    var extension = /\.([^.]*)$/.exec(name);
+    if (extension) {
+        extension = extension[1].toLowerCase();
+    }
+    var guessedType = type || mimeTypes[extension] || "text/plain";
+    this._guessedType = guessedType;
+
+    if (data && data.blob) {
+        this._source = AV.Promise.as(data.blob, guessedType);
+    } else {
+        throw "Only blob supported";
+    }
+}
+
+AV.File = File;
+
+File.prototype = _.extend({}, PrevFile.prototype, {
+    save: function(options) {
+        var options = null;
+        var saveOptions = {};
+        if (arguments.length === 1) {
+            options = arguments[0];
+        } else if (arguments.length === 2) {
+            saveOptions = arguments[0];
+            options = arguments[1];
+        }
+        var self = this;
+        if (!self._previousSave) {
+            if (self._source) {
+                // 替换原来的上传文件的实现方法
+                // var upload = require('./browserify-wrapper/upload');
+                var upload = _upload;
+                upload(self, AV, saveOptions);
+            } else if (self._url && self._metaData['__source'] == 'external') {
+                //external link file.
+                var data = {
+                    name: self._name,
+                    ACL: self._acl,
+                    metaData: self._metaData,
+                    mime_type: self._guessedType,
+                    url: self._url
+                };
+                self._previousSave = AV._request("files", self._name, null, 'POST', data).then(function(response) {
+                    self._name = response.name;
+                    self._url = response.url;
+                    self.id = response.objectId;
+                    if (response.size) {
+                        self._metaData.size = response.size;
+                    }
+                    return self;
+                });
+            }
+        }
+        return self._previousSave._thenRunCallbacks(options);
+    }
+});
+
+function _upload(file) {
+    file._previousSave = file._source.then(function(base64, type) {
+        file._base64 = base64;
+        return file._qiniuToken(type);
+    }).then(function(response) {
+        file._url = response.url;
+        file._bucket = response.bucket;
+        file.id = response.objectId;
+        //Get the uptoken to upload files to qiniu.
+        var uptoken = response.token;
+        var formdata = new FormData();
+        formdata.append('file', file._base64);
+        formdata.append('token', uptoken);
+        formdata.append('key', file._qiniu_key);
+        return fetch('http://up.qiniu.com', {
+            method: 'post',
+            body: formdata
+        }).then(function() {
+            console.log(arguments);
+            delete file._qiniu_key;
+            delete file._base64;
+            return file;
+        }, function(e) {
+            file.destroy();
+            throw e;
+        });
+    });
+}
+
+AV.File.prototype.save = function(options) {
+    var options = null;
+    var saveOptions = {};
+    if (arguments.length === 1) {
+        options = arguments[0];
+    } else if (arguments.length === 2) {
+        saveOptions = arguments[0];
+        options = arguments[1];
+    }
+    var self = this;
+    if (!self._previousSave) {
+        if (self._source) {
+            // 替换原来的上传文件的实现方法
+            // var upload = require('./browserify-wrapper/upload');
+            var upload = _upload;
+            upload(self, AV, saveOptions);
+        } else if (self._url && self._metaData['__source'] == 'external') {
+            //external link file.
+            var data = {
+                name: self._name,
+                ACL: self._acl,
+                metaData: self._metaData,
+                mime_type: self._guessedType,
+                url: self._url
+            };
+            self._previousSave = AV._request("files", self._name, null, 'POST', data).then(function(response) {
+                self._name = response.name;
+                self._url = response.url;
+                self.id = response.objectId;
+                if (response.size) {
+                    self._metaData.size = response.size;
+                }
+                return self;
+            });
+        }
+    }
+    return self._previousSave._thenRunCallbacks(options);
+}
 
 var debug = require('../debug')('api:log');
 var warn = require('../debug')('api:warn');
