@@ -54,6 +54,7 @@ var FillActivityBrief = React.createClass({
       <View style={[styles.container, this.props.style]}>
         <ActivityCoverInput 
           style={styles.section}
+          navigator={this.props.navigator}
           value={this.state.cover}
           onChange={(cover) => this.setState({cover})}/>
 

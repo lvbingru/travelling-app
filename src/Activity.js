@@ -185,7 +185,10 @@ var ActivityList = React.createClass({
                 dataSource: dataSource,
                 activities: activities
             });
-        }.bind(this), error).finally(function() {
+        }.bind(this), function(e) {
+            console.trace(e);
+            error(e);
+        }).finally(function() {
             this.setState({
                 loadingMore: false
             });
@@ -312,6 +315,7 @@ var Activity = React.createClass({
     },
 
     render: function() {
+        try{
         var _activity = this.props.data;
         log('activity data', _activity);
         var creator = _activity.get('createBy');
@@ -321,8 +325,6 @@ var Activity = React.createClass({
         // } : require('image!avatar-placeholder');
         var avatar = require('image!avatar-placeholder');
 
-        // TODO: use real cover
-        var coverPlaceholder = 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg';
         // TODO: fetch starred
         var iconStar = _activity.getStarred() ? require('image!icon-star') : require('image!icon-stars');
 
@@ -330,7 +332,7 @@ var Activity = React.createClass({
             <TouchableHighlight underlayColor='#f3f5f6' onPress={this.props.onPress}>
                 <View style={styles.row}>
                   <View style={styles.brief}>
-                    <Image style={styles.bg} source={{uri: coverPlaceholder}}>
+                    <Image style={styles.bg} source={{uri: _activity.getCover()}}>
                       <View style={styles.info}>
                       <Text style={styles.title}>{_activity.get('title')}</Text>
                       <ActivityTags data={_activity} style={styles.tags}/>
@@ -357,6 +359,9 @@ var Activity = React.createClass({
                 </View>
             </TouchableHighlight>
         );
+        } catch(e) {
+            console.trace(e);
+        }
     }
 });
 

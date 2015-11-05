@@ -127,7 +127,7 @@ var ActivityFormSummaryScene = React.createClass({
             var _activity = _.extend({}, this.state);
             // TODO: save routeMap & cover;
             delete _activity.routeMap;
-            delete _activity.cover;
+            // delete _activity.cover;
             console.log(_activity);
             activity.publish(_activity).then(function() {
                 AlertIOS.alert('发布成功');
@@ -150,6 +150,7 @@ var ActivityFormSummaryScene = React.createClass({
             <ScrollView style={[styles.container, this.props.style]}>
                 <ActivityCoverInput 
                     style={styles.section}
+                    navigator={this.props.navigator}
                     value={this.state.cover}
                     onChange={(cover) => this.setState({cover})}/>
 

@@ -44,8 +44,6 @@ var File = function(name, data, type) {
 
     if (data && data.blob) {
         this._source = AV.Promise.as(data.blob, guessedType);
-    } else {
-        throw "Only blob supported";
     }
 }
 
@@ -198,6 +196,12 @@ var Activity = AV.Object.extend("Activity", {
         // TODO: 这个tag是怎么来的？
         var routeTag = '行车容易';
         return routeTag;
+    },
+
+    getCover: function() {
+        var FALLBACK = '';
+        var cover = this.get('cover');
+        return cover && cover.url() ? cover.thumbnailURL(960, 480) : FALLBACK;
     },
 
     _ensureAppCache: function() {

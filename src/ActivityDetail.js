@@ -257,10 +257,6 @@ var ActivityDetail = React.createClass({
         var creator = _activity.get('createBy');
         // TOOD: use real avatar
         var creatorAvatar = require('image!avatar-placeholder');
-        // var cover = _activity.get('cover');
-        // TODO: use real cover
-        var coverPlaceholder = 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg';
-        var cover = coverPlaceholder;
 
         var isSponsor = this.state.user.id === creator.id;
 
@@ -274,7 +270,8 @@ var ActivityDetail = React.createClass({
                     onResponderRelease={this._onScrollRelease}
                     onScrollAnimationEnd={this.scrollEndHandle}>
 
-                    <Image source={{uri: cover}} style={[styles.banner, this.state.bannerStyle]}>
+                    <Image source={{uri: _activity.getCover()}} 
+                        style={[styles.banner, this.state.bannerStyle]}>
                         <UserInfo 
                             style={styles.info}
                             username={creator.get('username')}

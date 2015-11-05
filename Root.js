@@ -125,13 +125,16 @@ var Home = React.createClass({
     },
 
     _testRoute: function() {
-        var Route = require('./src/TestCameraRoll');
+        var Route = require('./src/LocalPhotoPicker');
         // var Route = require('./src/ActivityApply');
         // var Route = require('./src/TestStretchy');
         // var Route = require('./src/FillActivityBrief');
         // var Route = require('./src/FillActivityDetail');
         // var Route = require('./src/ActivityFormSummary');
-        this.refs.navigator.replace(new Route());
+        this.refs.navigator.replace(new Route({
+            title: '本地相册',
+            onResult: console.log.bind(console)
+        }));
     },
 
     _handleChange: function() {
@@ -152,12 +155,13 @@ var Home = React.createClass({
             this.refs.navigator.replace(new SignIn());
         } else {
             log('route to playing');
-            this.refs.navigator.replace(new HomePage(this.refs.navigator));
+            this._homeRoute = new HomePage(this.refs.navigator);
+            this.refs.navigator.replace(this._homeRoute);
         }
     },
 
     componentDidMount: function() {
-        return this._testRoute();
+        // return this._testRoute();
 
         Dispatcher.addListener('logout', function() {
             this.refs.navigator.resetTo(new SignIn)

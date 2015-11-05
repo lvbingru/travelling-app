@@ -9,6 +9,7 @@ var {
 } = React;
 
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+var LocalPhotoPicker = require('./LocalPhotoPicker');
 
 var su = require('./styleUtils');
 var {
@@ -38,8 +39,9 @@ var ActivityCoverInput = React.createClass({
                 <Image source={placeholder} style={styles.placeholder}/>
             );
         } else {
+            var photo = this.props.value;
             return (
-                <Image source={this.props.value} style={styles.cover}>
+                <Image source={{uri: photo.uri}} style={styles.cover}>
                     <PenIcon/>
                 </Image>
             );
@@ -47,37 +49,12 @@ var ActivityCoverInput = React.createClass({
     },
 
     _showImagePicker: function() {
-        var options = {
-            title: '选择封面',
-            cancelButtonTitle: '取消',
-            takePhotoButtonTitle: '拍照',
-            chooseFromLibraryButtonTitle: '从手机相册选择',
-            maxWidth: 800,
-            maxHeight: 800,
-            quality: 1,
-            allowsEditing: false,
-            storageOptions: {
-                skipBackup: true,
-                path: 'images'
+        this.props.navigator.push(new LocalPhotoPicker({
+            onResult: (photo) => {
+                this.props.onChange(photo);
             }
-        };
-
-        UIImagePickerManager.showImagePicker(options, function(type, result) {
-            console.log('show image picker', arguments);
-
-            if (type === "cancel") {
-                console.log('User cancelled image picker');
-            } else if (type === 'uri') {
-                var source = {
-                    uri: result,
-                    isStatic: true
-                };
-
-                this.props.onChange(source);
-            }
-        }.bind(this));
+        }));
     },
-
 
     render: function() {
         return (

@@ -9,6 +9,7 @@ var {
 var _ = require('underscore');
 var extName = require('ext-name');
 var shortid = require('shortid');
+var mimetypes = require('../mimetypes');
 var rnfs = require('react-native-fs');
 var moment = require('moment');
 var user = require('./user');
@@ -359,22 +360,40 @@ var activity = {
     },
 
     publish: function(data) {
-        var _activity = new Activity();
-        _.each(data, function(value, key) {
-            _activity.set(key, value);
+        var cover = data.cover;
+
+        var ext = cover.uri.split(/ext=/)[1].toLowerCase();
+        var name = shortid.generate() + '.' + ext;
+        var file = new AV.File(name, {
+            blob: {
+                name: name,
+                uri: cover.uri,
+                type: mimetypes[ext]
+            }
         });
 
-        return AV.User.currentAsync().then(function(user) {
+        return Promise.all([
+            AV.User.currentAsync(),
+            file.save()
+        ]).then(function(values) {
+            var [user, cover] = values;
+
+            delete data.cover;
+            var _activity = new Activity();
+            _.each(data, function(value, key) {
+                _activity.set(key, value);
+            });
             var _user = new AV.User();
             _user.id = user.id;
             _activity.set('createBy', _user);
+            _activity.set('cover', cover)
             var acl = new AV.ACL();
             acl.setPublicWriteAccess(false);
             acl.setPublicReadAccess(true);
             acl.setWriteAccess(user, true);
             _activity.setACL(acl);
             return _activity.save();
-        })
+        });
     }
 };
 
