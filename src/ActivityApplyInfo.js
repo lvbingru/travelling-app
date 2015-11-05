@@ -33,7 +33,7 @@ var ActivityApplyInfo = React.createClass({
             this.setState({
                 user,
                 partner
-            })
+            });
 
             this.props.route.setEditable(!partner.isFailed());
         }.bind(this)).catch(console.trace.bind(console));
