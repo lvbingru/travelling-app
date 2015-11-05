@@ -13,12 +13,6 @@ var rnfs = require('react-native-fs');
 var moment = require('moment');
 var user = require('./user');
 
-// var commonHeaders = {
-//     'X-LC-Id': AppID,
-//     'X-LC-Key': AppKey,
-//     'Content-Type': 'application/json'
-// }
-
 var sms = {
     requestSmsCode: function(phone) {
         // TODO: implement sms api
