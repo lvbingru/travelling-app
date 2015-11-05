@@ -18,10 +18,14 @@ var {
 var {user} = require('./api');
 var SignUp = require('./SignUp');
 var HomePage = require('./HomePage');
+var store = require('./store');
+var {updateSession} = require('./actions');
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
+var debug = require('./debug');
+var log = debug("signin:log");
 var su = require('./styleUtils');
 
 var SignInView = React.createClass({
@@ -55,9 +59,12 @@ var SignInView = React.createClass({
 			return AlertIOS.alert('请填写正确的手机号码');
 		}
 
-		user.signin(this.state.phone, this.state.password).then(function() {
-			var navigator = this.props.navigator;
-			navigator.resetTo(new HomePage(navigator));
+		user.signin(this.state.phone, this.state.password).then(function(user) {
+			log('current user:', user);
+			log('update user in sesson');
+			store.dispatch(updateSession({
+				user: user
+			}));
 		}.bind(this), function(e) {
 			console.trace(e);
 			return AlertIOS.alert(e.reason || '登录失败');

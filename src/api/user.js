@@ -1,5 +1,9 @@
+var {
+    Activity,
+    AV
+} = require('./models');
+
 var shortid = require('shortid');
-var AV = require('avoscloud-sdk');
 
 var React = require('react-native');
 var NativeModules = React.NativeModules;
@@ -62,9 +66,25 @@ function logout() {
     // });
 }
 
+function starActivity(activity) {
+    return AV.User.currentAsync().then(function(user) {
+        user.relation('starredActivities').add(activity);
+        return user.save();
+    });
+}
+
+function unstarActivity(activity) {
+    return AV.User.currentAsync().then(function(user) {
+        user.relation('starredActivities').remove(activity);
+        return user.save();
+    });
+}
+
 module.exports = {
     currentUser,
     signup,
     signin,
-    logout
+    logout,
+    starActivity,
+    unstarActivity
 };

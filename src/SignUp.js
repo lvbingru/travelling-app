@@ -256,6 +256,10 @@ class SignUpRoute extends BaseRouteMapper {
 		return '注册';
 	}
 
+	get style() {
+		return this.styles.navBar;
+	}
+
 	renderLeftButton(route, navigator, index, navState) {
 		return this._renderBackButton(route, navigator, index, navState);
 	}

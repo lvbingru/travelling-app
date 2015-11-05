@@ -191,18 +191,6 @@ class ActivityChooseCarRoute extends BaseRouteMapper {
 		return this._renderBackButton(route, navigator, index, navState, callback);
 	}
 
-	renderRightButton(route, navigator, index, navState) {
-		return (
-			<TouchableOpacity onPress={() => {}} style={styles.rightButton}>
-				<Text style={styles.closeText}>编辑</Text>
-			</TouchableOpacity>
-		);
-	}
-
-	get style() {
-		return this.styles.navBar;
-	}
-
 	get title() {
 		return '选择出行车辆';
 	}

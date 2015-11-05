@@ -1,5 +1,9 @@
 'use strict';
 
+var debug = require('./debug');
+var log = debug('ActivityTab:log');
+var error = debug('ActivityTab:error');
+
 var moment = require('moment');
 var React = require('react-native');
 
@@ -21,43 +25,17 @@ var RefreshableListView = require('react-native-refreshable-listview');
 var su = require('./styleUtils');
 var Navbars = require('./Navbars');
 var ActivityDetail = require('./ActivityDetail');
-var api = require('./api');
-var activity = api.activity;
+
+var AV = require('avoscloud-sdk');
+var {
+    activity,
+    regions,
+} = require('./api');
+
+var initialRegion = regions()[0];
 
 var BaseRouteMapper = require('./BaseRouteMapper');
 var EventEmitter = require('EventEmitter');
-
-var REGIONS = [{
-    id: 0,
-    tag: 'all',
-    name: '全部',
-    icon: require('image!icon-region-shanxi')
-}, {
-    id: 1,
-    tag: 'beijing',
-    name: '北京',
-    icon: require('image!icon-region-beijing'),
-}, {
-    id: 2,
-    tag: 'hebei',
-    name: '河北',
-    icon: require('image!icon-region-hebei'),
-}, {
-    id: 3,
-    tag: 'shandong',
-    name: '山东',
-    icon: require('image!icon-region-shandong'),
-}, {
-    id: 4,
-    tag: 'tianjin',
-    name: '天津',
-    icon: require('image!icon-region-tianjin'),
-}, {
-    id: 5,
-    tag: 'neimenggu',
-    name: '内蒙古',
-    icon: require('image!icon-region-neimenggu'),
-}];
 
 class ActivityListRoute extends BaseRouteMapper {
 
@@ -67,7 +45,7 @@ class ActivityListRoute extends BaseRouteMapper {
         this._emitter = new EventEmitter();
         this._navigator = navigator;
         this._filterEnabled = false;
-        this._region = REGIONS[0];
+        this._region = initialRegion;
     }
 
     on() {
@@ -105,7 +83,7 @@ class ActivityListRoute extends BaseRouteMapper {
         var styles = this.styles;
         var filterIcon = {
             ...su.size(15, 20),
-            marginRight: 5
+                marginRight: 5
         }
 
         return (
@@ -129,19 +107,18 @@ var {
     Tag
 } = require('./widgets');
 
+var ActivityTags = require('./ActivityTags');
+
 
 var ActivityList = React.createClass({
 
     getInitialState: function() {
-        try {
-            this.route = new ActivityListRoute(this.props.navigator);
-        } catch (e) {
-            console.trace(e);
-        }
+        this.route = new ActivityListRoute(this.props.navigator);
 
         return {
+            activities: [],
             filterShown: false,
-            region: REGIONS[0],
+            region: initialRegion,
             dataSource: new ListView.DataSource({
                 rowHasChanged: (row1, row2) => row1 !== row2,
             }),
@@ -149,73 +126,27 @@ var ActivityList = React.createClass({
     },
 
     componentDidMount: function() {
-        try {
-            this._fetchData({
-                region: this.state.region
-            });
-
-            this.route.on('regions-show', function() {
-                this.setState({
-                    filterShown: true
-                });
-            }.bind(this));
-
-            this.route.on('regions-cancel', function() {
-                this.setState({
-                    filterShown: false
-                });
-            }.bind(this));
-        } catch (e) {
-            console.trace(e);
-        }
-    },
-
-    _fetchData: function(region) {
-        return activity.fetch({
-            region: region ? region.tag : null
-        }).then(function(data) {
-            var dataSource = this.state.dataSource.cloneWithRows(data.results);
+        this.route.on('regions-show', function() {
             this.setState({
-                dataSource: dataSource
+                filterShown: true
             });
-        }.bind(this), function(e) {
-            console.trace(e);
-        });
+        }.bind(this));
+
+        this.route.on('regions-cancel', function() {
+            this.setState({
+                filterShown: false
+            });
+        }.bind(this));
+
+        this.refs.list.handleRefresh();
     },
+
 
     _hideRegions: function() {
         this.route._hideRegions();
         this.setState({
             filterShown: false
         });
-    },
-
-    _renderHeaderWrapper: function(refreshingIndicator) {
-        if (refreshingIndicator == null) {
-            return null;
-        }
-
-        var styles = {
-            wrap: {
-                flex: 1,
-                paddingVertical: 15,
-                alignItems: 'center',
-                justifyContent: 'center'
-            },
-
-            loading: {
-                fontSize: 9,
-                marginBottom: 5,
-                color: '#777'
-            }
-        }
-
-        return (
-            <View style={styles.wrap}>
-                <Text style={styles.loading}>刷新活动</Text>
-                <ActivityIndicatorIOS size="small"/>
-            </View>
-        );
     },
 
     _renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
@@ -227,28 +158,83 @@ var ActivityList = React.createClass({
     },
 
     _loadMore: function() {
-        console.log('load more data');
+        if (this.state.loadingMore) {
+            return error('Invalid operation, loading now');
+        }
+
+        this.setState({
+            loadingMore: true
+        });
+
+        log('load more data');
+        var region = this.state.region;
+
+        var lastActivity = this.state.activities[this.state.activities.length - 1];
+        return activity.fetch({
+            region: region ? region.tag : null,
+            latestDate: lastActivity.getCreatedAt()
+        }).then(function(_activities) {
+            if (_activities.length === 0) {
+                return error('No more activities');
+            }
+
+            var activities = this.state.activities.concat(_activities);
+            log('activities: ', activities.map((item) => item.id).join(','));
+            var dataSource = this.state.dataSource.cloneWithRows(activities);
+            this.setState({
+                dataSource: dataSource,
+                activities: activities
+            });
+        }.bind(this), error).finally(function() {
+            this.setState({
+                loadingMore: false
+            });
+        }.bind(this));
     },
 
     _onRegionSelect: function(region) {
-        this.state.region = region;
         this.route.setRegion(region);
-        this.setState({
-            filterShown: false
-        });
-        this._fetchData(region);
+        this.state.region = region;
+        this._hideRegions();
+        this.refs.list.handleRefresh();
     },
 
     _renderRegionCell: function(item) {
         return (
-            <TouchableOpacity style={regions.cell} 
+            <TouchableOpacity style={regionsStyle.cell} 
               activeOpacity={0.8}
               onPress={this._onRegionSelect.bind(this, item)} key={item.tag}> 
-              <View style={regions.region}>
-                <Image style={regions.image} source={item.icon}/>
-                <Text style={regions.regionName}>{item.name}</Text>
+              <View style={regionsStyle.region}>
+                <Image style={regionsStyle.image} source={item.icon}/>
+                <Text style={regionsStyle.regionName}>{item.name}</Text>
               </View>
             </TouchableOpacity>
+        );
+    },
+
+    _renderFooter: function() {
+        if (!this.state.loadingMore) {
+            return null;
+        }
+
+        return (
+            <View style={indicatorStyles.wrap}>
+                <Text style={indicatorStyles.loading}>加载活动</Text>
+                <ActivityIndicatorIOS size="small"/>
+            </View>
+        );
+    },
+
+    _renderHeaderWrapper: function(refreshingIndicator) {
+        if (refreshingIndicator == null) {
+            return null;
+        }
+
+        return (
+            <View style={indicatorStyles.wrap}>
+                <Text style={indicatorStyles.loading}>刷新更多</Text>
+                <ActivityIndicatorIOS size="small"/>
+            </View>
         );
     },
 
@@ -256,22 +242,25 @@ var ActivityList = React.createClass({
         return (
             <View style={[styles.container, this.props.style]}>
                 <RefreshableListView
+                  ref="list"
+                  automaticallyAdjustContentInsets={false}
                   renderHeaderWrapper={this._renderHeaderWrapper}
                   renderSeparator={this._renderSeparator}
                   dataSource={this.state.dataSource}
+                  renderFooter={this._renderFooter}
                   onEndReached={this._loadMore}
                   renderRow={this._renderRow}
-                  loadData={this._onRefresh}/>
+                  loadData={this._refresh}/>
 
                 {this.state.filterShown &&
-                <TouchableOpacity activeOpacity={1} style={regions.popup} onPress={this._hideRegions}>
+                <TouchableOpacity activeOpacity={1} style={regionsStyle.popup} onPress={this._hideRegions}>
                   <BlurView style={{flex: 1}} blurType="light">
-                    <View style={regions.grid}>
-                      <View style={regions.row}>
-                        {REGIONS.slice(0, 3).map(this._renderRegionCell)}
+                    <View style={regionsStyle.grid}>
+                      <View style={regionsStyle.row}>
+                        {regions().slice(0, 3).map(this._renderRegionCell)}
                       </View>
-                      <View style={regions.row}>
-                        {REGIONS.slice(3).map(this._renderRegionCell)}
+                      <View style={regionsStyle.row}>
+                        {regions().slice(3).map(this._renderRegionCell)}
                       </View>
                     </View>
                   </BlurView>
@@ -280,79 +269,89 @@ var ActivityList = React.createClass({
         );
     },
 
-    _onRefresh: function() {
-        return this._fetchData(this.state.region);
+    _refresh: function() {
+        return activity.fetch({
+            region: this.state.region
+        }).then(function(activities) {
+            log('activities:', activities.map((item) => item.attributes));
+            var dataSource = this.state.dataSource.cloneWithRows(activities);
+            this.setState({
+                dataSource: dataSource,
+                activities: activities
+            });
+        }.bind(this));
     },
 
-    _renderRow: function(data) {
-        return (
-            <Activity 
-                key={data.id} 
-                data={data} 
-                onPress={() => {
-                    this.props.navigator.push(new ActivityDetail({
-                        id: data.id, 
-                        status: data.status, 
-                        isEnter: data.isEnter,
-                        isSponsor: data.isSponsor
-                    }));
-                }}/>
-        );
+    _toDetail: function(activity) {
+        this.props.navigator.push(new ActivityDetail({
+            activity
+        }, this.props.navigator));
     },
+
+    _renderRow: function(_activity) {
+        return (
+            <Activity key={'activity-' + _activity.id}
+                data={_activity} onPress={() => this._toDetail(_activity)}/>
+        );
+    }
 });
 
 var Activity = React.createClass({
+
     getInitialState: function() {
-        return {}
+        return {
+            creator: new AV.User(),
+            currentUser: new AV.User(),
+            starred: false,
+            stars: 0
+        }
     },
 
-    _renderTags: function() {
-        var data = this.props.data;
-
-        var tags = data.tags.map(function(tag) {
-            return (<Tag style={styles.tag} key={tag}>{tag}</Tag>);
-        });
-
-        if (data.status === activity.PREPARING) {
-            tags = [<Tag key={activity.PREPARING} style={styles.tagHot}>火热报名中</Tag>].concat(tags);
-        } else {
-            tags = [<Tag key={activity.TRAVELLING} style={styles.tagDue}>报名已截止</Tag>].concat(tags);
-        }
-
-        return (
-            <View style={styles.tags}>{tags}</View>
-        );
+    componentDidMount: function() {
+        log('Cmponent Activity mount');
     },
 
     render: function() {
-        var data = this.props.data;
-        var user = data.user;
-        var avatar = user.avatar ? {
-            url: user.avatar
-        } : require('image!avatar-placeholder');
+        var _activity = this.props.data;
+        log('activity data', _activity);
+        var creator = _activity.get('createBy');
+
+        // var avatar = creator.avatar ? {
+        // url: creator.avatar
+        // } : require('image!avatar-placeholder');
+        var avatar = require('image!avatar-placeholder');
+
+        // TODO: use real cover
+        var coverPlaceholder = 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg';
+        // TODO: fetch starred
+        var iconStar = _activity.getStarred() ? require('image!icon-star') : require('image!icon-stars');
 
         return (
             <TouchableHighlight underlayColor='#f3f5f6' onPress={this.props.onPress}>
                 <View style={styles.row}>
                   <View style={styles.brief}>
-                    <Image style={styles.bg} source={{uri: data.header}}>
+                    <Image style={styles.bg} source={{uri: coverPlaceholder}}>
                       <View style={styles.info}>
-                        <Text style={styles.title}>{data.title}</Text>
-                        {this._renderTags(data)}
+                      <Text style={styles.title}>{_activity.get('title')}</Text>
+                      <ActivityTags data={_activity} style={styles.tags}/>
                       </View>
                     </Image>
                   </View>
 
-                  <ActivitySchedule data={data} style={{paddingLeft: 16}}/>
+                  <ActivitySchedule data={_activity} style={{paddingLeft: 16}}/>
                   
                   <View style={styles.user}>
                     <Image style={styles.avatar} source={avatar}/>
-                    <Text style={[styles.username, styles.baseText]}>{data.user.username}</Text>
-                    <Text style={[styles.publishDate]}>发布于 {moment(data.publishDate).format('YYYY-MM-DD HH:mm')}</Text>
+                    <Text style={[styles.username, styles.baseText]}>
+                        {creator.get('username') || ""}
+                    </Text>
+                    <Text style={[styles.publishDate]}>
+                        发布于 {moment(_activity.getCreatedAt()).format('YYYY-MM-DD HH:mm')}
+                    </Text>
 
                     <View style={styles.star}>
-                      <Image style={styles.iconStar} source={data.starred ? require('image!icon-starred') : require('image!icon-star')}/>
-                      <Text style={[styles.baseText, styles.stars]}>{data.stars}</Text>
+                      <Image style={styles.iconStar} source={iconStar}/>
+                      <Text style={[styles.baseText, styles.stars]}>{_activity.getStars()}</Text>
                     </View>
                   </View>
                 </View>
@@ -360,6 +359,21 @@ var Activity = React.createClass({
         );
     }
 });
+
+var indicatorStyles = StyleSheet.create({
+    wrap: {
+        flex: 1,
+        paddingVertical: 15,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
+    loading: {
+        fontSize: 9,
+        marginBottom: 5,
+        color: '#777'
+    }
+})
 
 var styles = StyleSheet.create({
     icon: {
@@ -411,24 +425,6 @@ var styles = StyleSheet.create({
 
     tags: {
         marginBottom: 15,
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-
-    tag: {
-        marginRight: 5,
-    },
-
-    tagHot: {
-        marginRight: 5,
-        borderColor: '#f03a47',
-        backgroundColor: '#f03a47'
-    },
-
-    tagDue: {
-        marginRight: 5,
-        borderColor: '#34be9a',
-        backgroundColor: '#34be9a'
     },
 
     user: {
@@ -489,7 +485,7 @@ var styles = StyleSheet.create({
     }
 });
 
-var regions = StyleSheet.create({
+var regionsStyle = StyleSheet.create({
     popup: {
         position: 'absolute',
         backgroundColor: 'transparent',

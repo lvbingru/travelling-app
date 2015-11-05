@@ -21,14 +21,9 @@ var ActivityPublishDate = React.createClass({
     },
 
     render: function() {
-        var {
-            startDate,
-            endDate
-        } = this.props.data;
-
-        if (!startDate || !endDate) {
-            return null;
-        }
+        var _activity = this.props.data;
+        var startDate = new Date(_activity.get('startDate'));
+        var endDate = new Date(_activity.get('endDate'));
 
         var days = Math.floor((endDate.getTime() - startDate.getTime()) / (3600 * 1000 * 24)) + 1;
         if (days > 1) {

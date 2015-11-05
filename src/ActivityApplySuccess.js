@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var React = require('react-native');
 
 var {
@@ -13,7 +14,7 @@ var stylesVar = require('./stylesVar');
 
 var ActivityApplySuccess = React.createClass({
 	sendHandle: function() {
-		//todo
+		// TODO: implement IM
 	},
 
 	render: function() {
@@ -134,22 +135,21 @@ var styles = StyleSheet.create({
 var BaseRouteMapper = require('./BaseRouteMapper');
 
 class ActivityApplySuccessRoute extends BaseRouteMapper {
-	constructor(data) {
-		super();
-
-		this.id = data.id;
-	}
 
 	renderRightButton(route, navigator, index, navState) {
+		function _close() {
+			var routes = navigator.getCurrentRoutes();
+			var route = routes[routes.length - 3];
+			navigator.popToRoute(route);
+		}
+
 		return (
-			<TouchableOpacity onPress={() => {navigator.pop()}} style={styles.rightButton}>
+			<TouchableOpacity
+				onPress={_close}
+				style={styles.rightButton}>
 				<Text style={styles.closeText}>关闭</Text>
 			</TouchableOpacity>
 		);
-	}
-
-	get style() {
-		return this.styles.navBar;
 	}
 
 	get title() {
@@ -157,7 +157,7 @@ class ActivityApplySuccessRoute extends BaseRouteMapper {
 	}
 
 	renderScene(navigator) {
-		return <ActivityApplySuccess id={this.id} />
+		return <ActivityApplySuccess/>
 	}
 }
 

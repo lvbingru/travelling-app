@@ -52,10 +52,6 @@ class RoutePickerRoute extends BaseRouteMapper {
         this.params = params;
     }
 
-    get style() {
-        return this.styles.navBar;
-    }
-
     get title() {
         return '轨迹';
     }
