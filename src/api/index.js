@@ -358,67 +358,75 @@ var activity = {
         });
     },
 
-    fetchManageInfo: function() {
+    fetchManageInfo: function(activity) {
         return new Promise(function(resolve, reject) {
-            var datas = [{
-                user: {
-                    username: 'Komi',
-                    avatar: 'http://localhost:8081/img/avatar-placeholder.png',
-                    publishDate: '2015-08-02 13:48'
-                },
-                hasCar: '1',
-                status: '0',//0代表审核中，1代表通过审核
-                carType: '牧马人／2014款',
-                carNumber: '京PN8S88',
-                phone: '152 1050 9888',
-                peopleNum: '2',
-                childNum: '2',
-                seat: 1,
-                share: '1'
-            }, {
-                user: {
-                    username: 'Komi',
-                    avatar: 'http://localhost:8081/img/avatar-placeholder.png',
-                    publishDate: '2015-08-02 13:48'
-                },
-                hasCar: '1',
-                status: '2',//0代表审核中，1代表通过审核
-                carType: '牧马人／2014款',
-                carNumber: '京PN8S88',
-                phone: '152 1050 9888',
-                peopleNum: '2',
-                childNum: '2',
-                seat: 1,
-                share: '1'
-            }, {
-                user: {
-                    username: 'Komi',
-                    avatar: 'http://localhost:8081/img/avatar-placeholder.png',
-                    publishDate: '2015-08-02 13:48'
-                },
-                hasCar: '0',
-                status: '0',
-                phone: '152 1050 9888',
-                peopleNum: '3',
-                childNum: '2',
-                canDrive: '1'
-            }, {
-                user: {
-                    username: 'Komi',
-                    avatar: 'http://localhost:8081/img/avatar-placeholder.png',
-                    publishDate: '2015-08-02 13:48'
-                },
-                hasCar: '0',
-                status: '1',
-                phone: '152 1050 9888',
-                peopleNum: '3',
-                childNum: '2',
-                canDrive: '1'
-            }];
+            var query = new AV.Query(Partner);
+            query.equalTo('activity', activity);
+            query.include('user');
 
-            setTimeout(function() {
-                resolve(datas);
-            }, 1000);
+            query.find({
+                success: function(partners) {
+                    var results = partners.map((item) => {
+                        var subItem = item.attributes;
+                        var user = subItem.user.attributes;
+                        var datas = {
+                            id: item.id,
+                            user: {
+                                username: user.username,
+                                avatar: user.avatar,
+                                publishDate: item.updatedAt
+                            },
+                            type: subItem.type,
+                            status: subItem.status,
+                            car: subItem.car,
+                            phone: subItem.phone,
+                            peopleNum: subItem.peopleNum,
+                            childNum: subItem.childNum,
+                            leftSeats: subItem.leftSeats,
+                            share: subItem.share,
+                            canDrive: subItem.canDrive
+                        };
+                        return datas;
+                    })
+                    resolve(results);
+                },
+                error: function(error) {
+                    reject("Error: " + error.code + " " + error.message);
+                }
+            });
+        });
+    },
+
+    changeManageStatus: function(id, status) {
+        return new Promise(function(resolve, reject) {
+            var query = new AV.Query(Partner);
+            query.equalTo('objectId', id);
+            query.find().then(function(results) {
+                results[0].set('status', status);
+                return results[0].save();
+            }).then(function() {
+                resolve('success');
+            }, function(e) {
+                reject(e);
+            })
+        });
+    },
+
+    ensureManage: function(id, peopleNum, childNum, childNum2) {
+        return new Promise(function(resolve, reject) {
+            var query = new AV.Query(Partner);
+            query.equalTo('objectId', id);
+            query.find().then(function(results) {
+                results[0].set('status', Partner.STATUS_CONFIRMED);
+                results[0].set('peopleNum', parseInt(peopleNum))
+                results[0].set('childNum', parseInt(childNum))
+                results[0].set('childNum2', parseInt(childNum2))
+                return results[0].save();
+            }).then(function() {
+                resolve('success');
+            }, function(e) {
+                reject(e);
+            })
         });
     },
 

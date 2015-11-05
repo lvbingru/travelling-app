@@ -20,24 +20,25 @@ var ActivtyModal = React.createClass({
 			childNum2: '0',
 			amimated: true,
 			transparent: true,
-			modalVisible: false
+			modalVisible: false,
+			id: this.props.id
 		}
 	},
 
-	setDatas: function(modalVisible, peopleNum, childNum1){
+	setDatas: function(modalVisible, peopleNum, childNum1, id){
 		this.setState({
 			modalVisible: modalVisible,
-			peopleNum: peopleNum,
-			childNum1: childNum1
+			peopleNum: '' + peopleNum,
+			childNum1: '' + childNum1,
+			id: '' + id
 		});
 	},
 
 	ensureHandle: function() {
-		//todo ajax
 		this.setState({
 			modalVisible: false
 		}, function() {
-			this.props.ensurePeople();
+			this.props.ensurePeople(this.state.peopleNum.trim(), this.state.childNum1.trim(), this.state.childNum2.trim(), this.state.id);
 		}.bind(this))
 	},
 

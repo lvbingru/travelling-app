@@ -10,6 +10,10 @@ var {
 	TouchableOpacity
 } = React;
 
+var {
+	Partner
+} = require('./api/models');
+
 var activityApi = require('./api').activity;
 var stylesVar = require('./stylesVar');
 var ActivityModal = require('./ActivityModal');
@@ -31,7 +35,7 @@ var ActivityManage = React.createClass({
 	},
 
 	fetchDatas: function() {
-		activityApi.fetchManageInfo().then(function(datas) {
+		activityApi.fetchManageInfo(this.props.activity).then(function(datas) {
 			this.setState({
 				datas: datas
 			})
@@ -41,13 +45,13 @@ var ActivityManage = React.createClass({
 	},
 
 	renderItemDetail: function(item) {
-		if (item.hasCar === '1') {
+		if (item.type === Partner.SELF_RIDE) {
 			var datas = [{
 				title: '出行车辆：',
-				content: item.carType
+				content: item.car.model
 			}, {
 				title: '牌照：',
-				content: item.carNumber
+				content: item.car.number
 			}, {
 				title: '手机号码：',
 				content: item.phone
@@ -56,15 +60,15 @@ var ActivityManage = React.createClass({
 				content: '成人' + item.peopleNum + '／' + '儿童' + item.childNum
 			}, {
 				title: '空余座位：',
-				content: item.seat
+				content: item.leftSeats
 			}, {
 				title: '是否愿意搭人：',
-				content: item.share === '1' ? '是': '否'
+				content: item.share ? '是': '否'
 			}];
 			return (
 				<ItemInfo datas={datas} detailView={styles.detailView}/>
 			);
-		} else {
+		} else if (item.type === Partner.FREE_RIDE){
 			var datas = [{
 				title: '手机号码：',
 				content: item.phone
@@ -73,51 +77,82 @@ var ActivityManage = React.createClass({
 				content: '成人' + item.peopleNum + '／' + '儿童' + item.childNum
 			}, {
 				title: '是否能驾驶车辆：',
-				content: item.canDrive === '1' ? '是': '否'
+				content: item.canDrive ? '是': '否'
 			}]
 			return (
 				<ItemInfo datas={datas} detailView={styles.detailView} />
 			);
+		} else {
+			console.error('partner type error!');
+			return null;
 		}
 	},
 
-	ensurePeopleNum: function(peopleNum, childNum) {
-		this._modal.setDatas(true, peopleNum, childNum);
+	ensurePeopleNum: function(peopleNum, childNum, id) {
+		this._modal.setDatas(true, peopleNum, childNum, id);
 	},
 
-	ensurePeopleHandle: function() {
-		//todo
-		this.fetchDatas();
+	ensurePeopleHandle: function(peopleNum, childNum1, childNum2, id) {
+		activityApi.ensureManage(id, peopleNum, childNum1, childNum2).then(function() {
+			this.fetchDatas();
+		}.bind(this), function(e) {
+			console.error(e);
+		});
+	},
+
+	changeStatus: function(id, status) {
+		activityApi.changeManageStatus(id, status).then(function() {
+			this.fetchDatas();
+		}.bind(this), function(e) {
+			console.error(e);
+		});
 	},
 
 	renderBottom: function(item) {
-		if (item.status === '1') {
+		if (item.status === Partner.STATUS_APPROVAL) {
 			return (
 				<View style={styles.bottomView}>
-					<TouchableOpacity style={styles.leftView}>
+					<TouchableOpacity style={styles.leftView}
+						onPress={this.changeStatus.bind(this, item.id, Partner.STATUS_CANCELLED)}>
 						<Text style={styles.leftText}>取消活动资格</Text>
 					</TouchableOpacity >
 					<TouchableOpacity style={styles.rightView}
-						onPress={this.ensurePeopleNum.bind(this, item.peopleNum, item.childNum)}>
+						onPress={this.ensurePeopleNum.bind(this, item.peopleNum, item.childNum, item.id)}>
 						<Text style={styles.rightText}>确认参加人数</Text>
 					</TouchableOpacity>
 				</View>
 			);
-		} else if (item.status === '0') {
+		} else if (item.status === Partner.STATUS_IN_REVIEW) {
 			return (
 				<View style={styles.bottomView}>
-					<TouchableOpacity style={styles.leftView}>
+					<TouchableOpacity style={styles.leftView}
+						onPress={this.changeStatus.bind(this, item.id, Partner.STATUS_REFUSED)}>
 						<Text style={styles.leftText}>不同意参加</Text>
 					</TouchableOpacity>
-					<TouchableOpacity style={styles.rightView}>
+					<TouchableOpacity style={styles.rightView}
+						onPress={this.changeStatus.bind(this, item.id, Partner.STATUS_APPROVAL)}>
 						<Text style={styles.rightText}>同意参加</Text>
 					</TouchableOpacity>
 				</View>
 			);
-		} else if(item.status === '2') {
+		} else {
 			return (
 				<View style={styles.lineView}></View>
 			);
+		}
+	},
+
+	renderTag: function(status) {
+		if (status === Partner.STATUS_IN_REVIEW) {
+			return (<Tag key='status' style={styles.tagGreen}>审核中</Tag>);
+		} else if (status === Partner.STATUS_REFUSED) {
+			return (<Tag key='status' style={styles.tagRed}>未通过审核</Tag>);
+		} else if (status === Partner.STATUS_APPROVAL) {
+			return (<Tag key='status' style={styles.tagGreen}>已通过审核</Tag>);
+		} else if (status === Partner.STATUS_CANCELLED) {
+			return (<Tag key='status' style={styles.tagRed}>已取消活动资格</Tag>);
+		} else if (status === Partner.STATUS_CONFIRMED) {
+			return (<Tag key='status' style={styles.tagGreen}>确认参加</Tag>);
 		}
 	},
 
@@ -138,7 +173,7 @@ var ActivityManage = React.createClass({
 									publishDateText={styles.publishDateText}
 									avatar={item.user && item.user.avatar ? {uri: item.user.avatar}: require('image!avatar-placeholder')}/>
 								<View style={styles.status}>
-									{(item.status === '1' || item.status === '2')? (<Tag key='status' style={styles.tag}>已通过审核</Tag>): null}
+									{this.renderTag(item.status)}
 								</View>
 							</View>
 							{this.renderItemDetail(item)}
@@ -206,9 +241,14 @@ var styles = StyleSheet.create({
         justifyContent: 'flex-end'
 	},
 
-	tag: {
+	tagGreen: {
 		color: stylesVar('green'),
         borderColor: stylesVar('green')
+	},
+
+	tagRed: {
+		color: stylesVar('red'),
+		borderColor: stylesVar('red')
 	},
 
 	usernameText: {
@@ -274,6 +314,8 @@ var BaseRouteMapper = require('./BaseRouteMapper');
 class ActivityManageRoute extends BaseRouteMapper {
 	constructor(data) {
 		super();
+
+		this.activity = data.activity;
 	}
 
 	renderLeftButton(route, navigator, index, navState) {
@@ -289,7 +331,7 @@ class ActivityManageRoute extends BaseRouteMapper {
 	}
 
 	renderScene(navigator) {
-		return <ActivityManage navigator={navigator}/>
+		return <ActivityManage activity={this.activity} />
 	}
 }
 

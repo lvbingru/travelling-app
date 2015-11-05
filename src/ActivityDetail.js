@@ -185,7 +185,7 @@ var ActivityDetail = React.createClass({
     },
 
     manageHandle: function() {
-        this.props.navigator.push(new ActivityManage({id: this.props.id}));
+        this.props.navigator.push(new ActivityManage({activity: this.state.activity}));
     },
 
     editHandle: function() {
