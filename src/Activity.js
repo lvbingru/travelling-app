@@ -315,7 +315,6 @@ var Activity = React.createClass({
     },
 
     render: function() {
-        try{
         var _activity = this.props.data;
         log('activity data', _activity);
         var creator = _activity.get('createBy');
@@ -324,6 +323,8 @@ var Activity = React.createClass({
         // url: creator.avatar
         // } : require('image!avatar-placeholder');
         var avatar = require('image!avatar-placeholder');
+
+        log('activity cover', _activity.getCover());
 
         // TODO: fetch starred
         var iconStar = _activity.getStarred() ? require('image!icon-star') : require('image!icon-stars');
@@ -359,9 +360,6 @@ var Activity = React.createClass({
                 </View>
             </TouchableHighlight>
         );
-        } catch(e) {
-            console.trace(e);
-        }
     }
 });
 

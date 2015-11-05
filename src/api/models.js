@@ -199,7 +199,7 @@ var Activity = AV.Object.extend("Activity", {
     },
 
     getCover: function() {
-        var FALLBACK = '';
+        var FALLBACK = 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg';
         var cover = this.get('cover');
         return cover && cover.url() ? cover.thumbnailURL(960, 480) : FALLBACK;
     },
