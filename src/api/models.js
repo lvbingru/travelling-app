@@ -162,6 +162,10 @@ var debug = require('../debug')('api:log');
 var warn = require('../debug')('api:warn');
 var error = require('../debug')('api:error');
 
+_.extend(AV.User.prototype, {
+    
+});
+
 var Photo = AV.Object.extend("Photo");
 var Region = AV.Object.extend("Region");
 var Partner = AV.Object.extend("Partner", {

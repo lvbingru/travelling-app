@@ -18,6 +18,8 @@ var {
     ListView
 } = React;
 
+var Subscribable = require('Subscribable');
+
 var {
     BlurView
 } = require('react-native-blur');
@@ -33,6 +35,14 @@ var {
 } = require('./api');
 
 var initialRegion = regions()[0];
+
+var {
+    ActivitySchedule,
+    BaseText
+} = require('./widgets');
+var Text = BaseText;
+var ActivityTags = require('./ActivityTags');
+var ActivityView = require('./activity/ActivityView');
 
 var BaseRouteMapper = require('./BaseRouteMapper');
 var EventEmitter = require('EventEmitter');
@@ -100,17 +110,10 @@ class ActivityListRoute extends BaseRouteMapper {
     }
 }
 
-Object.assign(ActivityListRoute, EventEmitter.prototype);
-
-var {
-    ActivitySchedule,
-    Tag
-} = require('./widgets');
-
-var ActivityTags = require('./ActivityTags');
-
 
 var ActivityList = React.createClass({
+
+    mixins: [Subscribable.Mixin],
 
     getInitialState: function() {
         this.route = new ActivityListRoute(this.props.navigator);
@@ -126,21 +129,20 @@ var ActivityList = React.createClass({
     },
 
     componentDidMount: function() {
-        this.route.on('regions-show', function() {
+        this.addListenerOn(this.route._emitter, 'regions-show', function() {
             this.setState({
                 filterShown: true
             });
-        }.bind(this));
+        }, this);;
 
-        this.route.on('regions-cancel', function() {
+        this.addListenerOn(this.route._emitter, 'regions-cancel', function() {
             this.setState({
                 filterShown: false
             });
-        }.bind(this));
+        }, this);
 
         this.refs.list.handleRefresh();
     },
-
 
     _hideRegions: function() {
         this.route._hideRegions();
@@ -245,8 +247,8 @@ var ActivityList = React.createClass({
         return (
             <View style={[styles.container, this.props.style]}>
                 <RefreshableListView
+                  scrollEventThrottle={16}
                   ref="list"
-                  automaticallyAdjustContentInsets={false}
                   renderHeaderWrapper={this._renderHeaderWrapper}
                   renderSeparator={this._renderSeparator}
                   dataSource={this.state.dataSource}
@@ -293,72 +295,8 @@ var ActivityList = React.createClass({
 
     _renderRow: function(_activity) {
         return (
-            <Activity key={'activity-' + _activity.id}
-                data={_activity} onPress={() => this._toDetail(_activity)}/>
-        );
-    }
-});
-
-var Activity = React.createClass({
-
-    getInitialState: function() {
-        return {
-            creator: new AV.User(),
-            currentUser: new AV.User(),
-            starred: false,
-            stars: 0
-        }
-    },
-
-    componentDidMount: function() {
-        log('Cmponent Activity mount');
-    },
-
-    render: function() {
-        var _activity = this.props.data;
-        log('activity data', _activity);
-        var creator = _activity.get('createBy');
-
-        // var avatar = creator.avatar ? {
-        // url: creator.avatar
-        // } : require('image!avatar-placeholder');
-        var avatar = require('image!avatar-placeholder');
-
-        log('activity cover', _activity.getCover());
-
-        // TODO: fetch starred
-        var iconStar = _activity.getStarred() ? require('image!icon-star') : require('image!icon-stars');
-
-        return (
-            <TouchableHighlight underlayColor='#f3f5f6' onPress={this.props.onPress}>
-                <View style={styles.row}>
-                  <View style={styles.brief}>
-                    <Image style={styles.bg} source={{uri: _activity.getCover()}}>
-                      <View style={styles.info}>
-                      <Text style={styles.title}>{_activity.get('title')}</Text>
-                      <ActivityTags data={_activity} style={styles.tags}/>
-                      </View>
-                    </Image>
-                  </View>
-
-                  <ActivitySchedule data={_activity} style={{paddingLeft: 16}}/>
-                  
-                  <View style={styles.user}>
-                    <Image style={styles.avatar} source={avatar}/>
-                    <Text style={[styles.username, styles.baseText]}>
-                        {creator.get('username') || ""}
-                    </Text>
-                    <Text style={[styles.publishDate]}>
-                        发布于 {moment(_activity.getCreatedAt()).format('YYYY-MM-DD HH:mm')}
-                    </Text>
-
-                    <View style={styles.star}>
-                      <Image style={styles.iconStar} source={iconStar}/>
-                      <Text style={[styles.baseText, styles.stars]}>{_activity.getStars()}</Text>
-                    </View>
-                  </View>
-                </View>
-            </TouchableHighlight>
+            <ActivityView key={'activity-' + _activity.id}
+                activity={_activity} onPress={() => this._toDetail(_activity)}/>
         );
     }
 });
@@ -379,6 +317,11 @@ var indicatorStyles = StyleSheet.create({
 })
 
 var styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#f3f5f6',
+    },
+
     icon: {
         ...su.size(11)
     },
@@ -386,76 +329,6 @@ var styles = StyleSheet.create({
     baseText: {
         color: '#303030',
         fontWeight: '200'
-    },
-
-    container: {
-        flex: 1,
-        backgroundColor: '#f3f5f6',
-    },
-
-    row: {
-        backgroundColor: '#fff'
-    },
-
-    brief: {
-        height: 180,
-        marginBottom: 10
-    },
-
-    bg: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
-    },
-
-    info: {
-        backgroundColor: 'transparent',
-        paddingLeft: 16,
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 0
-    },
-
-    title: {
-        textAlign: 'left',
-        fontSize: 20,
-        color: '#fff',
-        marginBottom: 10
-    },
-
-    tags: {
-        marginBottom: 15,
-    },
-
-    user: {
-        paddingBottom: 8,
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingLeft: 16
-    },
-
-    avatar: {
-        ...su.size(25),
-            borderRadius: 12.5,
-            marginRight: 10
-    },
-
-    username: {
-        fontSize: 12,
-        // FIXME: hack 
-        lineHeight: 15,
-        marginRight: 10
-    },
-
-    publishDate: {
-        fontSize: 10,
-        lineHeight: 15,
-        marginRight: 10,
-        fontWeight: '100',
-        color: '#96969b'
     },
 
     toolbar: {
@@ -467,24 +340,6 @@ var styles = StyleSheet.create({
         flex: 1,
         marginTop: 44,
         backgroundColor: '#f3f5f6',
-    },
-
-    star: {
-        position: 'absolute',
-        top: 5,
-        right: 15,
-        flexDirection: 'row',
-    },
-
-    iconStar: {
-        ...su.size(15, 14),
-            marginRight: 5,
-    },
-
-    stars: {
-        lineHeight: 14,
-        fontSize: 10,
-        color: '#96969b'
     }
 });
 
@@ -518,15 +373,15 @@ var regionsStyle = StyleSheet.create({
     },
 
     image: {
+        ...su.size(60),
         borderWidth: 1,
         borderColor: '#fff',
         borderRadius: 30,
-        ...su.size(60),
         marginBottom: 10
     },
 
     regionName: {
-        color: '#fff'
+        color: 'white'
     }
 });
 
