@@ -1,5 +1,8 @@
 'use strict';
 
+// FIXME: hack react native packager 给 leancloud-realtime 提供 xmlhttprequest 模块
+require('xmlhttprequest');
+
 var React = require('react-native');
 var cssVar = require('cssVar');
 
@@ -125,7 +128,8 @@ var Home = React.createClass({
     },
 
     _testRoute: function() {
-        var Route = require('./src/LocalPhotoPicker');
+        var Route = require('./src/TestRealtimeMessage');
+        // var Route = require('./src/LocalPhotoPicker');
         // var Route = require('./src/ActivityApply');
         // var Route = require('./src/TestStretchy');
         // var Route = require('./src/FillActivityBrief');
@@ -161,7 +165,7 @@ var Home = React.createClass({
     },
 
     componentDidMount: function() {
-        // return this._testRoute();
+        return this._testRoute();
 
         Dispatcher.addListener('logout', function() {
             this.refs.navigator.resetTo(new SignIn)
