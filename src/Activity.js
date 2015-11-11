@@ -117,6 +117,7 @@ var ActivityList = React.createClass({
 
     getInitialState: function() {
         this.route = new ActivityListRoute(this.props.navigator);
+        this.activitiesObjects = {};
 
         return {
             activities: [],
@@ -287,15 +288,19 @@ var ActivityList = React.createClass({
         }.bind(this));
     },
 
+    refreshDetail: function(id) {
+        this.activitiesObjects[id].forceUpdate();
+    },
+
     _toDetail: function(activity) {
         this.props.navigator.push(new ActivityDetail({
             activity
-        }, this.props.navigator));
+        }, this.props.navigator, this.refreshDetail));
     },
 
     _renderRow: function(_activity) {
         return (
-            <ActivityView key={'activity-' + _activity.id}
+            <ActivityView key={'activity-' + _activity.id} ref={component => this.activitiesObjects[_activity.id] = component}
                 activity={_activity} onPress={() => this._toDetail(_activity)}/>
         );
     }

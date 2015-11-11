@@ -248,7 +248,8 @@ var ActivityDetail = React.createClass({
         this.refs.scroll.scrollTo(0, 0);
 
         this.props.navigator.push(new ActivityMoreDetail({
-            activity: this.state.activity
+            activity: this.state.activity,
+            refreshStar: this.props.refreshStar
         }));
     },
 
@@ -588,10 +589,11 @@ var styles = StyleSheet.create({
 var BaseRouteMapper = require('./BaseRouteMapper');
 
 class ActivityDetailRoute extends BaseRouteMapper {
-    constructor(data, navigator) {
+    constructor(data, navigator, refreshDetail) {
         super()
 
         this.navigator = navigator;
+        this.refreshDetail = refreshDetail;
 
         this.activity = data.activity;
         this.stars = this.activity.getStars();
@@ -602,7 +604,9 @@ class ActivityDetailRoute extends BaseRouteMapper {
         if (!this.starred) {
             userApi.starActivity(this.activity).then(function() {
                 this.stars++;
+                this.activity.setStars(this.stars);
                 this.starred = true;
+                this.activity.setStarred(true);
                 this.navigator.forceUpdate();
             }.bind(this), function(e) {
                 console.trace(e);
@@ -610,7 +614,9 @@ class ActivityDetailRoute extends BaseRouteMapper {
         } else {
             userApi.unstarActivity(this.activity).then(function() {
                 this.stars--;
+                this.activity.setStars(this.stars);
                 this.starred = false;
+                this.activity.setStarred(false);
                 this.navigator.forceUpdate();
             }.bind(this), function(e) {
                 console.trace(e);
@@ -618,8 +624,18 @@ class ActivityDetailRoute extends BaseRouteMapper {
         }
     }
 
+    refreshStar(navigator) {
+        this.stars = this.activity.getStars();
+        this.starred = this.activity.getStarred();
+        navigator.forceUpdate();
+    }
+
     renderLeftButton(route, navigator, index, navState) {
-        return this._renderBackButton(route, navigator, index, navState);
+        function callback() {
+            this.refreshDetail(this.activity.id);
+            navigator.pop();
+        }
+        return this._renderBackButton(route, navigator, index, navState, callback.bind(this));
     }
 
     renderRightButton(route, navigator, index, navState) {
@@ -688,8 +704,10 @@ class ActivityDetailRoute extends BaseRouteMapper {
         return this.styles.navBarTransparent;
     }
 
-    renderScene() {
-        return <ActivityDetail activity={this.activity} route={this}/>;
+    renderScene(navigator) {
+        return <ActivityDetail activity={this.activity}
+                    refreshStar={this.refreshStar.bind(this, navigator)} 
+                    route={this}/>;
     }
 }
 
