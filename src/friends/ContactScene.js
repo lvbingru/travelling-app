@@ -298,7 +298,7 @@ var ContactScene = React.createClass({
 var styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff'
+        backgroundColor: stylesVar('dark-lighter') 
     },
 
     avatar: {
@@ -311,6 +311,7 @@ var styles = StyleSheet.create({
     },
 
     item: {
+        backgroundColor: 'white',
         flexDirection: 'row',
         alignItems: 'center',
         paddingLeft: 16,
@@ -365,7 +366,6 @@ class Route extends BaseRouteMapper {
 
         return (
             <TouchableOpacity 
-              activeOpacity={0.8} 
               style={[styles.wrap, styles.right]}>
                 <Image style={icon} source={require('image!icon-conv-plus')}/>
             </TouchableOpacity>
