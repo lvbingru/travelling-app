@@ -44,11 +44,13 @@ var BaseTouchableOpacity = React.createClass({
 
 var styles = StyleSheet.create({
     text: {
+        fontSize: 14,
         color: stylesVar('dark'),
         fontWeight: '300'
     },
 
     textInput: {
+        fontSize: 14,
         color: stylesVar('dark'),
         fontWeight: '300'
     }

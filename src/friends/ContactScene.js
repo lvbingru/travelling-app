@@ -23,12 +23,17 @@ var {
     Line,
     LettersView,
     BaseText,
+    BaseTextInput,
     BaseTouchableOpacity
 } = require('../widgets');
 
 // override default compnents
 var Text = BaseText;
+var TextInput = BaseTextInput;
 var TouchableOpacity = BaseTouchableOpacity;
+
+var ContactItem = require('./ContactItem');
+var GroupContact = require('./GroupContactScene');
 
 var debug = require('../debug');
 var log = debug('Contact:log');
@@ -36,6 +41,14 @@ var warn = debug('Contact:warn');
 var error = debug('Contact:error');
 
 var DATA = {
+    'top': [{
+        name: 'search'
+    }, {
+        name: 'circle'
+    }, {
+        name: 'group'
+    }],
+
     'A': [{
         name: 'Allen'
     }, {
@@ -119,81 +132,163 @@ var ContactScene = React.createClass({
         dataSource = dataSource.cloneWithRowsAndSections(DATA, Object.keys(DATA), null);
 
         this.setState({
+            data: DATA,
             dataSource
         });
-
-        this.sectionHeaders = {};
     },
 
-    _renderRow: function(item) {
+    _renderSearchBar: function() {
         return (
-            <TouchableOpacity style={styles.item}>
-                <Image style={styles.avatar} 
-                    source={require('image!avatar-placeholder')}/>
-                <Text style={styles.name}>{item.name}</Text>
+            <View style={styles.item}>
+                <Image
+                    source={require('image!icon-search')}
+                    resizeMode="contain"
+                    style={{...su.size(24, 18)}}/>
+                <TextInput
+                    style={[styles.searchInput, styles.name]}
+                    placeholder="搜索"/>
+            </View>
+        );
+    },
+
+    _toCircleContacts: function() {
+        this.props.navigator.push(new GroupContact({
+            circle: true
+        }));
+    },
+
+    _toGroupContacts: function() {
+        this.props.navigator.push(new GroupContact);
+    },
+
+    _renderCircleItem: function() {
+        return (
+            <TouchableOpacity
+                onPress={this._toCircleContacts}
+                style={styles.item}>
+                <Image
+                    source={require('image!icon-circle')}
+                    style={{...su.size(24)}}/>
+                <Text style={styles.name}>圈子</Text>
             </TouchableOpacity>
         );
     },
 
-    _cacheSectionHeader: function(sectionID, comp) {
-        var key = 'section-' + sectionID;
-        this.sectionHeaders[key] = comp;
+    _renderGroupItem: function() {
+        return (
+            <TouchableOpacity
+                onPress={this._toGroupContacts}
+                style={styles.item}>
+                <Image
+                    source={require('image!icon-group')}
+                    style={{...su.size(24)}}/>
+                <Text style={styles.name}>群聊</Text>
+            </TouchableOpacity>
+        );
+    },
+
+    _renderRow: function(item, sectionID, rowID, highlightRow) {
+        if (sectionID !== 'top') {
+            return <ContactItem item={item}/>
+        }
+
+        if (item.name === 'search') {
+            return this._renderSearchBar();
+        } else if (item.name === 'circle') {
+            return this._renderCircleItem();
+        } else if (item.name === 'group') {
+            return this._renderGroupItem();
+        }
     },
 
     _renderSectionHeader: function(sectionData, sectionID) {
+        if (sectionID === 'top') {
+            return null;
+        }
+
         return (
-            <View ref={this._cacheSectionHeader.bind(this, sectionID)} style={styles.sectionHeader}>
+            <View style={styles.sectionHeader}>
                 <Text>{sectionID}</Text>
             </View>
         );
     },
 
-    _renderSeparator: function() {
-        return <Line/>;
+    _renderSeparator: function(sectionID) {
+        return (
+            <View style={{paddingLeft: sectionID === 'top' ? 0 : 8}}>
+                <Line/>
+            </View>
+        );
     },
 
     _handleLetterPress: function(letter) {
-        if (letter === '#') {
-            // TODO: jump to number
-            return;
-        }
+        // TODO: 对接数据接口
+        var data = this.state.data;
 
         console.log(letter);
-        var sectionHeader = this.sectionHeaders['section-' + letter]
         var index = LettersView.LETTERS.indexOf(letter);
-        while (index >= 0 && !sectionHeader) {
+        var dataByLetter = this.state.data[letter];
+        while (index >= 0 && !dataByLetter) {
             index--;
             letter = LettersView.LETTERS[index];
-            sectionHeader = this.sectionHeaders['section-' + letter]
+            dataByLetter = this.state.data[letter];
         }
 
-        if (!sectionHeader) {
-            return warn('Section header not found.');
+        if (!dataByLetter) {
+            return warn('no data of letter');
         }
 
-        console.log(letter);
+        var offsetY = 0;
+        for (var i = 0; i < index; i++) {
+            // FIXME: magic number
+            offsetY += 30;
+            var letter = LettersView.LETTERS[i];
+            var dataByLetter = data[letter];
+            offsetY += dataByLetter.length * 45 + (dataByLetter.length - 1) * Line.HEIGHT;
+        }
 
-        var self = this;
-        sectionHeader.measure((fx, fy, width, height, px, py) => {
+        offsetY += 3 * (45 + Line.HEIGHT);
+
+        console.log(letter, index, offsetY);
+        this.refs.content.measure((fx, fy, width, height, px, py) => {
             console.log(fx, fy, width, height, px, py);
-            this.refs.listview.getScrollResponder().scrollTo(fy);
+            var scrollHeight = this._getScrollHeight();
+            offsetY = Math.min(scrollHeight - height, offsetY);
+            this.refs.listview.getScrollResponder().scrollWithoutAnimationTo(offsetY);
         });
+    },
+
+    _getScrollHeight: function() {
+        var data = this.state.data;
+        var height = 0;
+        for (var i = 0; i < LettersView.LETTERS.length; i++) {
+            var letter = LettersView.LETTERS[i];
+            var dataByLetter = data[letter];
+            if (dataByLetter) {
+                height += 30;
+                height += dataByLetter.length * 45 + (dataByLetter.length - 1) * Line.HEIGHT;
+            }
+        }
+
+        return height + 3 * 45 + 2 * Line.HEIGHT;
     },
 
     render: function() {
         return (
             <View style={[styles.container, this.props.style]}>
-                <ListView
-                    ref="listview"
-                    renderSectionHeader={this._renderSectionHeader}
-                    renderSeparator={this._renderSeparator}
-                    renderRow={this._renderRow}
-                    dataSource={this.state.dataSource}/>
+                <View ref="content" style={styles.container}>
+                    <ListView
+                        ref="listview"
+                        renderSectionHeader={this._renderSectionHeader}
+                        renderSeparator={this._renderSeparator}
+                        renderRow={this._renderRow}
+                        dataSource={this.state.dataSource}/>
 
-                <View style={styles.letters}>
-                    <LettersView 
-                        ref={(v) => this.lettersView = v}
-                        onLetterPress={this._handleLetterPress}/>
+                    <View style={styles.letters}>
+                        <LettersView 
+                            ref={(v) => this.lettersView = v}
+                            onLetterPress={this._handleLetterPress}/>
+                    </View>
                 </View>
             </View>
         )
@@ -220,6 +315,10 @@ var styles = StyleSheet.create({
         alignItems: 'center',
         paddingLeft: 16,
         height: 45
+    },
+
+    searchInput: {
+        flex: 1
     },
 
     sectionHeader: {
@@ -255,6 +354,21 @@ class Route extends BaseRouteMapper {
     renderScene() {
         return (
             <ContactScene/>
+        );
+    }
+
+    renderRightButton(route, navigator, index, navState) {
+        var styles = this.styles;
+        var icon = {
+            ...su.size(18, 18),
+        };
+
+        return (
+            <TouchableOpacity 
+              activeOpacity={0.8} 
+              style={[styles.wrap, styles.right]}>
+                <Image style={icon} source={require('image!icon-conv-plus')}/>
+            </TouchableOpacity>
         );
     }
 }
