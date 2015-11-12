@@ -227,7 +227,6 @@ var ActivityApply = React.createClass({
     },
 
     renderCommon: function() {
-
         return (
             <View>
 				<View style={styles.separator}></View>
@@ -265,29 +264,16 @@ var ActivityApply = React.createClass({
     },
 
     addCarHandle: function() {
-        var carType = this.state.selfRideDatas.carType || '';
-        var carNumber = this.state.selfRideDatas.carNumber || '';
-
-        var car = carType && carNumber ? (carType + ' （' + carNumber + '）') : '';
         this.props.navigator.push(new ActivityChooseCar({
             getCarHandle: this.getCarHandle,
-            car: car
+            car: this.state.selfRideDatas
         }));
     },
 
     getCarHandle: function(data) {
-        var index = data.indexOf(' ');
-
-        if (index != -1) {
-            var carType = data.substring(0, index);
-            var carNumber = data.substring(index + 2, data.length - 1);
-            var datas = this.state.selfRideDatas;
-            datas.carType = carType;
-            datas.carNumber = carNumber;
-            this.setState({
-                selfRideDatas: datas
-            });
-        }
+        this.setState({
+            selfRideDatas: data
+        });
     },
 
     renderContent: function() {
