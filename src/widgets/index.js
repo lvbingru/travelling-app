@@ -7,6 +7,8 @@ var Tag = require('./Tag');
 var icons = require('./icons');
 var baseComponents = require('./baseComponents');
 var ItemInfo = require('./ItemInfo');
+var Line = require('./Line');
+var LettersView = require('./LettersView');
 
 module.exports = {
     Button,
@@ -16,6 +18,8 @@ module.exports = {
     ActivityRoute,
     ActivityPublishDate,
     ItemInfo,
+    Line,
+    LettersView,
     ...icons,
     ...baseComponents
 };
