@@ -3,6 +3,7 @@ var React = require('react-native');
 var {
     Text,
     TextInput,
+    TouchableOpacity,
     StyleSheet
 } = React;
 
@@ -21,8 +22,22 @@ var BaseText = React.createClass({
 var BaseTextInput = React.createClass({
     render: function() {
         return (
-            <TextInput {...this.props} 
+            <TextInput 
+                {...this.props}
                 style={[styles.textInput, this.props.style]}/>
+        );
+    }
+});
+
+var BaseTouchableOpacity = React.createClass({
+    
+    displayName: 'BaseTouchableOpacity',
+
+    render: function() {
+        return (
+            <TouchableOpacity
+                {...this.props}
+                activeOpacity={this.props.activeOpacity || 0.8}/>
         );
     }
 });
@@ -41,6 +56,7 @@ var styles = StyleSheet.create({
 
 module.exports = {
     BaseText,
+    BaseTouchableOpacity,
     BaseTextInput
 };
 
