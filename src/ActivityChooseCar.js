@@ -1,4 +1,5 @@
 var React = require('react-native');
+var _ = require('underscore');
 
 var {
 	View,
@@ -57,12 +58,31 @@ var ActivityChooseCar = React.createClass({
 
 	editHandle: function() {
 		this.props.navigator.push(new AddOrEditCar({
-			car: this.state.carArray[this.state.chooseIndex]
+			car: this.state.carArray[this.state.chooseIndex],
+			addCar: this.editCar
 		}))
 	},
 
+	editCar: function(car) {
+		var carArray = _.clone(this.state.carArray);
+		carArray[this.state.chooseIndex] = car;
+
+		this.setState({
+			carArray: carArray
+		})
+	},
+
+	addCar: function(car) {
+		var carArray = _.clone(this.state.carArray);
+		carArray.push(car);
+
+		this.setState({
+			carArray: carArray
+		})
+	},
+
 	addHandle: function() {
-		this.props.navigator.push(new AddOrEditCar());
+		this.props.navigator.push(new AddOrEditCar({addCar: this.addCar}));
 	},
 
 	renderChooseImage: function(index) {

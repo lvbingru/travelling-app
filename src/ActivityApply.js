@@ -248,14 +248,14 @@ var ActivityApply = React.createClass({
 						<Text style={styles.subItemText}>成人</Text>
 						<TextInput style={styles.subItemEdit} 
 							onChangeText={this._changeCommon('peopleNum')}
-							value={String(this.state.common.peopleNum)} 
+							value={String(this.state.common.peopleNum || '')} 
 							keyboardType='numeric'/>
 					</View>
 					<View style={styles.subItemViewLast}>
 						<Text style={styles.subItemText}>小孩</Text>
 						<TextInput style={styles.subItemEdit} 
 							onChangeText={this._changeCommon('childNum')}
-							value={String(this.state.common.childNum)} 
+							value={String(this.state.common.childNum || '')} 
 							keyboardType='numeric'/>
 					</View>
 				</View>

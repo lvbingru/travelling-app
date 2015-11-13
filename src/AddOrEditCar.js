@@ -1,4 +1,5 @@
 var React = require('react-native');
+var _ = require('underscore');
 
 var {
 	View,
@@ -21,7 +22,23 @@ var AddOrEditCar = React.createClass({
 	},
 
 	chooseCarType: function() {
-		this.props.navigator.push(new ChooseCarType());
+		this.props.navigator.push(new ChooseCarType(this.setCarType));
+	},
+
+	getCar: function() {
+		return this.state.car;
+	},
+
+	setCarType: function(carType) {
+		var car = _.clone(this.state.car);
+		car.carType = carType;
+		this.setState({car});
+	},
+
+	setCarNumber: function(carNumber) {
+		var car = _.clone(this.state.car);
+		car.carNumber = carNumber;
+		this.setState({car});
 	},
 
 	render: function() {
@@ -45,7 +62,7 @@ var AddOrEditCar = React.createClass({
 						<View style={styles.subItemViewLast}>
 							<Text style={styles.subItemText}>车辆牌照</Text>
 							<TextInput style={styles.subItemEdit} 
-								onChangeText={(carNumber) => {this.setState({carNumber})}}
+								onChangeText={this.setCarNumber}
 								value={car.carNumber}/>
 						</View>
 					</View>
@@ -173,6 +190,7 @@ class AddOrEditCarRoute extends BaseRouteMapper {
 		super();
 
 		this.car = data && data.car;
+		this.addCar = data && data.addCar;
 	}
 
 	renderLeftButton(route, navigator, index, navState) {
@@ -181,10 +199,17 @@ class AddOrEditCarRoute extends BaseRouteMapper {
 
 	renderRightButton(route, navigator, index, navState) {
         return (
-            <TouchableOpacity style={styles.rightButton}>
+            <TouchableOpacity style={styles.rightButton}
+            	onPress={this.saveHandle.bind(this, navigator)}>
 				<Text style={styles.editText}>保存</Text>
 			</TouchableOpacity>
         );
+    }
+
+    saveHandle(navigator) {
+    	var car = this._root.getCar();
+    	this.addCar(car);
+    	navigator.pop();
     }
 
 	get title() {
