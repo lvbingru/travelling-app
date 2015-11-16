@@ -367,7 +367,9 @@ class Route extends BaseRouteMapper {
         return (
             <TouchableOpacity 
               style={[styles.wrap, styles.right]}>
-                <Image style={icon} source={require('image!icon-conv-plus')}/>
+                <Image
+                    style={icon}
+                    source={require('image!icon-conv-plus')}/>
             </TouchableOpacity>
         );
     }
