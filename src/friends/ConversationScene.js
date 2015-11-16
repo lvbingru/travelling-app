@@ -98,7 +98,8 @@ var BottomBar = React.createClass({
 
     getInitialState: function() {
         return {
-            mode: 'text'
+            mode: 'text',
+            textMsg: ''
         }
     },
 
@@ -127,18 +128,28 @@ var BottomBar = React.createClass({
         };
 
         AudioRecorder.onFinished = (data) => {
-            log(`Finished recording ${data}`);
-            this.state.status = 'playing';
+            log('Finished recording', data);
+            if (this.state.status === 'pre-cancelled') {
+                warn('Audio message is cancelled');
+                return AudioRecorder.deleteRecording();
+            }
+
+            if (data.status !== 'OK') {
+                this.state.status = 'error';
+                return warn('fail to record');
+            }
+
+            this.state.status = 'end';
             var audioPath = this.state.audioPath;
             var url = `file://${RNFS.DocumentDirectoryPath}/${audioPath}`;
-            log('url', url);
+            log('audio url', url);
 
-            this.props.onAudioRecorded &&
-                this.props.onAudioRecorded({
-                    name: audioPath,
-                    type: 'audio/aac',
-                    uri: url
-                });
+            this.props.onAudioRecorded && this.props.onAudioRecorded({
+                ...data,
+                name: audioPath,
+                type: 'audio/aac',
+                uri: url
+            });
         };
 
         AudioRecorder.onError = (data) => {
@@ -152,13 +163,25 @@ var BottomBar = React.createClass({
 
     _handleTouchEnd: function() {
         AudioRecorder.stopRecording();
+        this.state.status = 'pre-end';
     },
 
     _handleTouchCancelled: function() {
         AudioRecorder.stopRecording();
+        this.state.status = 'pre-cancelled';
         // this.state.status = null;
         // this.props.onAudioCancelled &&
         // this.props.onAudioCancelled();
+    },
+
+    getTextMessage: function() {
+        return this.state.textMsg;
+    },
+
+    clearTextMessage: function() {
+        this.setState({
+            textMsg: ''
+        });
     },
 
     render: function() {
@@ -179,6 +202,8 @@ var BottomBar = React.createClass({
                             onSubmitEditing={this.props.onSubmitEditing}
                             onBlur={this.props.onBlur}
                             onFocus={this.props.onFocus}
+                            value={this.state.textMsg}
+                            onChangeText={(textMsg) => this.setState({textMsg})}
                             style={styles.textInput}/>
                     </View>}
 
@@ -234,14 +259,9 @@ var ConversationScene = React.createClass({
         rt.on('open', () => {
             log('realtime open');
 
-            self.room = rt.room({
-                members: [
-                    'yangchen',
-                    'jarvis'
-                ],
-                data: {
-                    title: 'testTitle'
-                }
+            rt.conv('5649cfb360b2ed36205025e0', function(room) {
+                self.room = room;
+                self._onRootCreated();
             });
         });
 
@@ -255,10 +275,6 @@ var ConversationScene = React.createClass({
 
         rt.on('create', (data) => {
             log('create', data);
-            if (data.cid === self.room.id) {
-                self._onRootCreated();
-
-            }
         });
     },
 
@@ -288,22 +304,40 @@ var ConversationScene = React.createClass({
     _onSubmit: function() {
         log('on submit');
         this.refs.scrollView.scrollTo(0);
-
-        // TODO: send message
+        var textMsg = this.refs.bottomBar.getTextMessage();
+        this.room.send({
+            text: textMsg
+        }, {
+            type: 'text'
+        }, function(data) {
+            log('message result', data);
+        });
+        this.refs.bottomBar.clearTextMessage();
     },
 
     _onAudioRecorded: function(audio) {
         var file = new AV.File(audio.name, {
             blob: audio
-        });
+        }, audio.type);
 
+        file.metaData('size', audio.size);
+        file.metaData('format', audio.type);
+        file.metaData('duration', audio.duration);
+
+        var self = this;
         file.save().then(function() {
-            this.room.send(file, {
+            log('send audio message');
+            var data = file.toJSON();
+            self.room.send({
+                url: file.url(),
+                objectId: file.id,
+                metaData: file.metaData()
+            }, {
                 type: 'audio'
             }, function(data) {
                 log('msg result', data);
             });
-        });
+        }).catch(e => error(e));
     },
 
     render: function() {
