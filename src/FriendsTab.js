@@ -20,39 +20,8 @@ var {
 // override default Text Component
 var Text = BaseText;
 
-var realtime = require('leancloud-realtime');
 var stylesVar = require('./stylesVar');
 var su = require('./styleUtils');
-
-var EventEmitter = require('EventEmitter');
-
-class WebSocketImpl extends WebSocket {
-
-    constructor(url, protocols) {
-        super(url, protocols);
-        this._emitter = new EventEmitter();
-    }
-
-    addEventListener(eventType, listener) {
-        return this._emitter.addListener(eventType, listener);
-    }
-
-    onopen() {
-        this._emitter.emit('open', {});
-    }
-
-    onmessage(event) {
-        this._emitter.emit('message', event);
-    }
-
-    onclose(event) {
-        this._emitter.emit('close', event);
-    }
-
-    onerror(error) {
-        this._emitter.emit('error', error);
-    }
-}
 
 var clientId = 'hello'
 
@@ -155,26 +124,7 @@ var FriendsTab = React.createClass({
     },
 
     componentDidMount: function() {
-        // realtime.config({
-        //     WebSocket: WebSocketImpl
-        // });
-
-        // var rt = realtime({
-        //     appId: '5jqgy6q659ljyldiik70cev6d8n7t1ixolt6rd7k6p1n964d',
-        //     clientId: clientId
-        // })
-
-        // rt.on('open', function() {
-        //     console.log('realtime open');
-        // });
-
-        // rt.on('message', function(data) {
-        //     console.log('message', data);
-        // });
-
-        // rt.on('close', function() {
-        //     console.log('realtime close');
-        // });
+        
     },
 
     render: function() {

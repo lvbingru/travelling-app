@@ -12,12 +12,14 @@ var {
     View,
 } = React;
 
+var api = require('../api');
+var {
+    AV
+} = api;
 var RNFS = require('react-native-fs');
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
-
-var keyMirror = require('keyMirror');
 
 var shortid = require('shortid');
 var {
@@ -53,148 +55,8 @@ var log = debug('Contact:log');
 var warn = debug('Contact:warn');
 var error = debug('Contact:error');
 
-var AudioButton = React.createClass({
-
-    statics: {
-        styles: StyleSheet.create({
-            wrap: {
-                flex: 1,
-                height: 28,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: stylesVar('bg-gray'),
-                borderWidth: 1 / PixelRatio.get(),
-                borderColor: '#c8c8cd',
-                borderRadius: 5
-            },
-
-            highlight: {
-                backgroundColor: stylesVar('dark-mid'),
-                borderColor: stylesVar('dark-mid'),
-            }
-        }),
-
-        THREHOLD: 40,
-
-        States: keyMirror({
-            INITIALIZED: null,
-            TOUCH_IN: null,
-            TOUCH_OUT: null,
-            RELEASE: null
-        })
-    },
-
-    getInitialState: function() {
-        return {
-            touchState: AudioButton.States.INITIALIZED,
-            size: null
-        };
-    },
-
-    _performTransition: function(curTouchState, nextTouchState) {
-        log(curTouchState, nextTouchState);
-        if (curTouchState === nextTouchState) {
-            return;
-        }
-
-        if (nextTouchState === AudioButton.States.TOUCH_OUT) {
-            this.props.handleTouchOut && this.props.handleTouchOut();
-        }
-
-        if (nextTouchState === AudioButton.States.TOUCH_IN) {
-            this.props.handleTouchIn && this.props.handleTouchIn();
-        }
-
-        if (nextTouchState === AudioButton.States.RELEASE) {
-            if (curTouchState === AudioButton.States.TOUCH_IN) {
-                this.props.handleTouchEnd &&
-                    this.props.handleTouchEnd();
-            } else if (curTouchState === AudioButton.States.TOUCH_OUT) {
-                this.props.handleTouchCancelled &&
-                    this.props.handleTouchCancelled();
-            }
-        }
-    },
-
-    _responderGrant: function(e) {
-        this._performTransition(this.state.touchState, AudioButton.States.TOUCH_IN);
-        this.setState({
-            touchState: AudioButton.States.TOUCH_IN
-        });
-    },
-
-    _responderMove: function(e) {
-        this.refs.view.measure((fx, fy, width, height) => {
-            this.state.size = {
-                width: width,
-                height: height
-            };
-        });
-
-        if (!this.state.size) {
-            return;
-        }
-
-        var locationX = e.nativeEvent.locationX;
-        var locationY = e.nativeEvent.locationY;
-
-        var touchIsIn = locationX >= 0 &&
-            locationX <= this.state.size.width &&
-            locationY >= -AudioButton.THREHOLD &&
-            locationY <= this.state.size.height;
-
-        var nextTouchState = touchIsIn ?
-            AudioButton.States.TOUCH_IN :
-            AudioButton.States.TOUCH_OUT;
-
-        var curTouchState = this.state.touchState;
-        this._performTransition(curTouchState, nextTouchState);
-        this.setState({
-            touchState: nextTouchState
-        });
-    },
-
-    _responderEnd: function(e) {
-        var nextTouchState = AudioButton.States.RELEASE;
-        var curTouchState = this.state.touchState;
-        this._performTransition(curTouchState, nextTouchState);
-        this.setState({
-            touchState: nextTouchState
-        });
-    },
-
-    _isRecording: function() {
-        return this.state.touchState === AudioButton.States.TOUCH_IN ||
-            this.state.touchState === AudioButton.States.TOUCH_OUT;
-    },
-
-    render: function() {
-        var styles = AudioButton.styles;
-        var wrapStyle = [styles.wrap];
-        if (this._isRecording()) {
-            wrapStyle.push(styles.highlight);
-        }
-        wrapStyle.push(this.props.style);
-
-        var buttonText = this._isRecording() ? '松开 结束' : '按住 说话';
-
-        return (
-            <View
-                ref="view"
-                onStartShouldSetResponder={() => true}
-                onResponderTimernationRequest={() => true}
-                onResponderGrant={this._responderGrant}
-                onResponderMove={this._responderMove}
-                onResponderRelease={this._responderEnd}
-                onResponderTerminate={this._responderEnd}
-                style={wrapStyle}>
-                <Text style={[styles.input, styles.audioText]}>
-                    {buttonText}
-                </Text>
-            </View>
-        );
-    }
-});
+var WebSocketImpl = require('./WebSocketImpl');
+var AudioButton = require('./AudioButton');
 
 var BottomBar = React.createClass({
 
@@ -257,15 +119,30 @@ var BottomBar = React.createClass({
         }
 
         this.state.status = 'recording';
-        this.state.audioPath = `/audio-${shortid.generate()}.caf`;
-        AudioRecorder.prepareRecordingAtPath(this.state.audioPath);
+        this.state.audioPath = `audio-${shortid.generate()}.aac`;
+        AudioRecorder.prepareRecordingAtPath('/' + this.state.audioPath);
         AudioRecorder.startRecording();
         AudioRecorder.onProgress = (data) => {
             log('recording', data.currentTime);
         };
 
         AudioRecorder.onFinished = (data) => {
-            log(`Finished recording`)
+            log(`Finished recording ${data}`);
+            this.state.status = 'playing';
+            var audioPath = this.state.audioPath;
+            var url = `file://${RNFS.DocumentDirectoryPath}/${audioPath}`;
+            log('url', url);
+
+            this.props.onAudioRecorded &&
+                this.props.onAudioRecorded({
+                    name: audioPath,
+                    type: 'audio/aac',
+                    uri: url
+                });
+        };
+
+        AudioRecorder.onError = (data) => {
+            error('recording error', data);
         };
     },
 
@@ -275,15 +152,13 @@ var BottomBar = React.createClass({
 
     _handleTouchEnd: function() {
         AudioRecorder.stopRecording();
-        this.state.status = 'playing';
-        var url = 'file://' + RNFS.DocumentDirectoryPath + this.state.audioPath;
-        log('url', url);
-        AudioPlayer.playWithUrl(url);
     },
 
     _handleTouchCancelled: function() {
         AudioRecorder.stopRecording();
-        this.state.status = null;
+        // this.state.status = null;
+        // this.props.onAudioCancelled &&
+        // this.props.onAudioCancelled();
     },
 
     render: function() {
@@ -309,6 +184,7 @@ var BottomBar = React.createClass({
 
                     {this.state.mode === 'audio' &&
                     <AudioButton
+                        disabled={this.props.disabled}
                         handleTouchIn={this._handleTouchIn}
                         handleTouchOut={this._handleTouchOut}
                         handleTouchEnd={this._handleTouchEnd}
@@ -336,11 +212,62 @@ var ConversationScene = React.createClass({
         });
 
         return {
-            dataSource
+            dataSource,
+            disabled: true
         };
     },
 
-    componentDidMount: function() {},
+    componentDidMount: function() {
+        var realtime = require('leancloud-realtime');
+
+        realtime.config({
+            WebSocket: WebSocketImpl
+        });
+
+        var rt = realtime({
+            appId: '5jqgy6q659ljyldiik70cev6d8n7t1ixolt6rd7k6p1n964d',
+            clientId: 'yangchen'
+        });
+
+        var self = this;
+
+        rt.on('open', () => {
+            log('realtime open');
+
+            self.room = rt.room({
+                members: [
+                    'yangchen',
+                    'jarvis'
+                ],
+                data: {
+                    title: 'testTitle'
+                }
+            });
+        });
+
+        rt.on('message', function(data) {
+            log('message', data);
+        });
+
+        rt.on('close', function() {
+            log('realtime close');
+        });
+
+        rt.on('create', (data) => {
+            log('create', data);
+            if (data.cid === self.room.id) {
+                self._onRootCreated();
+
+            }
+        });
+    },
+
+    _onRootCreated: function() {
+        log('room created');
+        this.setState({
+            disabled: false
+        });
+    },
 
     _onFocus: function() {
         setImmediate(() => {
@@ -365,8 +292,18 @@ var ConversationScene = React.createClass({
         // TODO: send message
     },
 
-    _onLongPress: function() {
+    _onAudioRecorded: function(audio) {
+        var file = new AV.File(audio.name, {
+            blob: audio
+        });
 
+        file.save().then(function() {
+            this.room.send(file, {
+                type: 'audio'
+            }, function(data) {
+                log('msg result', data);
+            });
+        });
     },
 
     render: function() {
@@ -379,7 +316,8 @@ var ConversationScene = React.createClass({
                     dataSource={this.state.dataSource}
                     style={styles.content}/>
                 <BottomBar
-                    onLongPress={this._onLongPress}
+                    disabled={this.state.disabled}
+                    onAudioRecorded={this._onAudioRecorded}
                     ref="bottomBar"
                     style={styles.bottomBar}
                     onSubmitEditing={this._onSubmit}
