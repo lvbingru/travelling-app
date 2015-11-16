@@ -431,6 +431,135 @@ var activity = {
         });
     },
 
+    fetchAllCarType: function() {
+        return new Promise(function(resolve, reject) {
+            var dataBlob = {
+                'A': [
+                    {
+                        'name': '阿尔法罗密欧',
+                        'active': false
+                    }, {
+                        'name': '阿斯顿·马丁',
+                        'active': false
+                    }, {
+                        'name': '一汽-大众奥迪',
+                        'active': false
+                    }, {
+                        'name': '阿斯顿·马丁',
+                        'active': false
+                    }
+                ],
+                'B': [
+                    {
+                        'name': '阿尔法罗密欧',
+                        'active': false
+                    }, {
+                        'name': '阿斯顿·马丁',
+                        'active': false
+                    }, {
+                        'name': '一汽-大众奥迪',
+                        'active': false
+                    }, {
+                        'name': '阿斯顿·马丁',
+                        'active': false
+                    }
+                ],
+                'C': [
+                    {
+                        'name': '阿尔法罗密欧',
+                        'active': false
+                    }, {
+                        'name': '阿斯顿·马丁',
+                        'active': false
+                    }, {
+                        'name': '一汽-大众奥迪',
+                        'active': false
+                    }, {
+                        'name': '阿斯顿·马丁',
+                        'active': false
+                    }
+                ],
+                'D': [
+                    {
+                        'name': '阿尔法罗密欧',
+                        'active': false
+                    }, {
+                        'name': '阿斯顿·马丁',
+                        'active': false
+                    }, {
+                        'name': '一汽-大众奥迪',
+                        'active': false
+                    }, {
+                        'name': '阿斯顿·马丁',
+                        'active': false
+                    }
+                ],
+                'E': [
+                    {
+                        'name': '阿尔法罗密欧',
+                        'active': false
+                    }, {
+                        'name': '阿斯顿·马丁',
+                        'active': false
+                    }, {
+                        'name': '一汽-大众奥迪',
+                        'active': false
+                    }, {
+                        'name': '阿斯顿·马丁',
+                        'active': false
+                    }
+                ],
+                'F': [
+                    {
+                        'name': '阿尔法罗密欧',
+                        'active': false
+                    }, {
+                        'name': '阿斯顿·马丁',
+                        'active': false
+                    }, {
+                        'name': '一汽-大众奥迪',
+                        'active': false
+                    }, {
+                        'name': '阿斯顿·马丁',
+                        'active': false
+                    }
+                ]
+            }
+
+            setTimeout(function() {
+                resolve(dataBlob);
+            }, 400);
+        });
+    },
+
+    fetchSubitemCarType: function(carType) {
+        return new Promise(function(resolve, reject) {
+            var dataBlobCover = {
+                '一汽-大众奥迪': [
+                    '奥迪A3',
+                    '奥迪A4L',
+                    '奥迪A6L',
+                    '奥迪Q5'
+                ],
+                '奥迪(进口)': [
+                    '奥迪A1',
+                    '奥迪A3(进口)',
+                    '奥迪S3',
+                    '奥迪A4(进口)'
+                ],
+                '奥迪R5': [
+                    '奥迪RS 3',
+                    '奥迪RS 4',
+                    '奥迪RS 5',
+                    '奥迪RS 7'
+                ]
+            }
+            setTimeout(function() {
+                resolve(dataBlobCover);
+            }, 400);
+        });
+    },
+
     publish: function(data) {
         var cover = data.cover;
 

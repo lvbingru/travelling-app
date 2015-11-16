@@ -227,7 +227,6 @@ var ActivityApply = React.createClass({
     },
 
     renderCommon: function() {
-
         return (
             <View>
 				<View style={styles.separator}></View>
@@ -249,14 +248,14 @@ var ActivityApply = React.createClass({
 						<Text style={styles.subItemText}>成人</Text>
 						<TextInput style={styles.subItemEdit} 
 							onChangeText={this._changeCommon('peopleNum')}
-							value={String(this.state.common.peopleNum)} 
+							value={String(this.state.common.peopleNum || '')} 
 							keyboardType='numeric'/>
 					</View>
 					<View style={styles.subItemViewLast}>
 						<Text style={styles.subItemText}>小孩</Text>
 						<TextInput style={styles.subItemEdit} 
 							onChangeText={this._changeCommon('childNum')}
-							value={String(this.state.common.childNum)} 
+							value={String(this.state.common.childNum || '')} 
 							keyboardType='numeric'/>
 					</View>
 				</View>
@@ -265,29 +264,16 @@ var ActivityApply = React.createClass({
     },
 
     addCarHandle: function() {
-        var carType = this.state.selfRideDatas.carType || '';
-        var carNumber = this.state.selfRideDatas.carNumber || '';
-
-        var car = carType && carNumber ? (carType + ' （' + carNumber + '）') : '';
         this.props.navigator.push(new ActivityChooseCar({
             getCarHandle: this.getCarHandle,
-            car: car
+            car: this.state.selfRideDatas
         }));
     },
 
     getCarHandle: function(data) {
-        var index = data.indexOf(' ');
-
-        if (index != -1) {
-            var carType = data.substring(0, index);
-            var carNumber = data.substring(index + 2, data.length - 1);
-            var datas = this.state.selfRideDatas;
-            datas.carType = carType;
-            datas.carNumber = carNumber;
-            this.setState({
-                selfRideDatas: datas
-            });
-        }
+        this.setState({
+            selfRideDatas: data
+        });
     },
 
     renderContent: function() {

@@ -17,6 +17,7 @@ var RefreshableListView = require('react-native-refreshable-listview');
 var stylesVar = require('./stylesVar'); 
 var activityApi = require('./api').activity;
 var LightBox = require('./LightBox');
+var AddComment = require('./AddComment');
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
@@ -101,6 +102,12 @@ var CommentList = React.createClass({
 
     },
 
+    addComment: function() {
+    	this.props.navigator.push(new AddComment({
+    		id: this.props.id
+    	}))
+    },
+
 	render: function() {
 		return (
 			<View style={styles.container}>
@@ -113,7 +120,7 @@ var CommentList = React.createClass({
 					loadData={this._onRefresh} >
 				</RefreshableListView>
 				<View style={styles.bottomBar}>
-					<TouchableOpacity>
+					<TouchableOpacity onPress={this.addComment}>
 						<Text style={styles.bottomText}>发表评论</Text>
 					</TouchableOpacity>
 				</View>
@@ -126,6 +133,19 @@ var CommentItem = React.createClass({
 	starHandle: function() {
 		//todo
 		this.props.fresh();
+	},
+
+	renderLikeImage: function() {
+		var data = this.props.data;
+		if (data.isLike === '1') {
+			return <Image style={styles.starIcon} source={require('image!like-red')} />
+		} else {
+			return (
+				<TouchableOpacity onPress={this.starHandle}>
+					<Image style={styles.starIcon} source={require('image!like-gray')} />
+				</TouchableOpacity>
+			);
+		}
 	},
 
 	render: function() {
@@ -141,17 +161,7 @@ var CommentItem = React.createClass({
 					</View>
 					<View style={styles.star}>
 						<Text style={styles.starText}>{data.star}</Text>
-						{() => function() {
-							if (data.isLike === '1') {
-								return <Image style={styles.starIcon} source={require('image!like-red')} />
-							} else {
-								return (
-									<TouchableOpacity onPress={this.starHandle}>
-										<Image style={styles.starIcon} source={require('image!like-gray')} />
-									</TouchableOpacity>
-								);
-							}
-						}}
+						{this.renderLikeImage()}
 					</View>
 				</View>
 				<View style={styles.info}>

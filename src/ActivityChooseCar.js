@@ -1,4 +1,5 @@
 var React = require('react-native');
+var _ = require('underscore');
 
 var {
 	View,
@@ -11,17 +12,27 @@ var {
 } = React;
 
 var stylesVar = require('./stylesVar');
+var AddOrEditCar = require('./AddOrEditCar');
 
 var ActivityChooseCar = React.createClass({
 	getInitialState: function() {
-		var carArray = ['牧马人／2014款 （京PN8S88）', '牧马人／2015款 （京PN8S88）', '牧马人／2016款 （京PN8S88）'];
+		var carArray = [{
+			carType: '牧马人／2014款',
+			carNumber: '京PN8S88'
+		}, {
+			carType: '牧马人／2015款',
+			carNumber: '京PN8S88'
+		}, {
+			carType: '牧马人／2016款',
+			carNumber: '京PN8S88'
+		}];
 		var chooseIndex = 0;
 		var car = this.props.car;
 		if (car) {
 			chooseIndex = (function() {
 				var length = carArray.length;
 				for (var i = 0; i < length; i++) {
-					if (car == carArray[i]) {
+					if (car.carType == carArray[i].carType && car.carNumber == carArray[i].carNumber) {
 						return i
 					}
 				}
@@ -45,8 +56,43 @@ var ActivityChooseCar = React.createClass({
 		return this.state.carArray[this.state.chooseIndex];
 	},
 
-	addCarHandle: function() {
+	editHandle: function() {
+		this.props.navigator.push(new AddOrEditCar({
+			car: this.state.carArray[this.state.chooseIndex],
+			addCar: this.editCar
+		}))
+	},
 
+	editCar: function(car) {
+		var carArray = _.clone(this.state.carArray);
+		carArray[this.state.chooseIndex] = car;
+
+		this.setState({
+			carArray: carArray
+		})
+	},
+
+	addCar: function(car) {
+		var carArray = _.clone(this.state.carArray);
+		carArray.push(car);
+
+		this.setState({
+			carArray: carArray
+		})
+	},
+
+	addHandle: function() {
+		this.props.navigator.push(new AddOrEditCar({addCar: this.addCar}));
+	},
+
+	renderChooseImage: function(index) {
+		if (index === this.state.chooseIndex) {
+			return (
+				<View style={styles.okView}>
+					<Image style={styles.okImage} source={require('image!icon-ready')} />
+				</View>
+			);
+		}
 	},
 
 	render: function() {
@@ -60,22 +106,14 @@ var ActivityChooseCar = React.createClass({
 						return (
 							<TouchableOpacity style={itemStyle} activeOpacity={1} 
 								onPress={this.changeChooseState.bind(this, index)}>
-								<Text style={styles.text}>{item}</Text>
-								{() => {
-									if (index === this.state.chooseIndex) {
-										return (
-											<View style={styles.okView}>
-												<Image style={styles.okImage} source={require('image!icon-ready')} />
-											</View>
-										);
-									}
-								}()}
+								<Text style={styles.text}>{item.carType + ' （' + item.carNumber + '）'}</Text>
+								{this.renderChooseImage(index)}
 							</TouchableOpacity>	
 						);
 					}.bind(this))}
 					</View>
 				</ScrollView>
-				<TouchableOpacity onPress={this.addCarHandle} style={styles.bottomView}>
+				<TouchableOpacity onPress={this.addHandle} style={styles.bottomView}>
 					<Text style={styles.bottomText}>添加车辆</Text>
 				</TouchableOpacity>
 			</View>
@@ -168,7 +206,18 @@ var styles = StyleSheet.create({
 
 	rightButton: {
 		marginRight: 15
-	}
+	},
+
+	editText: {
+		fontSize: 14,
+        fontWeight: '300',
+        color: '#fff',
+        marginTop: 15
+	},
+
+	rightButton: {
+        marginRight: 15
+    }
 });
 
 var BaseRouteMapper = require('./BaseRouteMapper');
@@ -190,6 +239,14 @@ class ActivityChooseCarRoute extends BaseRouteMapper {
 
 		return this._renderBackButton(route, navigator, index, navState, callback);
 	}
+
+	renderRightButton(route, navigator, index, navState) {
+        return (
+            <TouchableOpacity onPress={() => {this._root.editHandle()}} style={styles.rightButton}>
+				<Text style={styles.editText}>编辑</Text>
+			</TouchableOpacity>
+        );
+    }
 
 	get title() {
 		return '选择出行车辆';

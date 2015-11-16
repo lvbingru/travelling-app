@@ -23,6 +23,7 @@ var su = require('./styleUtils');
 var stylesVar = require('./stylesVar');
 var fetchMoreDetail = require('./api').activity.fetchMoreDetail;
 var Tab = require('./widgets/Tab');
+var userApi = require('./api').user;
 var CommentList = require('./CommentList');
 
 var {
@@ -165,7 +166,8 @@ var ActivityMoreDetail = React.createClass({
                 <Animated.View style={[styles.partContainer, {transform: [{translateY: this.state.translateY}]}]} >
                 <ScrollView style={styles.scrollContainer} >
                     <Tab datas={['路线说明', '详细行程', '注意事项', '风险提示']}
-                        callbacks={callbacks} />
+                        callbacks={callbacks}
+                        activeTab={this.state.tab} />
                     {this.renderContent()}
                 </ScrollView>
                 </Animated.View>  
@@ -344,13 +346,40 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
         super()
 
         this.activity = data.activity;
+        this.stars = this.activity.getStars();
+        this.starred = this.activity.getStarred();
+        this.refreshStar = data.refreshStar;
     }
 
     renderLeftButton(route, navigator, index, navState) {
         return this._renderBackButton(route, navigator, index, navState, function() {
-            // this.resetScrollHandle();
+            this.refreshStar && this.refreshStar();
             navigator.pop();
         }.bind(this));
+    }
+
+    _toggleStar(navigator) {
+        if (!this.starred) {
+            userApi.starActivity(this.activity).then(function() {
+                this.stars++;
+                this.activity.setStars(this.stars);
+                this.starred = true;
+                this.activity.setStarred(true);
+                navigator.forceUpdate();
+            }.bind(this), function(e) {
+                console.trace(e);
+            });
+        } else {
+            userApi.unstarActivity(this.activity).then(function() {
+                this.stars--;
+                this.activity.setStars(this.stars);
+                this.starred = false;
+                this.activity.setStarred(false);
+                navigator.forceUpdate();
+            }.bind(this), function(e) {
+                console.trace(e);
+            });
+        }
     }
 
     renderRightButton(route, navigator, index, navState) {
@@ -382,6 +411,7 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
                 marginLeft: 5
             },
         });
+        var starIcon = this.starred ? require('image!icon-star') : require('image!icon-stars-o');
 
         return (
             <View style={navBarRightButton}>
@@ -390,8 +420,12 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
                         <Image style={styles.iconComments} source={require('image!icon-comments')}/>
                     </TouchableOpacity>
                     <Text style={styles.navbarText}>127</Text>
-                    <Image style={styles.iconStars} source={require('image!icon-stars-o')}/>
-                    <Text style={styles.navbarText}>19</Text>
+
+                    <TouchableOpacity activeOpacity={0.8} onPress={this._toggleStar.bind(this, navigator)}>
+                        <Image style={styles.iconStars} source={starIcon}/>
+                    </TouchableOpacity>
+                    <Text style={styles.navbarText}>{this.stars}</Text>
+
                     <Image style={styles.iconShare} source={require('image!icon-share')}/>
                 </View>
             </View>
