@@ -12,6 +12,8 @@ var {
     View,
 } = React;
 
+var RNFS = require('react-native-fs');
+
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
@@ -255,8 +257,7 @@ var BottomBar = React.createClass({
         }
 
         this.state.status = 'recording';
-        // this.state.audioPath = `/audio/tmp-${shortid.generate()}.caf`;
-        this.state.audioPath = `/tmp-test.caf`;
+        this.state.audioPath = `/audio-${shortid.generate()}.caf`;
         AudioRecorder.prepareRecordingAtPath(this.state.audioPath);
         AudioRecorder.startRecording();
         AudioRecorder.onProgress = (data) => {
@@ -275,7 +276,9 @@ var BottomBar = React.createClass({
     _handleTouchEnd: function() {
         AudioRecorder.stopRecording();
         this.state.status = 'playing';
-        AudioPlayer.play(this.state.audioPath);
+        var url = 'file://' + RNFS.DocumentDirectoryPath + this.state.audioPath;
+        log('url', url);
+        AudioPlayer.playWithUrl(url);
     },
 
     _handleTouchCancelled: function() {

@@ -168,7 +168,7 @@ var Home = React.createClass({
     },
 
     componentDidMount: function() {
-        return this._testRoute();
+        // return this._testRoute();
 
         Dispatcher.addListener('logout', function() {
             this.refs.navigator.resetTo(new SignIn)

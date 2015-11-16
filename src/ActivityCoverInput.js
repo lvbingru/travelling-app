@@ -8,7 +8,6 @@ var {
     StyleSheet
 } = React;
 
-var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 var LocalPhotoPicker = require('./LocalPhotoPicker');
 
 var su = require('./styleUtils');

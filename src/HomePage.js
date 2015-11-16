@@ -37,7 +37,7 @@ var HomePage = React.createClass({
 
     getInitialState: function() {
         return {
-            selectedTab: 'friends',
+            selectedTab: 'activities',
             notifCount: 0,
             presses: 0,
             dataSource: new ListView.DataSource({
