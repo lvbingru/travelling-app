@@ -131,6 +131,7 @@ var Home = React.createClass({
         // var Route = require('./src/FillActivityBrief');
         // var Route = require('./src/FillActivityDetail');
         // var Route = require('./src/ActivityFormSummary');
+        var Route = require('./src/LocalSeveralPhotoPicker');
         this.refs.navigator.replace(new Route({
             title: '本地相册',
             onResult: console.log.bind(console)
@@ -161,7 +162,7 @@ var Home = React.createClass({
     },
 
     componentDidMount: function() {
-        // return this._testRoute();
+        return this._testRoute();
 
         Dispatcher.addListener('logout', function() {
             this.refs.navigator.resetTo(new SignIn)
