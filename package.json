@@ -6,6 +6,7 @@
     "start": "node_modules/react-native/packager/packager.sh"
   },
   "dependencies": {
+    "async": "^1.5.0",
     "avoscloud-sdk": "^1.0.0-rc3",
     "color": "^0.10.1",
     "debug": "^2.2.0",

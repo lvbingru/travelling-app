@@ -20,6 +20,7 @@ var ActivityApplyInfo = require('./ActivityApplyInfo');
 var activityApi = require('./api').activity;
 var stylesVar = require('./stylesVar');
 var su = require('./styleUtils');
+var RecordActivityChoosePhoto = require('./RecordActivityChoosePhoto');
 
 var Mixin = {
     _apply: function() {
@@ -31,6 +32,10 @@ var Mixin = {
 
     _viewApplyInfo: function() {
         this.props.navigator.push(new ActivityApplyInfo(this.props.navigator, this.state.activity));
+    },
+
+    _recordActivity: function() {
+        this.props.navigator.push(new RecordActivityChoosePhoto());
     },
 
     renderBottom: function() {
@@ -97,7 +102,8 @@ var Mixin = {
                             <Image source={require('image!icon-picture-trans')} style={styles.iconPictureTrans} />
                             <Text style={styles.informationText}>分享照片</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.information, styles.red]} activeOpacity={0.8}>
+                        <TouchableOpacity style={[styles.information, styles.red]} activeOpacity={0.8}
+                            onPress={this._recordActivity}>
                             <Image source={require('image!icon-journey-trans')} style={styles.iconJourneyTrans} />
                             <Text style={styles.informationText}>写游记</Text>
                         </TouchableOpacity>

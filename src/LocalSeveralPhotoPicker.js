@@ -35,10 +35,9 @@ var CameraRollScene = React.createClass({
 		CameraRoll.getPhotos({
 			first: 65535
 		}, function(data) {
-			console.log(data);
 			var photos = data.edges.map(function(item) {
 				return {
-					photo: item.node.image,
+					photo: item.node,
 					checked: false
 				}
 			});
@@ -118,6 +117,11 @@ var CameraRollScene = React.createClass({
 		)
 	},
 
+	nextStep: function() {
+		var checked = this.state.checkedDataBlob;
+		this.props.nextStep(checked, this.props.navigator);
+	},
+
 	render: function() {
 		if (!this.state.dataSource) {
 			return null;
@@ -139,8 +143,8 @@ var CameraRollScene = React.createClass({
 						<View style={styles.numberView}>
 							<Text style={styles.numberText}>{this.state.checkedDataBlob.length}</Text>
 						</View>
-						<TouchableOpacity>
-							<Text style={styles.nextText}>下一步</Text>
+						<TouchableOpacity onPress={this.nextStep}>
+							<Text style={styles.nextText}>{this.props.nextText || '下一步'}</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -178,7 +182,7 @@ var Cell = React.createClass({
 				onLayout={this._onLayout}
 				activeOpacity={1} >
 				{this.state.layout &&
-					<Image source={{uri: this.props.data.photo.uri}} resizeMode="cover" style={[{
+					<Image source={{uri: this.props.data.photo.image.uri}} resizeMode="cover" style={[{
 						width: this.state.layout.width,
 						height: this.state.layout.height
 					}, styles.imageContainer]} >
@@ -209,7 +213,7 @@ var PreviewCell = React.createClass({
 					activeOpacity={1}
 					onLayout={this._onLayout}>
 					{this.state.layout &&
-						<Image source={{uri: this.props.data.photo.uri}} resizeMode="cover" style={[{
+						<Image source={{uri: this.props.data.photo.image.uri}} resizeMode="cover" style={[{
 							width: this.state.layout.width,
 							height: this.state.layout.height
 						}, styles.imageContainer]} />						
@@ -330,82 +334,7 @@ var styles = StyleSheet.create({
 		color: stylesVar('blue'),
 		fontSize: 13,
 		marginLeft: 7
-	},
-
-	tabView: {
-		flex: 1,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-
-	subTabView: {
-		flex: 1,
-		borderBottomWidth: 2,
-		borderColor: 'transparent',
-		paddingTop: 5,
-		paddingBottom: 7,
-		paddingHorizontal: 8
-	},
-
-	tab: {
-		color: '#fff',
-		fontSize: 13
-	},
-
-	activeTab: {
-		borderColor: '#fff'
 	}
 });
 
-var BaseRouteMapper = require('./BaseRouteMapper');
-class Route extends BaseRouteMapper {
-	constructor(params) {
-        super();
-        this._onResult = params.onResult;
-        this.activeTab = 0;
-    }
-
-    renderLeftButton() {
-        return this._renderBackButton.apply(this, arguments);
-    }
-
-    pressTab(index, navigator) {
-    	this.activeTab = index;
-    	navigator.forceUpdate();
-    }
-
-    renderTitle(route, navigator, index, navState) {
-    	var tab1Style = styles.subTabView;
-    	var tab2Style = styles.subTabView;
-
-    	if (this.activeTab === 0) {
-    		tab1Style = [styles.subTabView, styles.activeTab];
-    	} else {
-    		tab2Style = [styles.subTabView, styles.activeTab];
-    	}
-
-    	return (
-    		<View style={styles.tabView}>
-    			<TouchableOpacity activeOpacity={1}
-    				style={tab1Style}
-    				onPress={this.pressTab.bind(this, 0, navigator)}>
-    				<Text style={styles.tab}>本地相册</Text>
-    			</TouchableOpacity>
-    			<TouchableOpacity activeOpacity={1} 
-    				style={tab2Style}
-    				onPress={this.pressTab.bind(this, 1, navigator)}>
-    				<Text style={styles.tab}>活动相册</Text>
-    			</TouchableOpacity>
-    		</View>
-    	);
-    }
-
-    renderScene(navigator) {
-    	return (
-    		<CameraRollScene route={this} onResult={this._onResult} />
-    	);
-    }
-}
-
-module.exports = Route;
+module.exports = CameraRollScene;

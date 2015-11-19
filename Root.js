@@ -125,13 +125,15 @@ var Home = React.createClass({
     },
 
     _testRoute: function() {
-        var Route = require('./src/LocalPhotoPicker');
+        //var Route = require('./src/LocalPhotoPicker');
         // var Route = require('./src/ActivityApply');
         // var Route = require('./src/TestStretchy');
         // var Route = require('./src/FillActivityBrief');
         // var Route = require('./src/FillActivityDetail');
         // var Route = require('./src/ActivityFormSummary');
-        var Route = require('./src/LocalSeveralPhotoPicker');
+        //var Route = require('./src/LocalSeveralPhotoPicker');
+        //var Route = require('./src/RecordActivityChoosePhoto');
+        //var Route = require('./src/RecordActivityEdit');
         this.refs.navigator.replace(new Route({
             title: '本地相册',
             onResult: console.log.bind(console)
@@ -162,7 +164,7 @@ var Home = React.createClass({
     },
 
     componentDidMount: function() {
-        return this._testRoute();
+        //return this._testRoute();
 
         Dispatcher.addListener('logout', function() {
             this.refs.navigator.resetTo(new SignIn)
