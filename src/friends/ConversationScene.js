@@ -12,6 +12,10 @@ var {
     View,
 } = React;
 
+var {
+    humanDate
+} = require('../utils');
+
 var api = require('../api');
 var {
     AV
@@ -39,12 +43,6 @@ var {
     BaseTouchableOpacity
 } = require('../widgets');
 
-var Text = BaseText;
-var TextInput = BaseTextInput;
-var TouchableOpacity = BaseTouchableOpacity;
-
-var ContactItem = require('./ContactItem');
-
 // override default compnents
 var Text = BaseText;
 var TextInput = BaseTextInput;
@@ -55,186 +53,27 @@ var log = debug('Contact:log');
 var warn = debug('Contact:warn');
 var error = debug('Contact:error');
 
+var DateLabel = require('./DateLabel');
+var ContactItem = require('./ContactItem');
+var MessageView = require('./MessageView');
 var WebSocketImpl = require('./WebSocketImpl');
 var AudioButton = require('./AudioButton');
-
-var BottomBar = React.createClass({
-
-    statics: {
-        styles: StyleSheet.create({
-            row: {
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 44
-            },
-
-            bar: {
-                backgroundColor: stylesVar('bg-gray')
-            },
-
-            icon: {
-                ...su.size(28),
-                    resizeMode: 'contain',
-                    marginHorizontal: 5
-            },
-
-            inputWrap: {
-                flex: 1,
-                justifyContent: 'center',
-                marginRight: 5
-            },
-
-            textInput: {
-                height: 28,
-                paddingHorizontal: 6,
-                backgroundColor: 'white',
-                borderWidth: 1 / PixelRatio.get(),
-                borderColor: '#c8c8cd',
-                borderRadius: 5
-            }
-        })
-    },
-
-    getInitialState: function() {
-        return {
-            mode: 'text',
-            textMsg: ''
-        }
-    },
-
-    _toggleMode: function() {
-        this.setState({
-            mode: this.state.mode === 'audio' ? 'text' : 'audio'
-        });
-    },
-
-    _handleTouchIn: function() {
-        log('touch in');
-        if (this.state.status === 'recording') {
-            return;
-        }
-
-        if (this.state.status === 'playing') {
-            AudioPlayer.stop();
-        }
-
-        this.state.status = 'recording';
-        this.state.audioPath = `audio-${shortid.generate()}.aac`;
-        AudioRecorder.prepareRecordingAtPath('/' + this.state.audioPath);
-        AudioRecorder.startRecording();
-        AudioRecorder.onProgress = (data) => {
-            log('recording', data.currentTime);
-        };
-
-        AudioRecorder.onFinished = (data) => {
-            log('Finished recording', data);
-            if (this.state.status === 'pre-cancelled') {
-                warn('Audio message is cancelled');
-                return AudioRecorder.deleteRecording();
-            }
-
-            if (data.status !== 'OK') {
-                this.state.status = 'error';
-                return warn('fail to record');
-            }
-
-            this.state.status = 'end';
-            var audioPath = this.state.audioPath;
-            var url = `file://${RNFS.DocumentDirectoryPath}/${audioPath}`;
-            log('audio url', url);
-
-            this.props.onAudioRecorded && this.props.onAudioRecorded({
-                ...data,
-                name: audioPath,
-                type: 'audio/aac',
-                uri: url
-            });
-        };
-
-        AudioRecorder.onError = (data) => {
-            error('recording error', data);
-        };
-    },
-
-    _handleTouchOut: function() {
-        log('touch out');
-    },
-
-    _handleTouchEnd: function() {
-        AudioRecorder.stopRecording();
-        this.state.status = 'pre-end';
-    },
-
-    _handleTouchCancelled: function() {
-        AudioRecorder.stopRecording();
-        this.state.status = 'pre-cancelled';
-        // this.state.status = null;
-        // this.props.onAudioCancelled &&
-        // this.props.onAudioCancelled();
-    },
-
-    getTextMessage: function() {
-        return this.state.textMsg;
-    },
-
-    clearTextMessage: function() {
-        this.setState({
-            textMsg: ''
-        });
-    },
-
-    render: function() {
-        var styles = BottomBar.styles;
-
-        return (
-            <View style={this.props.style}>
-                <View style={[styles.row, styles.bar]}>
-                    <TouchableOpacity
-                        onPress={this._toggleMode}>
-                        <Image style={styles.icon}
-                            source={require('image!icon-switch-to-audio')}/>
-                    </TouchableOpacity>
-
-                    {this.state.mode === 'text' &&
-                    <View style={styles.inputWrap}>
-                        <TextInput
-                            onSubmitEditing={this.props.onSubmitEditing}
-                            onBlur={this.props.onBlur}
-                            onFocus={this.props.onFocus}
-                            value={this.state.textMsg}
-                            onChangeText={(textMsg) => this.setState({textMsg})}
-                            style={styles.textInput}/>
-                    </View>}
-
-                    {this.state.mode === 'audio' &&
-                    <AudioButton
-                        disabled={this.props.disabled}
-                        handleTouchIn={this._handleTouchIn}
-                        handleTouchOut={this._handleTouchOut}
-                        handleTouchEnd={this._handleTouchEnd}
-                        handleTouchCancelled={this._handleTouchCancelled}/>}
-
-                    <TouchableOpacity>
-                        <Image style={styles.icon}
-                            source={require('image!icon-expression')}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Image style={styles.icon}
-                            source={require('image!icon-send-media')}/>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        )
-    }
-});
+var BottomBar = require('./BottomBar');
 
 var ConversationScene = React.createClass({
 
     getInitialState: function() {
+        var dateSection = this._getDateSection();
+        this.messages = {
+            [dateSection]: []
+        };
         var dataSource = new ListView.DataSource({
-            rowHasChanged: (row1, row2) => row1 !== row2
+            rowHasChanged: (row1, row2) => row1 !== row2,
+            sectionHeaderHasChanged: (section1, section2) => section1 !== section2
         });
+
+        dataSource = dataSource.cloneWithRowsAndSections(
+            this.messages, Object.keys(this.messages));
 
         return {
             dataSource,
@@ -266,7 +105,20 @@ var ConversationScene = React.createClass({
         });
 
         rt.on('message', function(data) {
-            log('message', data);
+            // FIXME: fix state
+            if (!self.room) {
+                return warn('room not fetched!');
+            }
+
+            if (data.cid !== self.room.id) {
+                return;
+            }
+
+            self._handleMessage(data);
+        });
+
+        rt.on('receipt', function(data) {
+            log('message receipt', data);
         });
 
         rt.on('close', function() {
@@ -276,6 +128,32 @@ var ConversationScene = React.createClass({
         rt.on('create', (data) => {
             log('create', data);
         });
+    },
+
+    _handleMessage: function(data) {
+        var message = {
+            id: data.id,
+            uid: data.fromPeerId,
+            type: data.msg.type,
+            content: data.msg,
+            timestamp: data.timestamp
+        };
+        log('new message', message);
+        this._appendMessage(message);
+    },
+
+    _getDateSection: function() {
+        if (!this.messages || Object.keys(this.messages).length === 0) {
+            return String(Date.now());
+        }
+
+        var lastDate = Number(Object.keys(this.messages).slice(-1)[0]);
+        var now = Date.now();
+        if (now - lastDate <= 1000 * 3600 * 3) {
+            return String(lastDate);
+        } else {
+            return String(Date.now());
+        }
     },
 
     _onRootCreated: function() {
@@ -302,7 +180,7 @@ var ConversationScene = React.createClass({
     },
 
     _onSubmit: function() {
-        log('on submit');
+        log('on text submit');
         this.refs.scrollView.scrollTo(0);
         var textMsg = this.refs.bottomBar.getTextMessage();
         this.room.send({
@@ -311,8 +189,32 @@ var ConversationScene = React.createClass({
             type: 'text'
         }, function(data) {
             log('message result', data);
-        });
+            var message = {
+                uid: 'yangchen',
+                type: 'text',
+                content: {
+                    text: textMsg,
+                },
+                timestamp: data.t,
+                id: data.uid
+            }
+            this._appendMessage(message);
+        }.bind(this));
         this.refs.bottomBar.clearTextMessage();
+    },
+
+    _appendMessage: function(message) {
+        var section = this._getDateSection();
+        var messages = this.messages[section] || [];
+        messages = messages.concat([message]);
+        this.messages[section] = messages;
+
+        var dataSource = this.state.dataSource.cloneWithRowsAndSections(
+            this.messages, Object.keys(this.messages));
+
+        this.setState({
+            dataSource
+        });
     },
 
     _onAudioRecorded: function(audio) {
@@ -328,16 +230,42 @@ var ConversationScene = React.createClass({
         file.save().then(function() {
             log('send audio message');
             var data = file.toJSON();
-            self.room.send({
+            var messageContent = {
                 url: file.url(),
                 objectId: file.id,
                 metaData: file.metaData()
-            }, {
+            }
+            self.room.send(messageContent, {
                 type: 'audio'
             }, function(data) {
-                log('msg result', data);
-            });
+                log('audio message result', data);
+                var message = {
+                    uid: 'yangchen',
+                    type: 'audio',
+                    content: {
+                        ...messageContent,
+                    },
+                    id: data.uid,
+                    timestamp: data.t
+                }
+                this._appendMessage(message);
+            }.bind(self));
         }).catch(e => error(e));
+    },
+
+    _renderMessage: function(message) {
+        // FIXME: fix current user id
+        return (
+            <MessageView
+                message={message}
+                key={'message-' + message.id}
+                self={message.uid === 'yangchen'}/>
+        );
+    },
+
+    _renderSectionHeader: function(sectionData, sectionID) {
+        var date = new Date(Number(sectionID));
+        return (<DateLabel style={{marginVertical: 5}} text={humanDate(date)}/>);
     },
 
     render: function() {
@@ -347,6 +275,12 @@ var ConversationScene = React.createClass({
                 contentContainerStyle={[styles.container]}
                 style={[styles.container, this.props.style]}>
                 <ListView
+                    renderScrollComponent={props => {
+                        props.stickyHeaderIndices = [];
+                        return <ScrollView {...props}/>
+                    }}
+                    renderRow={this._renderMessage}
+                    renderSectionHeader={this._renderSectionHeader}
                     dataSource={this.state.dataSource}
                     style={styles.content}/>
                 <BottomBar
