@@ -6,8 +6,8 @@ var {
     View
 } = React;
 
+var icons = require('./icons');
 var BaseText = require('./widgets').BaseText;
-
 var stylesVar = require('./stylesVar');
 
 class BaseRouteMapper {
@@ -43,7 +43,7 @@ class BaseRouteMapper {
                     activeOpacity={0.8}
                     onPress={() => callback ? callback() : navigator.pop()}>
                     <Image style={styles.navBarLeftButton} 
-                        source={require('image!back-icon')}/>
+                        source={icons.back}/>
                 </TouchableOpacity>    
             </View>
         );

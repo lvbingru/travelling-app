@@ -20,6 +20,7 @@ var {
 // override default Text Component
 var Text = BaseText;
 
+var icons = require('./icons');
 var stylesVar = require('./stylesVar');
 var su = require('./styleUtils');
 
@@ -42,17 +43,17 @@ var ConversationListView = React.createClass({
             nickname: 'hello',
             message: 'Anywhere you are, I am near. Anytime you whisper my name, you\'ll see. How every single promise I keep.',
             time: new Date(),
-            avatar: require('image!avatar-placeholder')
+            avatar: icons.avatarPlaceholder
         }, {
             nickname: 'hello',
             message: 'what?',
             time: new Date(2015, 10, 11),
-            avatar: require('image!avatar-placeholder')
+            avatar: icons.avatarPlaceholder
         }, {
             nickname: 'hello',
             message: 'what?',
             time: new Date(2015, 9, 10),
-            avatar: require('image!avatar-placeholder')
+            avatar: icons.avatarPlaceholder
         }]);
 
         this.setState({
@@ -203,7 +204,7 @@ class Route extends BaseRouteMapper {
               activeOpacity={0.8} 
               onPress={() => navigator.push(new ContactRoute)}
               style={[styles.wrap, styles.left]}>
-                <Image style={icon} source={require('image!icon-contact')}/>
+                <Image style={icon} source={icons.contact}/>
             </TouchableOpacity>
         );
     }
@@ -218,7 +219,7 @@ class Route extends BaseRouteMapper {
             <TouchableOpacity 
               activeOpacity={0.8} 
               style={[styles.wrap, styles.right]}>
-                <Image style={icon} source={require('image!icon-conv-plus')}/>
+                <Image style={icon} source={icons.plusConv}/>
             </TouchableOpacity>
         );
     }

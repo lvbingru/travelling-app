@@ -11,6 +11,7 @@ var {
 	TouchableOpacity
 } = React;
 
+var icons = require('./icons');
 var stylesVar = require('./stylesVar');
 var ChooseCarType = require('./ChooseCarType');
 
@@ -54,7 +55,7 @@ var AddOrEditCar = React.createClass({
 								onPress={this.chooseCarType}>
 								<Text style={styles.carTypeText}>{car.carType}</Text>
 								<View style={styles.imageView}>
-									<Image source={require('image!icon-arrow')} 
+									<Image source={icons.arrow} 
 										style={styles.iconArrow}/>
 								</View>
 							</TouchableOpacity>

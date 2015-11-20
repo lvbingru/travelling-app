@@ -8,6 +8,7 @@ var {
 } = React;
 
 var su = require('../styleUtils');
+var icons = require('../icons');
 
 var ActivityRoute = React.createClass({
     render: function() {
@@ -15,7 +16,7 @@ var ActivityRoute = React.createClass({
             <View style={[styles.route, this.props.style]}>
                 <Image 
                     style={[styles.icon, {marginRight: 10}]} 
-                    source={require('image!icon-mark')}/>
+                    source={icons.mark}/>
                 <Text style={styles.baseText}>{this.props.route}</Text>
             </View>
         );

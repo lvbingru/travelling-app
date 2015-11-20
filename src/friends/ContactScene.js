@@ -15,6 +15,7 @@ var {
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
+var icons = require('../icons');
 var su = require('../styleUtils');
 var stylesVar = require('../stylesVar');
 var activityApi = require('../api').activity;
@@ -141,7 +142,7 @@ var ContactScene = React.createClass({
         return (
             <View style={styles.item}>
                 <Image
-                    source={require('image!icon-search')}
+                    source={icons.search}
                     resizeMode="contain"
                     style={{...su.size(24, 18)}}/>
                 <TextInput
@@ -167,7 +168,7 @@ var ContactScene = React.createClass({
                 onPress={this._toCircleContacts}
                 style={styles.item}>
                 <Image
-                    source={require('image!icon-circle')}
+                    source={icons.circle}
                     style={{...su.size(24)}}/>
                 <Text style={styles.name}>圈子</Text>
             </TouchableOpacity>
@@ -180,7 +181,7 @@ var ContactScene = React.createClass({
                 onPress={this._toGroupContacts}
                 style={styles.item}>
                 <Image
-                    source={require('image!icon-group')}
+                    source={icons.group}
                     style={{...su.size(24)}}/>
                 <Text style={styles.name}>群聊</Text>
             </TouchableOpacity>
@@ -369,7 +370,7 @@ class Route extends BaseRouteMapper {
               style={[styles.wrap, styles.right]}>
                 <Image
                     style={icon}
-                    source={require('image!icon-conv-plus')}/>
+                    source={icons.plusConv}/>
             </TouchableOpacity>
         );
     }

@@ -20,6 +20,7 @@ var deviceHeight = Dimensions.get('window').height;
 
 console.log('device height', deviceHeight);
 
+var icons = require('./icons');
 var su = require('./styleUtils');
 var BaseRouteMapper = require('./BaseRouteMapper');
 var ActivityScene = require('./ActivityScene');
@@ -49,7 +50,7 @@ var Entry = React.createClass({
                 <Text style={styles.baseText}>{this.props.label}</Text>
                 <View style={styles.entry}>
                     <Text style={styles.badge}>{this.props.count}</Text>
-                    <Image source={require('image!icon-arrow')} style={styles.arrow}/>
+                    <Image source={icons.arrow} style={styles.arrow}/>
                 </View>
             </TouchableOpacity>
         );
@@ -119,11 +120,11 @@ var Space = React.createClass({
         var info = this.state.info;
         var avatar = info.avatar ? {
             uri: info.avatar
-        } : require('image!avatar-placeholder');
+        } : icons.avatarPlaceholder;
 
         return (
             <View style={styles.container}>
-              <Image style={styles.banner} source={require('image!space-header')}>
+              <Image style={styles.banner} source={icons.spaceHeader}>
                 <View style={styles.links}>
                   <TouchableOpacity activeOpacity={0.8} style={styles.link}>
                     <Text style={styles.linkText}>个人资料</Text>
@@ -137,17 +138,18 @@ var Space = React.createClass({
               <View style={styles.user}>
                 <Image style={styles.avatar} source={avatar}></Image>
                 <Text style={styles.username}>{info.username || ''}</Text>
-                <Image source={require('image!levels-bg')} resizeMode="contain" style={{height: 16}}>
+                <Image source={icons.levelsBg} resizeMode="contain" style={{height: 16}}>
                   <Text style={styles.levels}>等级 {info.grade}</Text>
                 </Image>
               </View>
 
               <View style={styles.items}>
-                <Entry label='活动' onPress={this._goto('activity')} icon={require('image!icon-activity')} count={info.activity || ''}/>
-                <Entry label='游记' icon={require('image!icon-journey')} count={info.journey || ''}/>
-                <Entry label='轨迹' icon={require('image!icon-annotations')} count={info.annotations || ''}/>
-                <Entry label='相册' icon={require('image!icon-photos')} count={info.photos || ''}/>
-                <Entry label='账单' icon={require('image!icon-bills')} count={info.bills || ''} style={styles.last}/>
+                <Entry label='活动' onPress={this._goto('activity')}
+                    icon={icons.activity} count={info.activity || ''}/>
+                <Entry label='游记' icon={icons.journey} count={info.journey || ''}/>
+                <Entry label='轨迹' icon={icons.annotations} count={info.annotations || ''}/>
+                <Entry label='相册' icon={icons.photos} count={info.photos || ''}/>
+                <Entry label='账单' icon={icons.bills} count={info.bills || ''} style={styles.last}/>
               </View>
 
               <TouchableOpacity style={{margin: 20}} 

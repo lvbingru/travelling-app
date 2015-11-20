@@ -14,15 +14,16 @@ var ViewPager = require('react-native-viewpager');
 var Button = require('./widgets').Button;
 var HomePage = require('./HomePage');
 
+var icons = require('./icons');
 var store = require('./store');
 var {
     updateSession
 } = require('./actions');
 
 var IMGS = [
-    require('image!page1'),
-    require('image!page2'),
-    require('image!page3'),
+    icons.page1,
+    icons.page2,
+    icons.page3,
 ];
 
 var Onboarding = React.createClass({

@@ -11,12 +11,7 @@ var SignUp = require('./src/SignUp');
 
 var ModalExample = require('./ModalExample');
 var Onboarding = require('./src/Onboarding');
-var config = require('./src/config');
-var HomePage = require('./src/HomePage');
-var Onboarding = require('./src/Onboarding');
-var NavBar = require('./src/NavBar');
-
-var Dispatcher = require('./src/Dispatcher');
+var config = require('./src/config'); var HomePage = require('./src/HomePage'); var Onboarding = require('./src/Onboarding'); var NavBar = require('./src/NavBar'); var Dispatcher = require('./src/Dispatcher');
 var store = require('./src/store');
 var {buildSession} = require('./src/actions');
 
@@ -29,12 +24,6 @@ var Navbars = require('./src/Navbars');
 var {
     user
 } = api;
-
-var {
-    RefresherListView,
-    LoadingBarIndicator
-} = require('react-native-refresher');
-
 
 var {
     Animated,
@@ -168,7 +157,7 @@ var Home = React.createClass({
     },
 
     componentDidMount: function() {
-        return this._testRoute();
+        // return this._testRoute();
 
         Dispatcher.addListener('logout', function() {
             this.refs.navigator.resetTo(new SignIn)

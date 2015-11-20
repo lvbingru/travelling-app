@@ -14,6 +14,7 @@ var {
 	Partner
 } = require('./api/models');
 
+var icons = require('./icons');
 var activityApi = require('./api').activity;
 var stylesVar = require('./stylesVar');
 var ActivityModal = require('./ActivityModal');
@@ -171,7 +172,7 @@ var ActivityManage = React.createClass({
 									publishDate={item.user && item.user.publishDate}
 									usernameText={styles.usernameText}
 									publishDateText={styles.publishDateText}
-									avatar={item.user && item.user.avatar ? {uri: item.user.avatar}: require('image!avatar-placeholder')}/>
+									avatar={item.user && item.user.avatar ? {uri: item.user.avatar}: icons.avatarPlaceholder}/>
 								<View style={styles.status}>
 									{this.renderTag(item.status)}
 								</View>

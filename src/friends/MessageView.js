@@ -17,6 +17,8 @@ var {
     BaseTouchableOpacity
 } = require('../widgets');
 
+var icons = require('../icons');
+
 var Text = BaseText;
 var TouchableOpacity = BaseTouchableOpacity;
 
@@ -212,14 +214,14 @@ var MessageView = React.createClass({
                     <View style={styles.space}></View>
                     <AudioBar audio={message.content} self={true} style={{marginHorizontal: 8}}/>
                     <Image style={styles.avatar}
-                        source={require('image!avatar-placeholder')}/>
+                        source={icons.avatarPlaceholder}/>
                 </View>
             );
         } else {
             return (
                 <View style={[styles.msg, this.props.style]}>
                     <Image style={styles.avatar}
-                        source={require('image!avatar-placeholder')}/>
+                        source={icons.avatarPlaceholder}/>
                     <AudioBar audio={message.content} style={{marginHorizontal: 8}}/>
                     <View style={styles.space}></View>
                 </View>
@@ -238,14 +240,14 @@ var MessageView = React.createClass({
                         textStyle={[styles.text, styles.textSelf]}
                         text={this.props.message.content.text}/>
                     <Image style={styles.avatar}
-                        source={require('image!avatar-placeholder')}/>
+                        source={icons.avatarPlaceholder}/>
                 </View>
             );
         } else {
             return (
                 <View style={[styles.msg, this.props.style]}>
                     <Image style={styles.avatar}
-                        source={require('image!avatar-placeholder')}/>
+                        source={icons.avatarPlaceholder}/>
                     <AutosizingText
                         style={styles.textBox}
                         textStyle={styles.text}

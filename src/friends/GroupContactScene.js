@@ -14,6 +14,7 @@ var {
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
+var icons = require('../icons');
 var su = require('../styleUtils');
 var stylesVar = require('../stylesVar');
 var activityApi = require('../api').activity;
@@ -145,7 +146,7 @@ class Route extends BaseRouteMapper {
         return (
             <TouchableOpacity 
               style={[styles.wrap, styles.right]}>
-                <Image style={icon} source={require('image!icon-conv-plus')}/>
+                <Image style={icon} source={icons.plusConv}/>
             </TouchableOpacity>
         );
     }

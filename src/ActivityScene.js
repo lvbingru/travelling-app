@@ -27,18 +27,19 @@ class ActivityRoute extends BaseRouteMapper {
     }
 
     renderLeftButton(route, navigator, index, navState) {
-        if (index === 0) {
-            return null;
-        }
+        return this._renderBackButton(route, navigator, index, navState);
+        // if (index === 0) {
+        //     return null;
+        // }
 
-        var styles = this.styles;
-        var previousRoute = navState.routeStack[index - 1];
-        return (
-          <TouchableOpacity
-            onPress={() => navigator.pop()}>
-            <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
-          </TouchableOpacity>
-        );
+        // var styles = this.styles;
+        // var previousRoute = navState.routeStack[index - 1];
+        // return (
+        //   <TouchableOpacity
+        //     onPress={() => navigator.pop()}>
+        //     <Image style={styles.navBarLeftButton} source={require('image!back-icon')}/>
+        //   </TouchableOpacity>
+        // );
     }
 
     renderTitle(route, navigator, index, navState) {

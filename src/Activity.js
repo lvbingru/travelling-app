@@ -2,6 +2,7 @@
 
 var debug = require('./debug');
 var log = debug('ActivityTab:log');
+var warn = debug('ActivityTab:warn');
 var error = debug('ActivityTab:error');
 
 var moment = require('moment');
@@ -101,7 +102,7 @@ class ActivityListRoute extends BaseRouteMapper {
               activeOpacity={0.8} 
               style={[styles.wrap, styles.left]} 
               onPress={this._toggleRegions.bind(this)}>
-                <Image style={filterIcon} source={require('image!icon-annotation')}/>
+                <Image style={filterIcon} source={require('../img/icon-annotation.png')}/>
                 <Text style={styles.navBarText}>
                   {this._filterEnabled ? '取消' : this._region.name}
                 </Text>
@@ -165,14 +166,17 @@ var ActivityList = React.createClass({
             return error('Invalid operation, loading now');
         }
 
+        var region = this.state.region;
+        var lastActivity = this.state.activities[this.state.activities.length - 1];
+        if (!lastActivity) {
+            return warn('no existed activity');
+        }
+
+
+        log('load more data');
         this.setState({
             loadingMore: true
         });
-
-        log('load more data');
-        var region = this.state.region;
-
-        var lastActivity = this.state.activities[this.state.activities.length - 1];
         return activity.fetch({
             region: region ? region.tag : null,
             latestDate: lastActivity.getCreatedAt()
@@ -248,15 +252,16 @@ var ActivityList = React.createClass({
         return (
             <View style={[styles.container, this.props.style]}>
                 <RefreshableListView
-                  scrollEventThrottle={16}
-                  ref="list"
-                  renderHeaderWrapper={this._renderHeaderWrapper}
-                  renderSeparator={this._renderSeparator}
-                  dataSource={this.state.dataSource}
-                  renderFooter={this._renderFooter}
-                  onEndReached={this._loadMore}
-                  renderRow={this._renderRow}
-                  loadData={this._refresh}/>
+                    style={{flex: 1}}
+                    scrollEventThrottle={16}
+                    ref="list"
+                    renderHeaderWrapper={this._renderHeaderWrapper}
+                    renderSeparator={this._renderSeparator}
+                    dataSource={this.state.dataSource}
+                    renderFooter={this._renderFooter}
+                    onEndReached={this._loadMore}
+                    renderRow={this._renderRow}
+                    loadData={this._refresh}/>
 
                 {this.state.filterShown &&
                 <TouchableOpacity activeOpacity={1} style={regionsStyle.popup} onPress={this._hideRegions}>
@@ -300,8 +305,10 @@ var ActivityList = React.createClass({
 
     _renderRow: function(_activity) {
         return (
-            <ActivityView key={'activity-' + _activity.id} ref={component => this.activitiesObjects[_activity.id] = component}
-                activity={_activity} onPress={() => this._toDetail(_activity)}/>
+            <ActivityView key={'activity-' + _activity.id}
+                activity={_activity}
+                ref={component => this.activitiesObjects[_activity.id] = component}
+                onPress={() => this._toDetail(_activity)}/>
         );
     }
 });
@@ -379,10 +386,10 @@ var regionsStyle = StyleSheet.create({
 
     image: {
         ...su.size(60),
-        borderWidth: 1,
-        borderColor: '#fff',
-        borderRadius: 30,
-        marginBottom: 10
+            borderWidth: 1,
+            borderColor: '#fff',
+            borderRadius: 30,
+            marginBottom: 10
     },
 
     regionName: {

@@ -14,6 +14,8 @@ var {
     BaseTouchableOpacity
 } = require('../widgets');
 
+var icons = require('../icons');
+
 // override default compnents
 var Text = BaseText;
 var TextInput = BaseTextInput;
@@ -31,7 +33,7 @@ var ContactItem = React.createClass({
                 style={styles.item} 
                 onPress={this.props.onPress}>
                 <Image style={styles.avatar} 
-                    source={item.avatar || require('image!avatar-placeholder')}/>
+                    source={item.avatar || icons.avatarPlaceholder}/>
                 <Text style={styles.name}>{item.name}</Text>
             </TouchableOpacity>
         );

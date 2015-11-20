@@ -16,6 +16,7 @@ var {
     AudioPlayer
 } = require('react-native-audio');
 
+var icons = require('../icons');
 var su = require('../styleUtils');
 var stylesVar = require('../stylesVar');
 
@@ -163,12 +164,17 @@ var BottomBar = React.createClass({
 
     },
 
-    _insertEmoji: function(emoji) {},
+    _insertEmoji: function(emoji, name) {
+        log('insert emoji', emoji, name);
+        var textMsg = this.state.textMsg + `[${name}]`;
+        this.setState({
+            textMsg
+        });
+    },
 
     render: function() {
         var icon = this.state.mode === 'text' ?
-            require('image!icon-switch-to-audio') :
-            require('image!icon-keyboard');
+            icons.audio : icons.keyboard;
 
         return (
             <Animated.View style={this.props.style}>
@@ -200,11 +206,11 @@ var BottomBar = React.createClass({
                     <TouchableOpacity>
                         <Image style={styles.icon}
                             onPress={this._showExpressions}
-                            source={require('image!icon-expression')}/>
+                            source={icons.expression}/>
                     </TouchableOpacity>
                     <TouchableOpacity>
                         <Image style={styles.icon}
-                            source={require('image!icon-send-media')}/>
+                            source={icons.sendMedia}/>
                     </TouchableOpacity>
                 </View>
                 

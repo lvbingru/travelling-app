@@ -19,6 +19,7 @@ var {
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
+var icons = require('./icons');
 var su = require('./styleUtils');
 var stylesVar = require('./stylesVar');
 var fetchMoreDetail = require('./api').activity.fetchMoreDetail;
@@ -106,7 +107,7 @@ var ActivityMoreDetail = React.createClass({
             // TODO: 显示轨迹图
             return (
                 <View>
-                    <Image source={require('image!banner-activity-placeholder')} 
+                    <Image source={icons.activityCoverPlaceholder} 
                         style={styles.banner}/>
                     <View style={styles.contentRow}>
                         <Text style={styles.text}>{_activity.get('route')}</Text>
@@ -411,13 +412,13 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
                 marginLeft: 5
             },
         });
-        var starIcon = this.starred ? require('image!icon-star') : require('image!icon-stars-o');
+        var starIcon = this.starred ? icons.star : icons.starsOpposite;
 
         return (
             <View style={navBarRightButton}>
                 <View style={styles.navbarRight}>
                     <TouchableOpacity activeOpacity={1} onPress={this.commentHandle.bind(this, navigator)}>
-                        <Image style={styles.iconComments} source={require('image!icon-comments')}/>
+                        <Image style={styles.iconComments} source={icons.comments}/>
                     </TouchableOpacity>
                     <Text style={styles.navbarText}>127</Text>
 
@@ -426,7 +427,7 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
                     </TouchableOpacity>
                     <Text style={styles.navbarText}>{this.stars}</Text>
 
-                    <Image style={styles.iconShare} source={require('image!icon-share')}/>
+                    <Image style={styles.iconShare} source={icons.share}/>
                 </View>
             </View>
         );

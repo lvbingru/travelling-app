@@ -20,6 +20,7 @@ var ActivityApplyInfo = require('./ActivityApplyInfo');
 var activityApi = require('./api').activity;
 var stylesVar = require('./stylesVar');
 var su = require('./styleUtils');
+var icons = require('./icons');
 
 var {
     BaseTouchableOpacity
@@ -61,7 +62,7 @@ var Mixin = {
                             <TouchableOpacity
                                 onPress={this._contactCreator}
                                 style={styles.information}>
-                                <Image source={require('image!icon-information')} 
+                                <Image source={icons.information} 
                                     style={styles.iconInformation}/>
                                 <Text style={styles.informationText}>咨询楼主</Text>
                             </TouchableOpacity>
@@ -77,7 +78,7 @@ var Mixin = {
                         <View style={styles.bottomBar}>
                         <TouchableOpacity
                             style={[styles.information, styles.activityCircle]}>
-                            <Image source={require('image!icon-activity-circle-trans')}
+                            <Image source={icons.activityCircleTrans}
                                 style={styles.iconActivityCircle}/>
                             <Text style={styles.informationText}>活动圈子</Text>
                         </TouchableOpacity>
@@ -96,7 +97,8 @@ var Mixin = {
                         <TouchableOpacity 
                             onPress={this._contactCreator}
                             style={styles.information}>
-                            <Image source={require('image!icon-information')} style={styles.iconInformation} />
+                            <Image source={icons.information}
+                                style={styles.iconInformation} />
                             <Text style={styles.informationText}>咨询楼主</Text>
                         </TouchableOpacity>
                     </View>
@@ -105,19 +107,23 @@ var Mixin = {
                     return (
                         <View style={styles.bottomBar}>
                         <TouchableOpacity style={[styles.information, styles.blueLight]}>
-                            <Image source={require('image!icon-activity-circle-trans')} style={styles.iconActivityCircle} />
+                            <Image source={icons.activityCircleTrans}
+                                style={styles.iconActivityCircle} />
                             <Text style={styles.informationText}>活动圈子</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.information, styles.green]}>
-                            <Image source={require('image!icon-picture-trans')} style={styles.iconPictureTrans} />
+                            <Image source={icons.pictureTrans}
+                                style={styles.iconPictureTrans} />
                             <Text style={styles.informationText}>分享照片</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.information, styles.red]}>
-                            <Image source={require('image!icon-journey-trans')} style={styles.iconJourneyTrans} />
+                            <Image source={icons.journeyTrans}
+                                style={styles.iconJourneyTrans} />
                             <Text style={styles.informationText}>写游记</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.information, styles.orange]}>
-                            <Image source={require('image!icon-annotation-trans')} style={styles.iconAnnotationTrans} />
+                            <Image source={icons.annotationTrans}
+                                style={styles.iconAnnotationTrans} />
                             <Text style={styles.informationText}>上传轨迹</Text>
                         </TouchableOpacity>
                     </View>

@@ -22,6 +22,7 @@ var {
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
+var icons = require('./icons');
 var su = require('./styleUtils');
 var stylesVar = require('./stylesVar');
 var TextInputRoute = require('./TextInputRoute');
@@ -92,7 +93,7 @@ var RouteField = React.createClass({
                 </View>
                 {/*TODO: real route previewer*/}
                 <Image style={RouteField.styles.routeMap}
-                    source={require('image!space-header')}>
+                    source={icons.spaceHeader}>
                     <PenIcon/>
                 </Image>
             </TouchableOpacity>
@@ -287,7 +288,8 @@ class ActivityFormSummaryRoute extends BaseRouteMapper {
                 <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={() => navigator.pop()}>
-                    <Image style={[styles.navBarLeftButton, {margin: 0}]} source={require('image!back-icon')}/>
+                    <Image style={[styles.navBarLeftButton, {margin: 0}]}
+                        source={icons.back}/>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{marginLeft: 5}}

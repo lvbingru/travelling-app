@@ -28,27 +28,44 @@ var EmojiPageIndicator = require('./EmojiPageIndicator');
 var PADDING_HORIZONTAL = 8;
 var EMOJI_SIZE = (deviceWidth - PADDING_HORIZONTAL * 2) / 8;
 
-var EMOJI_COLLECTION = [[
-    'smile', 'laughing', 'blush', 'smiley', 'relaxed',
-    'smirk', 'heart_eyes', 'kissing_heart',
-
-    'flushed', 'relieved', 'grin', 'wink',
-    'grinning', 'kissing', 'stuck_out_tongue', 'sleeping',
-
-    'worried', 'open_mouth', 'grimacing', 'confused',
-    'expressionless', 'unamused', 'sweat', 'disappointed_relieved'
-]];
+var EMOJIS = {
+    'smile': '微笑',
+    'heart_eyes': '色',
+    'no_mouth': '发呆',
+    'sunglasses': '得意',
+    'sob': '流泪',
+    'sleeping': '睡',
+    'disappointed_relieved': '大哭',
+    'rage': '发怒',
+    'stuck_out_tongue': '调皮',
+    'laughing': '大笑',
+    'astonished': '惊讶',
+    'frowning': '难过',
+    'sweat': '汗',
+    'confounded': '抓狂',
+    'yum': '愉快',
+    'kissing': '亲亲',
+    'broken_heart': '心碎',
+    'ok_hand': 'OK',
+    '+1': '强',
+    '-1': '弱'
+};
 
 var EmojiGridPage = React.createClass({
+    _handlePress: function(emoji) {
+        var name = EMOJIS[emoji];
+        this.props.onPress(emoji, name);
+    },
+
     render: function() {
         return (
             <View style={styles.page} key={'page-' + (this.props.page + 1)}>
-                {this.props.emojiCollection.map(name => {
+                {Object.keys(EMOJIS).map(emoji => {
                     return (
                         <TouchableOpacity style={styles.cell}
-                            onPress={name => this.props.onPress(name)}>
+                            onPress={this._handlePress.bind(this, emoji)}>
                             <Text style={{fontSize: Math.min(16, EMOJI_SIZE/2)}}>
-                                <Emoji name={name}/>
+                                <Emoji name={emoji}/>
                             </Text>
                         </TouchableOpacity>
                     );
@@ -72,7 +89,7 @@ var EmojiGrid = React.createClass({
     _renderPage: function(emojiCollection) {
         return (
             <EmojiGridPage
-                onPress={name => this.props.onPress(name)}
+                onPress={(emoji, name) => this.props.onPress(emoji, name)}
                 emojiCollection={emojiCollection}/>
         );
     },
@@ -86,7 +103,7 @@ var EmojiGrid = React.createClass({
             rowHasChanged: (row1, row2) => row1 !== row2
         });
 
-        dataSource = dataSource.cloneWithPages(EMOJI_COLLECTION);
+        dataSource = dataSource.cloneWithPages([0]);
 
         return (
             <ViewPager autoPlay={false}
