@@ -30,6 +30,7 @@ var Conversation = require('./friends/ConversationScene');
 
 // override default components
 var TouchableOpacity = BaseTouchableOpacity;
+var RecordActivityChoosePhoto = require('./RecordActivityChoosePhoto');
 
 var Mixin = {
     _apply: function() {
@@ -45,6 +46,10 @@ var Mixin = {
 
     _contactCreator: function() {
         this.props.navigator.push(new Conversation(this.state.activity.getCreator()));
+    },
+
+    _recordActivity: function() {
+        this.props.navigator.push(new RecordActivityChoosePhoto());
     },
 
     renderBottom: function() {
@@ -116,9 +121,10 @@ var Mixin = {
                                 style={styles.iconPictureTrans} />
                             <Text style={styles.informationText}>分享照片</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.information, styles.red]}>
-                            <Image source={icons.journeyTrans}
-                                style={styles.iconJourneyTrans} />
+
+                        <TouchableOpacity style={[styles.information, styles.red]} activeOpacity={0.8}
+                            onPress={this._recordActivity}>
+                            <Image source={require('image!icon-journey-trans')} style={styles.iconJourneyTrans} />
                             <Text style={styles.informationText}>写游记</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.information, styles.orange]}>

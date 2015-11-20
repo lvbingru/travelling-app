@@ -117,19 +117,10 @@ var Home = React.createClass({
     },
 
     _testRoute: function() {
-        var Route = require('./src/friends/ConversationScene');
-        // var Route = require('./src/TestRealtimeMessage');
+        var route = require('./src/friends/conversationscene');
+        // var route = require('./src/testrealtimemessage');
         // var Route = require('./src/LocalPhotoPicker');
-        // var Route = require('./src/ActivityApply');
-        // var Route = require('./src/TestStretchy');
-        // var Route = require('./src/FillActivityBrief');
-        // var Route = require('./src/FillActivityDetail');
-        // var Route = require('./src/ActivityFormSummary');
-        // this.refs.navigator.replace(new Route({
-        //     title: '本地相册',
-        //     onResult: console.log.bind(console)
-        // }));
-
+        //var Route = require('./src/LocalPhotoPicker');
         this.refs.navigator.replace(new Route(new AV.User()));
     },
 
@@ -157,7 +148,7 @@ var Home = React.createClass({
     },
 
     componentDidMount: function() {
-        // return this._testRoute();
+        //return this._testRoute();
 
         Dispatcher.addListener('logout', function() {
             this.refs.navigator.resetTo(new SignIn)

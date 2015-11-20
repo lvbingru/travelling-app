@@ -215,11 +215,7 @@ var styles = StyleSheet.create({
         fontWeight: '300',
         color: '#fff',
         marginTop: 15
-	},
-
-	rightButton: {
-        marginRight: 15
-    }
+	}
 });
 
 var BaseRouteMapper = require('./BaseRouteMapper');
