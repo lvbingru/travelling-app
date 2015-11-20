@@ -176,6 +176,7 @@ var HomePage = React.createClass({
               <TabBarIOS.Item
                 title="朋友"
                 selected={this.state.selectedTab === 'friends'}
+                onPress={() => this.setState({selectedTab: 'friends'})}
                 icon={{uri: 'icon-tab-friends', scale: 2}}
                 selectedIcon={{uri: 'icon-tab-friends-active', scale: 2}}>
 
