@@ -3,6 +3,17 @@ var Image = React.Image;
 
 // TODO: group icons
 
+// homepage tabs
+exports.tabActivity = require('../img/icon-tab-activity.png');
+exports.activeTabActivity = require('../img/icon-tab-activity-active.png');
+exports.tabJourney = require('../img/icon-tab-journey.png');
+exports.activeTabJourney = require('../img/icon-tab-journey-active.png');
+exports.tabFriends = require('../img/icon-tab-friends.png');
+exports.activeTabFriends = require('../img/icon-tab-friends-active.png');
+exports.tabSpace = require('../img/icon-tab-space.png');
+exports.activeTabSpace = require('../img/icon-tab-space-active.png');
+exports.btnPlus = require('../img/icon-tab-plus.png');
+
 exports.countdown = require('../img/icon-countdown.png');
 exports.photos = require('../img/icon-photos.png');
 exports.journey = require('../img/icon-journey.png');

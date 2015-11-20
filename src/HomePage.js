@@ -15,6 +15,7 @@ var {
     NativeModules
 } = React;
 
+var icons = require('./icons');
 var Icon = require('react-native-vector-icons/Ionicons');
 var Navbars = require('./Navbars');
 var SpringBoard = NativeModules.SpringBoard;
@@ -24,6 +25,8 @@ var JourneyTab = require('./JourneyTab');
 var PlusMenu = require('./PlusMenu');
 var FillActivityBrief = require('./FillActivityBrief');
 var FriendsTab = require('./FriendsTab');
+
+console.log(icons.tabActivity);
 
 function emptyFunction() {}
 
@@ -173,7 +176,6 @@ var HomePage = React.createClass({
               <TabBarIOS.Item
                 title="朋友"
                 selected={this.state.selectedTab === 'friends'}
-                onPress={() => this._onTabSelect('friends')}
                 icon={{uri: 'icon-tab-friends', scale: 2}}
                 selectedIcon={{uri: 'icon-tab-friends-active', scale: 2}}>
 
