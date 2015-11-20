@@ -13,6 +13,7 @@ var {
 } = React;
 
 var deviceWidth = Dimensions.get('window').width;
+var icons = require('./icons');
 var su = require('./styleUtils');
 var stylesVar = require('./stylesVar');
 
@@ -173,7 +174,7 @@ var Cell = React.createClass({
 	},
 
 	render: function() {
-		var imageUrl = this.state.checked ? require('image!checked-green') : require('image!checked-trans');
+		var imageUrl = this.state.checked ? icons.checkedGreen : icons.checkedTrans;
 
 		return (
 			<TouchableOpacity
@@ -220,7 +221,7 @@ var PreviewCell = React.createClass({
 					}
 				</TouchableOpacity>
 				<TouchableOpacity onPress={this.props.onPress}>
-					<Image source={require('image!icon-dismiss-bg')}
+					<Image source={icons.dismissBg}
 						style={styles.iconDismiss} />
 				</TouchableOpacity>
 			</View>

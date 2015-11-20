@@ -1,6 +1,8 @@
 var React = require('react-native');
 var Image = React.Image;
 
+// TODO: group icons
+
 exports.countdown = require('../img/icon-countdown.png');
 exports.photos = require('../img/icon-photos.png');
 exports.journey = require('../img/icon-journey.png');
@@ -47,6 +49,8 @@ exports.levelsBg = require('../img/levels-bg.png');
 exports.views = require('../img/icon-views.png');
 exports.dismiss = require('../img/icon-dismiss.png');
 exports.addRoute = require('../img/icon-add-route.png');
+exports.addImage = require('../img/icon-add-image.png');
+exports.addText = require('../img/icon-add-text.png');
 exports.newActivity = require('../img/icon-new-activity.png');
 exports.newJourneyNote = require('../img/icon-new-journey-note.png');
 exports.coverPlaceholder = require('../img/cover-placeholder.png');
@@ -63,3 +67,14 @@ exports.group = require('../img/icon-group.png');
 exports.page1 = require('../img/page1.png');
 exports.page2 = require('../img/page2.png');
 exports.page3 = require('../img/page3.png');
+
+// LocalSeveralPhotoPicker
+exports.checkedGreen = require('../img/checked-green.png');
+exports.checkedTrans = require('../img/checked-trans.png');
+exports.dismissBg = require('../img/icon-dismiss-bg.png');
+
+// RecordActivityEdit
+exports.dismissMid = require('../img/icon-dismiss-mid.png');
+exports.plusBlue = require('../img/icon-plus-blue.png');
+exports.calendarGreen = require('../img/icon-calendar-green.png');
+exports.markBlue = require('../img/icon-mark-blue.png');

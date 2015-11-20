@@ -124,7 +124,7 @@ var Mixin = {
 
                         <TouchableOpacity style={[styles.information, styles.red]} activeOpacity={0.8}
                             onPress={this._recordActivity}>
-                            <Image source={require('image!icon-journey-trans')} style={styles.iconJourneyTrans} />
+                            <Image source={icons.journeyTrans} style={styles.iconJourneyTrans} />
                             <Text style={styles.informationText}>写游记</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.information, styles.orange]}>

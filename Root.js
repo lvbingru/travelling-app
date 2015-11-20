@@ -117,7 +117,7 @@ var Home = React.createClass({
     },
 
     _testRoute: function() {
-        var route = require('./src/friends/conversationscene');
+        var route = require('./src/friends/ConversationScene');
         // var route = require('./src/testrealtimemessage');
         // var Route = require('./src/LocalPhotoPicker');
         //var Route = require('./src/LocalPhotoPicker');
