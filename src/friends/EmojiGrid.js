@@ -86,10 +86,25 @@ var PageIndicator = React.createClass({
 });
 
 var EmojiGrid = React.createClass({
+
+    mixins: [require('NativeMethodsMixin')],
+
+    statics: {
+        HEIGHT: EMOJI_SIZE * 3 + 20
+    },
+
+    _emitEmoji: function(emoji, name) {
+        this.props.emojiEmitter.emit('emoji', {
+            name,
+            emoji
+        })
+    },
+
     _renderPage: function(emojiCollection) {
         return (
             <EmojiGridPage
-                onPress={(emoji, name) => this.props.onPress(emoji, name)}
+                style={this.props.style}
+                onPress={(emoji, name) => this._emitEmoji(emoji, name)}
                 emojiCollection={emojiCollection}/>
         );
     },

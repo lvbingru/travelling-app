@@ -12,6 +12,12 @@ var {
     View,
 } = React;
 
+// FIXME: 暂时使用这个 private api
+var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
+var dismissKeyboard = require('dismissKeyboard');
+var Subscribable = require('Subscribable');
+var EventEmitter = require('EventEmitter');
+
 var {
     humanDate
 } = require('../utils');
@@ -60,9 +66,14 @@ var WebSocketImpl = require('./WebSocketImpl');
 var AudioButton = require('./AudioButton');
 var BottomBar = require('./BottomBar');
 
+var EmojiGrid = require('./EmojiGrid');
+
 var ConversationScene = React.createClass({
 
+    mixins: [Subscribable.Mixin],
+
     getInitialState: function() {
+        this.emojiEmitter = new EventEmitter();
         var dateSection = this._getDateSection();
         this.messages = {
             [dateSection]: []
@@ -77,11 +88,52 @@ var ConversationScene = React.createClass({
 
         return {
             dataSource,
-            disabled: true
+            extHeight: new Animated.Value(0),
+                disabled: true
         };
     },
 
+    _resetExt: function() {
+        log('reset ext views');
+        if (this.state.animation) {
+            this.state.animation.stop();
+            this.state.animation = null;
+        }
+        this.state.extHeight.setValue(0);
+        this.state.expressionShown = false;
+    },
+
+    _handleKeyboardEvent: function(e) {
+        this._resetExt();
+        var scrollResponder = this.refs.scrollView.getScrollResponder();
+        scrollResponder.scrollResponderScrollNativeHandleToKeyboard(
+            React.findNodeHandle(this.refs.bottomBar),
+            64, //additionalOffset, FIXME: magic number
+            true
+        );
+    },
+
+    _onKeyboardDidHide: function(e) {
+        this.refs.scrollView.scrollWithoutAnimationTo(0)
+        this.refs.scrollView.setNativeProps({
+            scrollEnabled: false
+        });
+    },
+
+    _onKeyboardWillHide: function(e) {
+        this.refs.scrollView.scrollWithoutAnimationTo(0)
+        this.refs.scrollView.setNativeProps({
+            scrollEnabled: false
+        });
+    },
+
     componentDidMount: function() {
+        this._enableScroll(false);
+        this.addListenerOn(RCTDeviceEventEmitter, 'keyboardWillShow', this._handleKeyboardEvent);
+        this.addListenerOn(RCTDeviceEventEmitter, 'keyboardDidShow', this._handleKeyboardEvent);
+        this.addListenerOn(RCTDeviceEventEmitter, 'keyboardWillHide', this._onKeyboardWillHide);
+        // this.addListenerOn(RCTDeviceEventEmitter, 'keyboardDidHide', this._onKeyboardDidHide);
+
         var realtime = require('leancloud-realtime');
 
         realtime.config({
@@ -161,22 +213,6 @@ var ConversationScene = React.createClass({
         this.setState({
             disabled: false
         });
-    },
-
-    _onFocus: function() {
-        setImmediate(() => {
-            let scrollResponder = this.refs.scrollView.getScrollResponder();
-            scrollResponder.scrollResponderScrollNativeHandleToKeyboard(
-                React.findNodeHandle(this.refs.bottomBar),
-                60, //additionalOffset, FIXME: magic number
-                true
-            );
-        });
-    },
-
-    _onBlur: function() {
-        log('on blur');
-        this.refs.scrollView.scrollTo(0);
     },
 
     _onSubmit: function() {
@@ -268,10 +304,73 @@ var ConversationScene = React.createClass({
         return (<DateLabel style={{marginVertical: 5}} text={humanDate(date)}/>);
     },
 
+    _enableScroll: function(enabled) {
+        this.refs.scrollView.setNativeProps({
+            scrollEnabled: enabled
+        });
+    },
+
+    _toggleEmoji: function() {
+        if (this.state.animation) {
+            return warn('Invalid operation, animating now');
+        }
+
+        if (this.state.expressionShown) {
+            log('hide expressions');
+            this.state.animation = Animated.timing(this.state.extHeight, {
+                toValue: 0,
+                duration: 200
+            }).start(function(result) {
+                if (!result.finished) {
+                    return warn('Animation has been stopped!');
+                }
+
+                log('ExpressionsView is hidden');
+                this.state.animation = null;
+                this.state.expressionShown = false;
+            }.bind(this));
+        } else {
+            log('show expressions');
+            this.state.animation = Animated.timing(this.state.extHeight, {
+                toValue: EmojiGrid.HEIGHT,
+                duration: 200
+            }).start(function(result) {
+                if (!result.finished) {
+                    return warn('Animation has been stopped!');
+                }
+
+                log('ExpressionsView is shown');
+                this.state.animation = null;
+                this.state.expressionShown = true;
+            }.bind(this));
+        }
+    },
+
+    _onExpressionBtnPress: function() {
+        dismissKeyboard();
+        this._toggleEmoji();
+    },
+
+    _handleModeChange: function(mode) {
+        this.state.animation = Animated.timing(this.state.extHeight, {
+            toValue: 0,
+            duration: 200
+        }).start(function(result) {
+            if (!result.finished) {
+                return warn('animation');
+            }
+
+            this.state.animation = null;
+            this.state.expressionShown = false;
+        }.bind(this));
+    },
+
     render: function() {
         return (
             <ScrollView ref="scrollView"
                 scrollEnabled={false}
+                keyboardDismissMode="on-drag"
+                keyboardShouldPersistTaps={true}
                 contentContainerStyle={[styles.container]}
                 style={[styles.container, this.props.style]}>
                 <ListView
@@ -283,13 +382,22 @@ var ConversationScene = React.createClass({
                     renderSectionHeader={this._renderSectionHeader}
                     dataSource={this.state.dataSource}
                     style={styles.content}/>
-                <BottomBar
+
+                <BottomBar ref="bottomBar"
+                    style={styles.bottomBar}
+                    emojiEmitter={this.emojiEmitter}
+                    onModeChange={this._handleModeChange}
                     disabled={this.state.disabled}
                     onAudioRecorded={this._onAudioRecorded}
-                    ref="bottomBar"
-                    style={styles.bottomBar}
-                    onSubmitEditing={this._onSubmit}
-                    onFocus={this._onFocus} onBlur={this._onBlur}/>
+                    onExpressionBtnPress={this._onExpressionBtnPress}
+                    onSubmitEditing={this._onSubmit} />
+
+                <Animated.View ref="ext"
+                    style={{overflow: 'hidden',
+                        height: this.state.extHeight}}>
+                    <EmojiGrid ref="emojiGrid"
+                        emojiEmitter={this.emojiEmitter}/>
+                </Animated.View>
             </ScrollView>
         )
     }

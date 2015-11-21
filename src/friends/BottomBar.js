@@ -8,6 +8,8 @@ var {
     View,
 } = React;
 
+var Subscribable = require('Subscribable');
+var dismissKeyboard = require('dismissKeyboard');
 var RNFS = require('react-native-fs');
 
 var shortid = require('shortid');
@@ -37,14 +39,15 @@ var warn = debug('Friends/BottomBar:warn');
 var error = debug('Friends/BottomBar:error');
 
 var AudioButton = require('./AudioButton');
-var EmojiGrid = require('./EmojiGrid');
+
+var BAR_HEIGHT = 40;
 
 var styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 40
+        height: BAR_HEIGHT
     },
 
     bar: {
@@ -70,10 +73,12 @@ var styles = StyleSheet.create({
         borderWidth: 1 / PixelRatio.get(),
         borderColor: '#c8c8cd',
         borderRadius: 5
-    }
+    },
 });
 
 var BottomBar = React.createClass({
+
+    mixins: [Subscribable.Mixin],
 
     getInitialState: function() {
         return {
@@ -82,10 +87,16 @@ var BottomBar = React.createClass({
         }
     },
 
+    componentDidMount: function() {
+        this.addListenerOn(this.props.emojiEmitter, 'emoji', this._insertEmoji);
+    },
+
     _toggleMode: function() {
         this.setState({
             mode: this.state.mode === 'audio' ? 'text' : 'audio'
-        });
+        }, function() {
+            this.props.onModeChange(this.state.mode);
+        }.bind(this));
     },
 
     _handleTouchIn: function() {
@@ -160,11 +171,7 @@ var BottomBar = React.createClass({
         });
     },
 
-    _showExpressions: function() {
-
-    },
-
-    _insertEmoji: function(emoji, name) {
+    _insertEmoji: function({emoji, name}) {
         log('insert emoji', emoji, name);
         var textMsg = this.state.textMsg + `[${name}]`;
         this.setState({
@@ -172,50 +179,51 @@ var BottomBar = React.createClass({
         });
     },
 
+    getInputRef: function() {
+        return this.refs.textInput;
+    },
+
     render: function() {
         var icon = this.state.mode === 'text' ?
             icons.audio : icons.keyboard;
 
         return (
-            <Animated.View style={this.props.style}>
-                <View style={[styles.row, styles.bar]}>
-                    <TouchableOpacity
-                        onPress={this._toggleMode}>
-                        <Image style={styles.icon} source={icon}/>
-                    </TouchableOpacity>
+            <View style={[styles.row, styles.bar, this.props.style]}>
+                <TouchableOpacity
+                    onPress={this._toggleMode}>
+                    <Image style={styles.icon} source={icon}/>
+                </TouchableOpacity>
 
-                    {this.state.mode === 'text' &&
-                    <View style={styles.inputWrap}>
-                        <TextInput
-                            onSubmitEditing={this.props.onSubmitEditing}
-                            onBlur={this.props.onBlur}
-                            onFocus={this.props.onFocus}
-                            value={this.state.textMsg}
-                            onChangeText={(textMsg) => this.setState({textMsg})}
-                            style={styles.textInput}/>
-                    </View>}
+                {this.state.mode === 'text' &&
+                <View style={styles.inputWrap}>
+                    <TextInput ref="textInput"
+                        onSubmitEditing={this.props.onSubmitEditing}
+                        onBlur={this.props.onBlur}
+                        value={this.state.textMsg}
+                        onChangeText={(textMsg) => this.setState({textMsg})}
+                        style={styles.textInput}/>
+                </View>}
 
-                    {this.state.mode === 'audio' &&
-                    <AudioButton
-                        disabled={this.props.disabled}
-                        handleTouchIn={this._handleTouchIn}
-                        handleTouchOut={this._handleTouchOut}
-                        handleTouchEnd={this._handleTouchEnd}
-                        handleTouchCancelled={this._handleTouchCancelled}/>}
+                {this.state.mode === 'audio' &&
+                <AudioButton
+                    disabled={this.props.disabled}
+                    handleTouchIn={this._handleTouchIn}
+                    handleTouchOut={this._handleTouchOut}
+                    handleTouchEnd={this._handleTouchEnd}
+                    handleTouchCancelled={this._handleTouchCancelled}/>}
 
-                    <TouchableOpacity>
-                        <Image style={styles.icon}
-                            onPress={this._showExpressions}
-                            source={icons.expression}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Image style={styles.icon}
-                            source={icons.sendMedia}/>
-                    </TouchableOpacity>
-                </View>
-                
-                <EmojiGrid onPress={this._insertEmoji}/>
-            </Animated.View>
+                {this.state.mode === 'text' &&
+                <TouchableOpacity
+                    onPress={this.props.onExpressionBtnPress}>
+                    <Image style={styles.icon}
+                        source={icons.expression}/>
+                </TouchableOpacity>}
+
+                <TouchableOpacity>
+                    <Image style={styles.icon}
+                        source={icons.sendMedia}/>
+                </TouchableOpacity>
+            </View>
         );
     }
 });
