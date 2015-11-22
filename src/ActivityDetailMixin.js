@@ -20,6 +20,16 @@ var ActivityApplyInfo = require('./ActivityApplyInfo');
 var activityApi = require('./api').activity;
 var stylesVar = require('./stylesVar');
 var su = require('./styleUtils');
+var icons = require('./icons');
+
+var {
+    BaseTouchableOpacity
+} = require('./widgets');
+
+var Conversation = require('./friends/ConversationScene');
+
+// override default components
+var TouchableOpacity = BaseTouchableOpacity;
 var RecordActivityChoosePhoto = require('./RecordActivityChoosePhoto');
 
 var Mixin = {
@@ -32,6 +42,10 @@ var Mixin = {
 
     _viewApplyInfo: function() {
         this.props.navigator.push(new ActivityApplyInfo(this.props.navigator, this.state.activity));
+    },
+
+    _contactCreator: function() {
+        this.props.navigator.push(new Conversation(this.state.activity.getCreator()));
     },
 
     _recordActivity: function() {
@@ -50,13 +64,15 @@ var Mixin = {
                 if (!isEnter) { //没有报名
                     return (
                         <View style={styles.bottomBar}>
-                            <TouchableOpacity style={styles.information} activeOpacity={0.8}>
-                                <Image source={require('image!icon-information')} style={styles.iconInformation}/>
+                            <TouchableOpacity
+                                onPress={this._contactCreator}
+                                style={styles.information}>
+                                <Image source={icons.information} 
+                                    style={styles.iconInformation}/>
                                 <Text style={styles.informationText}>咨询楼主</Text>
                             </TouchableOpacity>
                             <TouchableOpacity 
                                 style={styles.apply}
-                                activeOpacity={0.8} 
                                 onPress={this._apply}>
                                 <Text style={styles.applyText}>我要报名</Text>
                             </TouchableOpacity>
@@ -66,16 +82,14 @@ var Mixin = {
                     return (
                         <View style={styles.bottomBar}>
                         <TouchableOpacity
-                            style={[styles.information, styles.activityCircle]}
-                            activeOpacity={0.8}>
-                            <Image source={require('image!icon-activity-circle-trans')}
+                            style={[styles.information, styles.activityCircle]}>
+                            <Image source={icons.activityCircleTrans}
                                 style={styles.iconActivityCircle}/>
                             <Text style={styles.informationText}>活动圈子</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
                             onPress={this._viewApplyInfo}
-                            style={styles.apply}
-                            activeOpacity={0.8}>
+                            style={styles.apply}>
                             <Text style={styles.applyText}>我的报名信息</Text>
                         </TouchableOpacity>
                     </View>
@@ -85,8 +99,11 @@ var Mixin = {
                 if (!isEnter) {
                     return (
                         <View style={styles.bottomBar}>
-                        <TouchableOpacity style={styles.information} activeOpacity={0.8}>
-                            <Image source={require('image!icon-information')} style={styles.iconInformation} />
+                        <TouchableOpacity 
+                            onPress={this._contactCreator}
+                            style={styles.information}>
+                            <Image source={icons.information}
+                                style={styles.iconInformation} />
                             <Text style={styles.informationText}>咨询楼主</Text>
                         </TouchableOpacity>
                     </View>
@@ -94,21 +111,25 @@ var Mixin = {
                 } else {
                     return (
                         <View style={styles.bottomBar}>
-                        <TouchableOpacity style={[styles.information, styles.blueLight]} activeOpacity={0.8}>
-                            <Image source={require('image!icon-activity-circle-trans')} style={styles.iconActivityCircle} />
+                        <TouchableOpacity style={[styles.information, styles.blueLight]}>
+                            <Image source={icons.activityCircleTrans}
+                                style={styles.iconActivityCircle} />
                             <Text style={styles.informationText}>活动圈子</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.information, styles.green]} activeOpacity={0.8}>
-                            <Image source={require('image!icon-picture-trans')} style={styles.iconPictureTrans} />
+                        <TouchableOpacity style={[styles.information, styles.green]}>
+                            <Image source={icons.pictureTrans}
+                                style={styles.iconPictureTrans} />
                             <Text style={styles.informationText}>分享照片</Text>
                         </TouchableOpacity>
+
                         <TouchableOpacity style={[styles.information, styles.red]} activeOpacity={0.8}
                             onPress={this._recordActivity}>
-                            <Image source={require('image!icon-journey-trans')} style={styles.iconJourneyTrans} />
+                            <Image source={icons.journeyTrans} style={styles.iconJourneyTrans} />
                             <Text style={styles.informationText}>写游记</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.information, styles.orange]} activeOpacity={0.8}>
-                            <Image source={require('image!icon-annotation-trans')} style={styles.iconAnnotationTrans} />
+                        <TouchableOpacity style={[styles.information, styles.orange]}>
+                            <Image source={icons.annotationTrans}
+                                style={styles.iconAnnotationTrans} />
                             <Text style={styles.informationText}>上传轨迹</Text>
                         </TouchableOpacity>
                     </View>

@@ -14,6 +14,7 @@ var {
 	ListView
 } = React;
 
+var icons = require('./icons');
 var stylesVar = require('./stylesVar');
 var MutilineInput = require('./MutilineInput');
 var deviceWidth = Dimensions.get('window').width;
@@ -203,7 +204,7 @@ var RecordActivity = React.createClass({
 							{this.state.content}
 						</Text>
 						<View style={styles.imageView}>
-							<Image source={require('image!icon-arrow')} 
+							<Image source={icons.arrow} 
 								style={styles.iconArrow}/>
 						</View>
 					</TouchableOpacity>
@@ -254,18 +255,21 @@ var Footer = React.createClass({
 			return (
 				<View style={[styles.footerView, {height: 32}]} >
 					<TouchableOpacity onPress={() => this.setState({adding: false})} activeOpacity={1}>
-						<Image source={require('image!icon-dismiss-mid')} style={styles.plusIcon} />
+						<Image source={icons.dismissBg}
+							style={styles.plusIcon} />
 					</TouchableOpacity>
 					<TouchableOpacity activeOpacity={1}>
-						<Image source={require('image!icon-add-route')} style={styles.editImage} />
+						<Image source={icons.addRoute}
+							style={styles.editImage} />
 					</TouchableOpacity>
 					<TouchableOpacity activeOpacity={1}
 						onPress={() => this.props.addImage(this.props.getRowID())}>
-						<Image source={require('image!icon-add-image')} style={styles.editImage} />
+						<Image source={icons.addImage}
+							style={styles.editImage} />
 					</TouchableOpacity>
 					<TouchableOpacity activeOpacity={1}
 						onPress={() => this.props.addText(this.props.getRowID())}>
-						<Image source={require('image!icon-add-text')} style={styles.editImage} />
+						<Image source={icons.addText} style={styles.editImage} />
 					</TouchableOpacity>
 
 				</View>
@@ -278,7 +282,7 @@ var Footer = React.createClass({
 						onPress={() => this.setState({
 							adding: true
 						})}>
-						<Image source={require('image!icon-plus-blue')} style={styles.plusIcon} />
+						<Image source={icons.plusBlue} style={styles.plusIcon} />
 					</TouchableOpacity>
 				</View>
 			);
@@ -358,18 +362,18 @@ var Cell = React.createClass({
 			return (
 				<View style={[styles.flex1View, {height: 32}]} >
 					<TouchableOpacity onPress={this._changeRowStatus} activeOpacity={1}>
-						<Image source={require('image!icon-dismiss-mid')} style={styles.plusIcon} />
+						<Image source={icons.dismissMid} style={styles.plusIcon} />
 					</TouchableOpacity>
 					<TouchableOpacity activeOpacity={1}>
-						<Image source={require('image!icon-add-route')} style={styles.editImage} />
+						<Image source={icons.addRoute} style={styles.editImage} />
 					</TouchableOpacity>
 					<TouchableOpacity activeOpacity={1}
 						onPress={() => this.props.addImage(this.props.rowID)}>
-						<Image source={require('image!icon-add-image')} style={styles.editImage} />
+						<Image source={icons.addImage} style={styles.editImage} />
 					</TouchableOpacity>
 					<TouchableOpacity activeOpacity={1}
 						onPress={() => this.props.addText(this.props.rowID)}>
-						<Image source={require('image!icon-add-text')} style={styles.editImage} />
+						<Image source={icons.addText} style={styles.editImage} />
 					</TouchableOpacity>
 				</View>
 			)
@@ -377,7 +381,7 @@ var Cell = React.createClass({
 			return (
 				<View style={styles.flex1View} >
 					<TouchableOpacity onPress={this._changeRowStatus} activeOpacity={1}>
-						<Image source={require('image!icon-plus-blue')} style={styles.plusIcon} />
+						<Image source={icons.plusBlue} style={styles.plusIcon} />
 					</TouchableOpacity>
 				</View>
 			)
@@ -390,14 +394,15 @@ var Cell = React.createClass({
 				{this._renderAddRow()}
 				<View style={[styles.verticalLine, styles.verticalLine10]}></View>
 				<View style={styles.flex1View}>
-					<Image source={require('image!icon-calendar-green')} style={styles.calendarIcon} />
+					<Image source={icons.calendarGreen}
+						style={styles.calendarIcon} />
 					<TextInput onChangeText={(publishDate) => this.props.setItemValue(publishDate, this.props.rowID, 'publishDate')}
 						value={this.state.publishDate}
 						style={styles.textInputView} />
 				</View>
 				<View style={[styles.verticalLine, styles.verticalLine10]}></View>
 				<View style={styles.flex1View}>
-					<Image source={require('image!icon-mark-blue')} style={styles.calendarIcon} />
+					<Image source={icons.markBlue} style={styles.calendarIcon} />
 					<TextInput onChangeText={(address) => this.props.setItemValue(address, this.props.rowID, 'address')}
 						value={this.state.address}
 						style={styles.textInputView} />

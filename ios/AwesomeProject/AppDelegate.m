@@ -84,12 +84,12 @@
    *
    * To run on device, change `localhost` to the IP address of your computer
    * (you can get this by typing `ifconfig` into the terminal and selecting the
-   * `inet` value under `en0:`) and make sure your computer and iOS device are
+   * `inet` value under `en0:`) and make sure your comp uter and iOS device are
    * on the same Wi-Fi network.
    */
   
   jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios"];
-  // jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.20:8081/index.ios.bundle?platform=ios"];
+  //jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.20:8081/index.ios.bundle?platform=ios"];
   
   /**
    * OPTION 2

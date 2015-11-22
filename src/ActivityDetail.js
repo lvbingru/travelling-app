@@ -19,6 +19,7 @@ var {
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
+var icons = require('./icons');
 var su = require('./styleUtils');
 var stylesVar = require('./stylesVar');
 var activityApi = require('./api').activity;
@@ -47,14 +48,14 @@ var ActivityEntries = React.createClass({
         if (_activity.getState() === activityApi.TRAVELLING) {
             return (
                 <View style={styles.row}>
-                    <Image style={styles.countdown} source={require('image!icon-countdown')}/>
+                    <Image style={styles.countdown} source={icons.countdown}/>
                     <Text style={styles.countdownText}>报名已结束</Text>
                 </View>
             );
         } else {
             return (
                 <View style={styles.row}>
-                    <Image style={styles.countdown} source={require('image!icon-countdown')}/>
+                    <Image style={styles.countdown} source={icons.countdown}/>
                     <Text style={styles.countdownText}>
                         报名倒计时：{_activity.daysLeftForApply()}天
                     </Text>
@@ -101,19 +102,19 @@ var ActivityEntries = React.createClass({
             return (
                 <View style={[styles.row, styles.spaceNone]}>
                     <View style={styles.note}>
-                        <Image source={require('image!icon-photos')} style={styles.icon}/>
+                        <Image source={icons.photos} style={styles.icon}/>
                         <Text style={styles.baseText}>相册</Text>
                         <Text style={styles.gray}>({data.photos || 0})</Text>
                     </View>
                     <View style={[styles.separator, {height: 45}]}></View>
                     <View style={styles.note}>
-                        <Image source={require('image!icon-journey')} style={styles.icon}/>
+                        <Image source={icons.journey} style={styles.icon}/>
                         <Text style={styles.baseText}>游记</Text>
                         <Text style={styles.gray}>({data.journeys || 0})</Text>
                     </View>
                     <View style={[styles.separator, {height: 45}]}></View>
                     <View style={styles.note}>
-                        <Image source={require('image!icon-annotations')} style={styles.icon}/>
+                        <Image source={icons.annotations} style={styles.icon}/>
                         <Text style={styles.baseText}>轨迹</Text>
                         <Text style={styles.gray}>({data.annotations || 0})</Text>
                     </View>
@@ -123,21 +124,24 @@ var ActivityEntries = React.createClass({
             return (
                 <View style={[styles.row, styles.spaceNone]}>
                         <View style={styles.stopCell}>
-                            <Image source={require('image!icon-photo-green')} style={styles.iconPhotoGreen}/>
+                            <Image source={icons.photoGreen}
+                                style={styles.iconPhotoGreen}/>
                             <Text style={styles.baseText}>相册
                                 <Text style={styles.gray}>({data.photos || 0})</Text>
                             </Text>
                         </View>
                         <View style={[styles.separator, {height: 90}]}></View>
                         <View style={styles.stopCell}>
-                            <Image source={require('image!icon-journey-red')} style={styles.iconJourneyRed}/>
+                            <Image source={icons.journeyRed}
+                                style={styles.iconJourneyRed}/>
                             <Text style={styles.baseText}>游记
                                 <Text style={styles.gray}>({data.journeys || 0})</Text>
                             </Text>
                         </View>
                         <View style={[styles.separator, {height: 90}]}></View>
                         <View style={styles.stopCell}>
-                            <Image source={require('image!icon-annotation-yello')} style={styles.iconAnnotationYello} />
+                            <Image source={icons.annotationYellow}
+                                style={styles.iconAnnotationYello} />
                             <Text style={styles.baseText}>轨迹
                                 <Text style={styles.gray}>({data.annotations || 0})</Text>
                             </Text>
@@ -267,7 +271,7 @@ var ActivityDetail = React.createClass({
         var _activity = this.state.activity;
         var creator = _activity.get('createBy');
         // TOOD: use real avatar
-        var creatorAvatar = require('image!avatar-placeholder');
+        var creatorAvatar = icons.avatarPlaceholder;
 
         var isSponsor = this.state.user.id === creator.id;
 
@@ -290,12 +294,18 @@ var ActivityDetail = React.createClass({
                             avatar={creatorAvatar}/>
                         {isSponsor && (
                             <View style={styles.manageInfo}>
-                                <TouchableOpacity onPress={this.editHandle} style={styles.manageView}>
-                                    <Image source={require('image!icon-edit-white')} style={styles.iconEditWhite}/>
+                                <TouchableOpacity
+                                    onPress={this.editHandle}
+                                    style={styles.manageView}>
+                                    <Image source={icons.editWhite}
+                                        style={styles.iconEditWhite}/>
                                     <Text style={[styles.manageText, styles.editText]}>编辑</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={this.manageHandle} style={styles.manageView}>
-                                    <Image source={require('image!icon-manage-white')} style={styles.iconManageWhite} />
+                                <TouchableOpacity
+                                    onPress={this.manageHandle}
+                                    style={styles.manageView}>
+                                    <Image source={icons.manageWhite}
+                                        style={styles.iconManageWhite} />
                                     <Text style={styles.manageText}>管理</Text>
                                 </TouchableOpacity>
                             </View>
@@ -319,7 +329,7 @@ var ActivityDetail = React.createClass({
                     <ActivityEntries activity={this.state.activity}/>
 
                     <View style={styles.moreRow}>
-                        <Image source={require('image!more-down-gray')}
+                        <Image source={icons.moreDownGray}
                             style={styles.moreDownGray} />
                     </View>
                     <View style={styles.moreRow}>
@@ -402,7 +412,6 @@ var styles = StyleSheet.create({
         ...su.size(17, 15),
             marginLeft: 10,
     },
-
 
     banner: {
         height: 180,
@@ -672,22 +681,25 @@ class ActivityDetailRoute extends BaseRouteMapper {
             },
         });
 
-        var starIcon = this.starred ? require('image!icon-star') : require('image!icon-stars-o');
+        var starIcon = this.starred ? icons.star : icons.starsOpposite;
 
         return (
             <View style={[wrap, navBarRightButton]}>
                 <View style={styles.navbarRight}>
-                    <TouchableOpacity activeOpacity={0.8} onPress={this.commentHandle.bind(this, navigator)}>
-                        <Image style={styles.iconComments} source={require('image!icon-comments')}/>
+                    <TouchableOpacity activeOpacity={0.8}
+                        onPress={this.commentHandle.bind(this, navigator)}>
+                        <Image style={styles.iconComments}
+                            source={icons.comments}/>
                     </TouchableOpacity>
                     <Text style={styles.navbarText}>127</Text>
 
-                    <TouchableOpacity activeOpacity={0.8} onPress={this._toggleStar.bind(this)}>
+                    <TouchableOpacity activeOpacity={0.8}
+                        onPress={this._toggleStar.bind(this)}>
                         <Image style={styles.iconStars} source={starIcon}/>
                     </TouchableOpacity>
                     <Text style={styles.navbarText}>{this.stars}</Text>
 
-                    <Image style={styles.iconShare} source={require('image!icon-share')}/>
+                    <Image style={styles.iconShare} source={icons.share}/>
                 </View>
             </View>
         );

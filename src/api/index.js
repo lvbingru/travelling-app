@@ -706,27 +706,27 @@ function uploadPhoto(path) {
 var REGIONS = [{
     tag: 'all',
     name: '全部',
-    icon: require('image!icon-region-shanxi')
+    icon: require('../../img/icon-region-shanxi.png')
 }, {
     tag: 'beijing',
     name: '北京',
-    icon: require('image!icon-region-beijing'),
+    icon: require('../../img/icon-region-beijing.png'),
 }, {
     tag: 'hebei',
     name: '河北',
-    icon: require('image!icon-region-hebei'),
+    icon: require('../../img/icon-region-hebei.png'),
 }, {
     tag: 'shandong',
     name: '山东',
-    icon: require('image!icon-region-shandong'),
+    icon: require('../../img/icon-region-shandong.png'),
 }, {
     tag: 'tianjin',
     name: '天津',
-    icon: require('image!icon-region-tianjin'),
+    icon: require('../../img/icon-region-tianjin.png'),
 }, {
     tag: 'neimenggu',
     name: '内蒙古',
-    icon: require('image!icon-region-neimenggu'),
+    icon: require('../../img/icon-region-neimenggu.png'),
 }];
 
 var _regions, _loadingRegions = false;

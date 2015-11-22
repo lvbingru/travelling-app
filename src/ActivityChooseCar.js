@@ -11,6 +11,7 @@ var {
 	TouchableOpacity
 } = React;
 
+var icons = require('./icons');
 var stylesVar = require('./stylesVar');
 var AddOrEditCar = require('./AddOrEditCar');
 
@@ -89,7 +90,8 @@ var ActivityChooseCar = React.createClass({
 		if (index === this.state.chooseIndex) {
 			return (
 				<View style={styles.okView}>
-					<Image style={styles.okImage} source={require('image!icon-ready')} />
+					<Image style={styles.okImage}
+						source={icons.ready} />
 				</View>
 			);
 		}

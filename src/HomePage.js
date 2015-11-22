@@ -15,6 +15,7 @@ var {
     NativeModules
 } = React;
 
+var icons = require('./icons');
 var Icon = require('react-native-vector-icons/Ionicons');
 var Navbars = require('./Navbars');
 var SpringBoard = NativeModules.SpringBoard;
@@ -23,6 +24,9 @@ var Space = require('./Space');
 var JourneyTab = require('./JourneyTab');
 var PlusMenu = require('./PlusMenu');
 var FillActivityBrief = require('./FillActivityBrief');
+var FriendsTab = require('./FriendsTab');
+
+console.log(icons.tabActivity);
 
 function emptyFunction() {}
 
@@ -47,7 +51,7 @@ var HomePage = React.createClass({
     },
 
     componentDidMount: function() {
-        this.props.changeRoute(this.refs.activities.route);
+        this.props.changeRoute(this.refs[this.state.selectedTab].route);
     },
 
     gotoIM: function() {
@@ -99,38 +103,12 @@ var HomePage = React.createClass({
         )
     },
 
-    _getPreviousTab: function() {
-        if (this.state.selectedTab === 'activities') {
-            return this.refs.activity;
-        } else if (this.state.selectedTab === 'journeys') {
-            return this.refs.journey;
-        } else {
-            return this.refs.space;
-        }
-    },
-
-    _onActivitiesSelect: function() {
+    _onTabSelect: function(tab) {
         this.setState({
-            selectedTab: 'activities'
+            selectedTab: tab
         }, function() {
-            this.props.changeRoute(this.refs.activities.route);
-        }.bind(this));
-    },
-
-    _onJourneySelect: function() {
-        this.setState({
-            selectedTab: 'journeys'
-        }, function() {
-            this.props.changeRoute(this.refs.journey.route);
-        }.bind(this));
-    },
-
-    _onSpaceSelect: function() {
-        this.setState({
-            selectedTab: 'space'
-        }, function() {
-            this.props.changeRoute(this.refs.space.route);
-        }.bind(this));
+            this.props.changeRoute(this.refs[tab].route);
+        }.bind(this))
     },
 
     _onPlusResult: function(result) {
@@ -168,7 +146,7 @@ var HomePage = React.createClass({
                 icon={{uri: 'icon-tab-activity', scale: 2}}
                 selectedIcon={{uri: 'icon-tab-activity-active', scale: 2}}
                 selected={this.state.selectedTab === 'activities'}
-                onPress={this._onActivitiesSelect}>
+                onPress={() => this._onTabSelect('activities')}>
 
                 <ActivityList
                     ref="activities" 
@@ -181,10 +159,10 @@ var HomePage = React.createClass({
                 icon={{uri: 'icon-tab-journey', scale: 2}}
                 selectedIcon={{uri: 'icon-tab-journey-active', scale: 2}}
                 selected={this.state.selectedTab === 'journeys'}
-                onPress={this._onJourneySelect}>
+                onPress={() => this._onTabSelect('journeys')}>
 
                   <JourneyTab 
-                    ref="journey" 
+                    ref="journeys" 
                     navigator={this.props.navigator}/>
                     
               </TabBarIOS.Item>
@@ -197,8 +175,12 @@ var HomePage = React.createClass({
 
               <TabBarIOS.Item
                 title="朋友"
+                selected={this.state.selectedTab === 'friends'}
                 icon={{uri: 'icon-tab-friends', scale: 2}}
                 selectedIcon={{uri: 'icon-tab-friends-active', scale: 2}}>
+
+                <FriendsTab ref="friends" navigator={this.props.navigator}/>
+
               </TabBarIOS.Item>
               
               <TabBarIOS.Item
@@ -206,7 +188,7 @@ var HomePage = React.createClass({
                 icon={{uri: 'icon-tab-space', scale: 2}}
                 selectedIcon={{uri: 'icon-tab-space-active', scale: 2}}
                 selected={this.state.selectedTab === 'space'}
-                onPress={this._onSpaceSelect}>
+                onPress={() => this._onTabSelect('space')}>
 
                 <Space 
                   ref="space" 
@@ -249,6 +231,11 @@ class HomePageRoute extends BaseRouteMapper {
     renderLeftButton(route, navigator, index, navState) {
         return this._route &&
             this._route.renderLeftButton(route, navigator, index, navState);
+    }
+
+    renderRightButton(route, navigator, index, navState) {
+        return this._route &&
+            this._route.renderRightButton(route, navigator, index, navState);
     }
 
     renderTitle(route, navigator, index, navState) {

@@ -13,6 +13,7 @@ var {
     SwitchIOS
 } = React;
 
+var icons = require('./icons');
 var Tab = require('./widgets/Tab');
 var stylesVar = require('./stylesVar');
 var ActivityApplySuccess = require('./ActivityApplySuccess');
@@ -298,7 +299,7 @@ var ActivityApply = React.createClass({
 								onPress={this.addCarHandle}>
 								<Text style={styles.carTypeText}>{datas.carType}</Text>
 								<View style={styles.imageView}>
-									<Image source={require('image!icon-arrow')} 
+									<Image source={icons.arrow} 
 										style={styles.iconArrow}/>
 								</View>
 							</TouchableOpacity>

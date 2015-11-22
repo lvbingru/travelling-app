@@ -21,6 +21,7 @@ var {
   UserInfo 
 }= require('./widgets');
 
+var icons = require('./icons');
 var su = require('./styleUtils');
 var api = require('./api');
 var journey = api.journey;
@@ -137,7 +138,7 @@ var Journey = React.createClass({
   render: function() {
     var data = this.props.data;
     var user = data.user;
-    var avatar = user.avatar ? {url: user.avatar} : require('image!avatar-placeholder');
+    var avatar = user.avatar ? {url: user.avatar} : icons.avatarPlaceholder;
 
     return (
         <TouchableHighlight style={this.props.style} underlayColor='#f3f5f6'>
@@ -156,9 +157,9 @@ var Journey = React.createClass({
                 <Text style={[styles.title, styles.baseText]}>{data.title}</Text>
 
                 <View style={styles.data}>
-                  <Image source={require('image!icon-views')} style={[styles.icon, {marginRight: 4}]}/>
+                  <Image source={icons.views} style={[styles.icon, {marginRight: 4}]}/>
                   <Text style={[styles.small, {marginRight: 12}]}>{data.views}</Text>
-                  <Image source={require('image!icon-stars')} style={[styles.icon, {marginRight: 4}]}/>
+                  <Image source={icons.stars} style={[styles.icon, {marginRight: 4}]}/>
                   <Text style={styles.small}>{data.stars}</Text>
                 </View>
             </View>

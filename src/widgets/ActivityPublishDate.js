@@ -8,6 +8,7 @@ var {
     StyleSheet
 } = React;
 
+var icons = require('../icons');
 var su = require('../styleUtils');
 
 var ActivityPublishDate = React.createClass({
@@ -34,7 +35,8 @@ var ActivityPublishDate = React.createClass({
 
         return (
           <View style={[styles.date, this.props.style]}>
-            <Image style={[styles.icon, {marginRight: 10}]} source={require('image!icon-calendar')}/>
+            <Image style={[styles.icon, {marginRight: 10}]}
+                source={icons.calendar}/>
             <Text style={styles.baseText}>
               {this._formatDate(startDate)} ~ {this._formatDate(endDate)}
             </Text>

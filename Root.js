@@ -1,5 +1,8 @@
 'use strict';
 
+// FIXME: hack react native packager 给 leancloud-realtime 提供 xmlhttprequest 模块
+require('xmlhttprequest');
+
 var React = require('react-native');
 var cssVar = require('cssVar');
 
@@ -8,12 +11,7 @@ var SignUp = require('./src/SignUp');
 
 var ModalExample = require('./ModalExample');
 var Onboarding = require('./src/Onboarding');
-var config = require('./src/config');
-var HomePage = require('./src/HomePage');
-var Onboarding = require('./src/Onboarding');
-var NavBar = require('./src/NavBar');
-
-var Dispatcher = require('./src/Dispatcher');
+var config = require('./src/config'); var HomePage = require('./src/HomePage'); var Onboarding = require('./src/Onboarding'); var NavBar = require('./src/NavBar'); var Dispatcher = require('./src/Dispatcher');
 var store = require('./src/store');
 var {buildSession} = require('./src/actions');
 
@@ -26,12 +24,6 @@ var Navbars = require('./src/Navbars');
 var {
     user
 } = api;
-
-var {
-    RefresherListView,
-    LoadingBarIndicator
-} = require('react-native-refresher');
-
 
 var {
     Animated,
@@ -125,6 +117,9 @@ var Home = React.createClass({
     },
 
     _testRoute: function() {
+        //var route = require('./src/friends/ConversationScene');
+        // var route = require('./src/testrealtimemessage');
+        // var Route = require('./src/LocalPhotoPicker');
         //var Route = require('./src/LocalPhotoPicker');
         // var Route = require('./src/ActivityApply');
         // var Route = require('./src/TestStretchy');
@@ -134,11 +129,9 @@ var Home = React.createClass({
         //var Route = require('./src/LocalSeveralPhotoPicker');
         //var Route = require('./src/RecordActivityChoosePhoto');
         //var Route = require('./src/RecordActivityEdit');
-        var Route = require('./src/SystemSettings');
-        this.refs.navigator.replace(new Route({
-            title: '本地相册',
-            onResult: console.log.bind(console)
-        }));
+        //var Route = require('./src/SystemSettings');
+        var Route = require('./src/Profile');
+        this.refs.navigator.replace(new Route(new AV.User()));
     },
 
     _handleChange: function() {
@@ -165,7 +158,7 @@ var Home = React.createClass({
     },
 
     componentDidMount: function() {
-        return this._testRoute();
+        //return this._testRoute();
 
         Dispatcher.addListener('logout', function() {
             this.refs.navigator.resetTo(new SignIn)

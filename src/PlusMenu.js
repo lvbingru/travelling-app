@@ -11,6 +11,7 @@ var {
 } = React;
 
 var {BlurView} = require('react-native-blur');
+var icons = require('./icons');
 var su = require('./styleUtils');
 
 var PlusMenu = React.createClass({
@@ -39,7 +40,7 @@ var PlusMenu = React.createClass({
             <TouchableOpacity 
                 activeOpacity={0.8} 
                 onPress={this._dismiss} style={styles.dismiss}>
-                <Image source={require('image!icon-dismiss')} style={styles.button}/>
+                <Image source={icons.dismiss} style={styles.button}/>
             </TouchableOpacity>
 
             <View style={styles.options}>
@@ -47,7 +48,7 @@ var PlusMenu = React.createClass({
                     activeOpacity={0.8} 
                     onPress={this._setResult('route')} 
                     style={styles.option}>
-                    <Image source={require('image!icon-add-route')} style={styles.button}/>
+                    <Image source={icons.addRoute} style={styles.button}/>
                     <Text style={styles.baseText}>记录轨迹</Text>
                 </TouchableOpacity>
 
@@ -55,7 +56,7 @@ var PlusMenu = React.createClass({
                     activeOpacity={0.8} 
                     onPress={this._setResult('activity')} 
                     style={styles.option}>
-                    <Image source={require('image!icon-new-activity')} style={styles.button}/>
+                    <Image source={icons.newActivity} style={styles.button}/>
                     <Text style={styles.baseText}>发起活动</Text>
                 </TouchableOpacity>
 
@@ -63,7 +64,7 @@ var PlusMenu = React.createClass({
                     activeOpacity={0.8} 
                     onPress={this._setResult('journey')} 
                     style={styles.option}>
-                    <Image source={require('image!icon-new-journey-note')} style={styles.button}/>
+                    <Image source={icons.newJourneyNote} style={styles.button}/>
                     <Text style={styles.baseText}>写游记</Text>
                 </TouchableOpacity>
             </View>

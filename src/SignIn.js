@@ -81,10 +81,12 @@ var SignInView = React.createClass({
 
 	render: function() {
 		return (
-			<Image source={require('image!signin-bg')} style={[styles.container, this.props.style]}>
+			<Image source={require('../img/signin-bg.png')}
+				style={[styles.container, this.props.style]}>
 				<View style={styles.signinForm}>
 					<View style={styles.inputWrap}>
-						<Image source={require('image!user-icon')} style={styles.inputIcon}/>
+						<Image source={require('../img/user-icon.png')}
+							style={styles.inputIcon}/>
 						<TextInput placeholder='输入手机号' 
 							style={[styles.input, styles.inputPhone]}
 							onChangeText={(phone) => this.setState({phone})}/>
@@ -93,7 +95,7 @@ var SignInView = React.createClass({
 					<View style={[styles.inputWrap, styles.inputSeparator]}/>
 
 					<View style={styles.inputWrap}>
-						<Image source={require('image!password-icon')} style={styles.inputIcon}/>
+						<Image source={require('../img/password-icon.png')} style={styles.inputIcon}/>
 						<TextInput placeholder='输入密码'
 							style={styles.input}
 							secureTextEntry={true} 
@@ -119,7 +121,7 @@ var SignInView = React.createClass({
 
 				<View style={styles.wechatWrap}>
 					<TouchableOpacity onPress={this._signInByWechat} activeOpacity={0.8}>
-						<Image source={require('image!wechat-icon')} style={styles.wechatIcon}/>
+						<Image source={require('../img/wechat-icon.png')} style={styles.wechatIcon}/>
 					</TouchableOpacity>
 					<Text style={styles.wechatTip}>使用微信账号登录</Text>
 				</View>

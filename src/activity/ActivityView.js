@@ -21,6 +21,7 @@ var {
     BaseText
 } = require('../widgets');
 
+var icons = require('../icons');
 var Text = BaseText;
 
 var stylesVar = require('../stylesVar');
@@ -40,9 +41,9 @@ var ActivityView = React.createClass({
         // var avatar = creator.avatar ? {
         // url: creator.avatar
         // } : require('image!avatar-placeholder');
-        var avatar = require('image!avatar-placeholder');
+        var avatar = icons.avatarPlaceholder;
 
-        var iconStar = _activity.getStarred() ? require('image!icon-star') : require('image!icon-stars');
+        var iconStar = _activity.getStarred() ? icons.star : icons.stars;
 
         return (
             <TouchableOpacity activeOpacity={0.8} onPress={this.props.onPress}>

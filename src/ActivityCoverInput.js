@@ -8,9 +8,9 @@ var {
     StyleSheet
 } = React;
 
-var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 var LocalPhotoPicker = require('./LocalPhotoPicker');
 
+var icons = require('./icons');
 var su = require('./styleUtils');
 var {
     PenIcon
@@ -18,7 +18,7 @@ var {
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
-var placeholder = require('image!cover-placeholder');
+var placeholder = icons.coverPlaceholder;
 var placeholderSize = {
     width: 722,
     height: 332

@@ -18,6 +18,7 @@ var stylesVar = require('./stylesVar');
 var activityApi = require('./api').activity;
 var LightBox = require('./LightBox');
 var AddComment = require('./AddComment');
+var icons = require('./icons');
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
@@ -138,11 +139,11 @@ var CommentItem = React.createClass({
 	renderLikeImage: function() {
 		var data = this.props.data;
 		if (data.isLike === '1') {
-			return <Image style={styles.starIcon} source={require('image!like-red')} />
+			return <Image style={styles.starIcon} source={icons.likeRed}/>
 		} else {
 			return (
 				<TouchableOpacity onPress={this.starHandle}>
-					<Image style={styles.starIcon} source={require('image!like-gray')} />
+					<Image style={styles.starIcon} source={icons.likeGray}/>
 				</TouchableOpacity>
 			);
 		}
@@ -154,7 +155,7 @@ var CommentItem = React.createClass({
 		return (
 			<View style={styles.row}>
 				<View style={styles.user}>
-					<Image source={data.user && data.user.avatar ? {uri: data.user.avatar}: require('image!avatar-placeholder')} 
+					<Image source={data.user && data.user.avatar ? {uri: data.user.avatar}: icons.avatarPlaceholder} 
 						style={styles.avatar}/>
 					<View style={styles.username}>
 						<Text style={styles.usernameText}>{data.user && data.user.username}</Text>

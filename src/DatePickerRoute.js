@@ -68,6 +68,7 @@ var DatepickerScene = React.createClass({
 var styles = StyleSheet.create({
     container: {
         flex: 1,
+        alignItems: 'center',
         backgroundColor: '#fff'
     },
 

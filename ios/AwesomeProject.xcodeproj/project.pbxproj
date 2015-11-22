@@ -167,6 +167,9 @@
 		68C0D73D1BB3D687007A6FFF /* main_leanchat.m in Sources */ = {isa = PBXBuildFile; fileRef = 68C0D73C1BB3D687007A6FFF /* main_leanchat.m */; };
 		68C0D7421BB3F9FE007A6FFF /* ReactViewWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 68C0D7411BB3F9FE007A6FFF /* ReactViewWrapper.m */; };
 		68C0D7451BB3FF56007A6FFF /* SpringBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 68C0D7441BB3FF56007A6FFF /* SpringBoard.m */; };
+		68D2B9D81BF86FC900CB7095 /* AudioPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D2B9D51BF86FC900CB7095 /* AudioPlayerManager.m */; };
+		68D2B9D91BF86FC900CB7095 /* AudioRecorderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D2B9D71BF86FC900CB7095 /* AudioRecorderManager.m */; };
+		68F501B41BFB6C26000469D5 /* TextMeasurer.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F501B31BFB6C26000469D5 /* TextMeasurer.m */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		A797834B8CAAD691A1C26BD4 /* libPods-AwesomeProject.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 375F033B6929C3810D1CC22C /* libPods-AwesomeProject.a */; };
 		E013541A1BBC081000D55854 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E01354191BBC081000D55854 /* Main.storyboard */; };
@@ -512,6 +515,12 @@
 		68C0D7411BB3F9FE007A6FFF /* ReactViewWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReactViewWrapper.m; path = AwesomeProject/ReactViewWrapper.m; sourceTree = "<group>"; };
 		68C0D7431BB3FEF7007A6FFF /* SpringBoard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SpringBoard.h; path = AwesomeProject/SpringBoard.h; sourceTree = "<group>"; };
 		68C0D7441BB3FF56007A6FFF /* SpringBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SpringBoard.m; path = AwesomeProject/SpringBoard.m; sourceTree = "<group>"; };
+		68D2B9D41BF86FC900CB7095 /* AudioPlayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioPlayerManager.h; path = "../node_modules/react-native-audio/ios/AudioPlayerManager.h"; sourceTree = "<group>"; };
+		68D2B9D51BF86FC900CB7095 /* AudioPlayerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioPlayerManager.m; path = "../node_modules/react-native-audio/ios/AudioPlayerManager.m"; sourceTree = "<group>"; };
+		68D2B9D61BF86FC900CB7095 /* AudioRecorderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioRecorderManager.h; path = "../node_modules/react-native-audio/ios/AudioRecorderManager.h"; sourceTree = "<group>"; };
+		68D2B9D71BF86FC900CB7095 /* AudioRecorderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioRecorderManager.m; path = "../node_modules/react-native-audio/ios/AudioRecorderManager.m"; sourceTree = "<group>"; };
+		68F501A41BFB6BFE000469D5 /* TextMeasurer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextMeasurer.h; sourceTree = "<group>"; };
+		68F501B31BFB6C26000469D5 /* TextMeasurer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextMeasurer.m; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		B2465566877ED921032C2325 /* Pods-AwesomeProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeProject.release.xcconfig"; path = "Pods/Target Support Files/Pods-AwesomeProject/Pods-AwesomeProject.release.xcconfig"; sourceTree = "<group>"; };
@@ -664,6 +673,8 @@
 				68C0D7441BB3FF56007A6FFF /* SpringBoard.m */,
 				6252BFAC1BCCFCEC00A7C093 /* UserApi.m */,
 				6252BFAE1BCCFCF900A7C093 /* UserApi.h */,
+				68F501A41BFB6BFE000469D5 /* TextMeasurer.h */,
+				68F501B31BFB6C26000469D5 /* TextMeasurer.m */,
 			);
 			name = AwesomeProject;
 			sourceTree = "<group>";
@@ -1075,6 +1086,17 @@
 			path = views;
 			sourceTree = "<group>";
 		};
+		68D2B9EA1BF86FED00CB7095 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				68D2B9D41BF86FC900CB7095 /* AudioPlayerManager.h */,
+				68D2B9D51BF86FC900CB7095 /* AudioPlayerManager.m */,
+				68D2B9D61BF86FC900CB7095 /* AudioRecorderManager.h */,
+				68D2B9D71BF86FC900CB7095 /* AudioRecorderManager.m */,
+			);
+			name = Audio;
+			sourceTree = "<group>";
+		};
 		78C398B11ACF4ADC00677621 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1115,6 +1137,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				68D2B9EA1BF86FED00CB7095 /* Audio */,
 				E0BEA0421BC0C8BA00600559 /* UIImagePickerManager */,
 				E0BEA0411BC0114C00600559 /* Ionicons.ttf */,
 				E0BEA0401BC0113D00600559 /* MaterialIcons.ttf */,
@@ -1615,10 +1638,12 @@
 				68C0D6701BB3ADDA007A6FFF /* CDEntryBaseVC.m in Sources */,
 				68C0D6751BB3ADDA007A6FFF /* CDAddFriendVC.m in Sources */,
 				68C0D6791BB3ADDA007A6FFF /* CDProfileNameVC.m in Sources */,
+				68D2B9D81BF86FC900CB7095 /* AudioPlayerManager.m in Sources */,
 				68C0D6771BB3ADDA007A6FFF /* CDFriendListVC.m in Sources */,
 				68C0D6E71BB3ADDA007A6FFF /* CDPopMenuItem.m in Sources */,
 				68C0D7421BB3F9FE007A6FFF /* ReactViewWrapper.m in Sources */,
 				68C0D6641BB3ADDA007A6FFF /* CDBaseVC.m in Sources */,
+				68D2B9D91BF86FC900CB7095 /* AudioRecorderManager.m in Sources */,
 				68C0D66A1BB3ADDA007A6FFF /* CDConvDetailVC.m in Sources */,
 				E013542A1BBC088400D55854 /* PageViewController.m in Sources */,
 				68C0D66F1BB3ADDA007A6FFF /* CDSelectMemberVC.m in Sources */,
@@ -1633,6 +1658,7 @@
 				68C0D6E11BB3ADDA007A6FFF /* CDEntryBottomButton.m in Sources */,
 				68C0D6EA1BB3ADDA007A6FFF /* CDSNSView.m in Sources */,
 				68C0D6631BB3ADDA007A6FFF /* CDBaseTableVC.m in Sources */,
+				68F501B41BFB6C26000469D5 /* TextMeasurer.m in Sources */,
 				68C0D6691BB3ADDA007A6FFF /* CDAddMemberVC.m in Sources */,
 				E0BEA0451BC0C8BA00600559 /* UIImagePickerManager.m in Sources */,
 				68C0D67A1BB3ADDA007A6FFF /* CDProfileVC.m in Sources */,

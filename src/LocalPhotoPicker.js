@@ -1,10 +1,7 @@
-var shortid = require('shortid');
 var _ = require('underscore');
+var shortid = require('shortid');
+
 var React = require('react-native');
-
-var AV = require('avoscloud-sdk');
-
-var Photo = AV.Object.extend("Photo");
 
 var {
     View,
@@ -17,6 +14,9 @@ var {
     ListView,
     TouchableOpacity
 } = React;
+
+var AV = require('avoscloud-sdk');
+var Photo = AV.Object.extend("Photo");
 
 var deviceWidth = Dimensions.get('window').width;
 var su = require('./styleUtils');
@@ -56,11 +56,7 @@ var CameraRollScene = React.createClass({
         var ext = image.uri.split(/ext=/)[1];
         var name = shortid.generate() + '.' + ext;
         var file = new AV.File(name, {
-            blob: {
-                name: name,
-                uri: image.uri,
-                type: 'image/jpeg'
-            }
+            blob: image 
         });
 
         file.save().then(console.log.bind(console), console.trace.bind(console));

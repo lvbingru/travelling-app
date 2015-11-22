@@ -6,12 +6,13 @@ var {
 } = React;
 
 var su = require('../styleUtils');
+var icons = require('../icons');
 
 var ArrowIcon = React.createClass({
     render: function() {
         return (
             <Image style={[styles.arrow, this.props.style]}
-                source={require('image!icon-arrow')}/>
+                source={icons.arrow}/>
         );
     }
 });
@@ -20,7 +21,7 @@ var PenIcon = React.createClass({
     render: function() {
         return (
             <Image style={[styles.pen, this.props.style]}
-                source={require('image!icon-edit')}/>
+                source={icons.edit}/>
         );
     }
 });
