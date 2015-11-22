@@ -134,6 +134,7 @@ var Home = React.createClass({
         //var Route = require('./src/LocalSeveralPhotoPicker');
         //var Route = require('./src/RecordActivityChoosePhoto');
         //var Route = require('./src/RecordActivityEdit');
+        var Route = require('./src/SystemSettings');
         this.refs.navigator.replace(new Route({
             title: '本地相册',
             onResult: console.log.bind(console)
@@ -164,7 +165,7 @@ var Home = React.createClass({
     },
 
     componentDidMount: function() {
-        //return this._testRoute();
+        return this._testRoute();
 
         Dispatcher.addListener('logout', function() {
             this.refs.navigator.resetTo(new SignIn)
