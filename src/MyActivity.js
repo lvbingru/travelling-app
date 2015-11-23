@@ -3,6 +3,7 @@ var React = require('react-native');
 var {
 	StyleSheet,
 	View,
+	Image,
 	ListView
 } = React;
 

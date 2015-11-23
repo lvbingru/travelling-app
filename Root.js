@@ -133,7 +133,8 @@ var Home = React.createClass({
         //var Route = require('./src/Profile');
         //var Route = require('./src/FriendSpace');
         //var Route = require('./src/FriendSpaceGallery');
-        var Route = require('./src/MyActivity');
+        //var Route = require('./src/MyActivity');
+        var Route = require('./src/MyJourney');
         this.refs.navigator.replace(new Route(new AV.User()));
     },
 
