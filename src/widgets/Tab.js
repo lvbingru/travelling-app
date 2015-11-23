@@ -27,7 +27,7 @@ var Tab = React.createClass({
 		}, function() {
 			var func = this.props.callbacks && this.props.callbacks[index];
 			if (typeof func === 'function') {
-				func();
+				func(index);
 			}
 		}.bind(this));
 	},
@@ -42,22 +42,16 @@ var Tab = React.createClass({
 
 	render: function() {
 		var activeTab = parseInt(this.state.activeTab);
-		var styleProps = this.props.styles;
-		var tabTextFont = {
-			fontSize: 10
-		};
-		if (styleProps && styleProps.tabTextFont) {
-			tabTextFont = styleProps.tabTextFont;
-		}
+		
 		return (
-			<View style={styles.tabRow}>
+			<View style={[styles.tabRow, this.props.styles && this.props.styles.tabView]}>
 				{this.props.datas && this.props.datas.map(function(item, index) {
 					if (activeTab === index) {
 						return (
 							<TouchableOpacity activeOpacity={1}
 								onPress={this.pressHandle.bind(this, index)}
 								style={[styles.tabView, styles.tabViewActive]}>
-								<Text style={[styles.tabText, tabTextFont, styles.tabTextActive]}>{item}</Text>
+								<Text style={[styles.tabText, this.props.styles && this.props.styles.tabTextFont, styles.tabTextActive]}>{item}</Text>
 							</TouchableOpacity>
 						)
 					} else {
@@ -65,7 +59,7 @@ var Tab = React.createClass({
 							<TouchableOpacity activeOpacity={1} 
 								onPress={this.pressHandle.bind(this, index)}
 								style={styles.tabView}>
-								<Text style={[styles.tabText, tabTextFont]}>{item}</Text>
+								<Text style={[styles.tabText, this.props.styles && this.props.styles.tabTextFont]}>{item}</Text>
 							</TouchableOpacity>
 						)
 					}
@@ -95,7 +89,7 @@ var styles = StyleSheet.create({
 
     tabText: {
         color: stylesVar('dark-light-little'),
-        fontWeight: "200"
+        fontSize: 10
     },
 
     tabViewActive: {

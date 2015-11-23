@@ -641,7 +641,7 @@ class ActivityDetailRoute extends BaseRouteMapper {
 
     renderLeftButton(route, navigator, index, navState) {
         function callback() {
-            this.refreshDetail(this.activity.id);
+            this.refreshDetail && this.refreshDetail(this.activity.id);
             navigator.pop();
         }
         return this._renderBackButton(route, navigator, index, navState, callback.bind(this));

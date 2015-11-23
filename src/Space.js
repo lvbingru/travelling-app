@@ -23,7 +23,7 @@ console.log('device height', deviceHeight);
 var icons = require('./icons');
 var su = require('./styleUtils');
 var BaseRouteMapper = require('./BaseRouteMapper');
-var ActivityScene = require('./ActivityScene');
+var MyActivity = require('./MyActivity');
 
 var store = require('./store');
 var {updateSession} = require('./actions');
@@ -93,7 +93,7 @@ var Space = React.createClass({
     _goto: function(entry) {
         return function() {
             if (entry === 'activity') {
-                this.props.navigator.push(new ActivityScene);
+                this.props.navigator.push(new MyActivity());
             }
         }.bind(this);
     },
