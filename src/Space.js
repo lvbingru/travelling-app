@@ -23,8 +23,10 @@ console.log('device height', deviceHeight);
 var icons = require('./icons');
 var su = require('./styleUtils');
 var BaseRouteMapper = require('./BaseRouteMapper');
+
 var MyActivity = require('./MyActivity');
 var MyJourney = require('./MyJourney');
+var MyBill = require('./MyBill');
 
 var store = require('./store');
 var {updateSession} = require('./actions');
@@ -95,8 +97,10 @@ var Space = React.createClass({
         return function() {
             if (entry === 'activity') {
                 this.props.navigator.push(new MyActivity());
-            } else if(entry === 'journey') {
+            } else if (entry === 'journey') {
                 this.props.navigator.push(new MyJourney());
+            } else if (entry === 'bill') {
+                this.props.navigator.push(new MyBill());
             }
         }.bind(this);
     },
@@ -166,7 +170,8 @@ var Space = React.createClass({
                     icon={icons.journey} count={info.journey || ''}/>
                 <Entry label='轨迹' icon={icons.annotations} count={info.annotations || ''}/>
                 <Entry label='相册' icon={icons.photos} count={info.photos || ''}/>
-                <Entry label='账单' icon={icons.bills} count={info.bills || ''} style={styles.last}/>
+                <Entry label='账单' onPress={this._goto('bill')}
+                    icon={icons.bills} count={info.bills || ''} style={styles.last}/>
               </View>
 
               <TouchableOpacity style={{margin: 20}} 
