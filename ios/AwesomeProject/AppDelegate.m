@@ -33,6 +33,7 @@
 #import <iVersion/iVersion.h>
 #import <LeanCloudSocial/AVOSCloudSNS.h>
 #import <OpenShare/OpenShareHeader.h>
+#import <RCTBaiduMap.h>
 
 @interface AppDelegate()
 
@@ -71,6 +72,8 @@
   UINavigationController *rootViewController = [[UINavigationController alloc] init];
   rootViewController.navigationBarHidden = true;
   self.window.rootViewController = rootViewController;
+  
+  [RCTBaiduMap registerAppId:@"NM6ovnGE27kFRXzXMLUU7aGo" launchOptions:launchOptions];
 
   NSURL *jsCodeLocation;
   
@@ -90,7 +93,8 @@
   
   jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios"];
   //jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.20:8081/index.ios.bundle?platform=ios"];
-  
+//  jsCodeLocation = [NSURL URLWithString:@"http://192.168.0.104:8081/index.ios.bundle?platform=ios"];
+
   /**
    * OPTION 2
    * Load from pre-bundled file on disk. To re-generate the static bundle
