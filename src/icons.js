@@ -93,3 +93,6 @@ exports.markBlue = require('../img/icon-mark-blue.png');
 //profile
 exports.code = require('../img/icon-code.png');
 exports.avatar = require('../img/icon-avatar.png');
+
+//myphotos
+exports.photosDecoration = require('../img/photos-decoration.png');

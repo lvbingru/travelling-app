@@ -31,7 +31,7 @@ var LightBoxOverlay = React.createClass({
 					index={index}
 					loop={false}>
 					{imagesArray && imagesArray.length !== 0 && imagesArray.map(function(item) {
-						return (<View style={styles.slide}><Image style={styles.images} source={{uri: item}} /></View>)
+						return (<View style={styles.slide}><Image style={styles.images} source={{uri: item}} resizeMode='contain' /></View>)
 					}.bind(this))}
 				</Swiper>
 		)
@@ -49,7 +49,7 @@ var styles = StyleSheet.create({
 
 	slide: {
 		flex: 1,
-    	backgroundColor: 'transparent',
+    	backgroundColor: '#000',
 	}
 });
 
@@ -65,8 +65,8 @@ class LightBoxOverlayRoute extends BaseRouteMapper {
 		return this._renderBackButton(route, navigator, index, navState);
 	}
 
-	renderScene(navigator) {
-		return <LightBoxOverlay navigator={navigator} {...this.data} />
+	renderScene() {
+		return <LightBoxOverlay {...this.data} />
 	}
 }
 

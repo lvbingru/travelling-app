@@ -86,7 +86,7 @@ class Route extends BaseRouteMapper {
 
     renderScene(navigator) {
     	return (
-    		<CameraRollScene route={this} nextStep={this.nextStepParent || this.nextStep}/>
+    		<CameraRollScene route={this} nextStep={this.nextStepParent || this.nextStep} nextText='下一步'/>
     	);
     }
 }

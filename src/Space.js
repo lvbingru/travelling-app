@@ -28,6 +28,7 @@ var MyActivity = require('./MyActivity');
 var MyJourney = require('./MyJourney');
 var MyBill = require('./MyBill');
 var MyTrace = require('./MyTrace');
+var MyGallery = require('./MyGallery');
 
 var store = require('./store');
 var {updateSession} = require('./actions');
@@ -104,6 +105,8 @@ var Space = React.createClass({
                 this.props.navigator.push(new MyBill());
             } else if (entry === 'trace') {
                 this.props.navigator.push(new MyTrace());
+            } else if (entry === 'gallery') {
+                this.props.navigator.push(new MyGallery());
             }
         }.bind(this);
     },
@@ -173,7 +176,8 @@ var Space = React.createClass({
                     icon={icons.journey} count={info.journey || ''}/>
                 <Entry label='轨迹' onPress={this._goto('trace')}
                     icon={icons.annotations} count={info.annotations || ''}/>
-                <Entry label='相册' icon={icons.photos} count={info.photos || ''}/>
+                <Entry label='相册' onPress={this._goto('gallery')}
+                    icon={icons.photos} count={info.photos || ''}/>
                 <Entry label='账单' onPress={this._goto('bill')}
                     icon={icons.bills} count={info.bills || ''} style={styles.last}/>
               </View>

@@ -156,7 +156,7 @@ class Route extends BaseRouteMapper {
     }
 
     get title() {
-    	return '游记';
+    	return '我的游记';
     }
 
     renderScene() {
