@@ -28,7 +28,8 @@ var JourneyView = React.createClass({
         var avatar = user.avatar ? {url: user.avatar} : icons.avatarPlaceholder;
 
         return (
-            <TouchableHighlight style={this.props.style} underlayColor='#f3f5f6'>
+            <TouchableHighlight onPress={this.props.gotoDetail} 
+                style={this.props.style} underlayColor='#f3f5f6'>
               <View>
                 <View style={styles.header}>
                   <Image style={styles.image} source={{uri: data.header}}>

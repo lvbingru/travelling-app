@@ -124,7 +124,7 @@ var CameraRollScene = React.createClass({
 
 	nextStep: function() {
 		var checked = this.state.checkedDataBlob;
-		this.props.nextStep(checked, this.props.navigator);
+		this.props.nextStep && this.props.nextStep(checked, this.props.navigator);
 	},
 
 	_renderSeparator: function(sectionID, rowID) {

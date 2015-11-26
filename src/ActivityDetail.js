@@ -17,7 +17,6 @@ var {
 } = React;
 
 var deviceWidth = Dimensions.get('window').width;
-var deviceHeight = Dimensions.get('window').height;
 
 var icons = require('./icons');
 var su = require('./styleUtils');

@@ -72,9 +72,14 @@ exports.search = require('../img/icon-search.png');
 exports.circle = require('../img/icon-circle.png');
 exports.group = require('../img/icon-group.png');
 
+//journey
+exports.bgGray = require('../img/bg-gray.png');
+exports.starWhite = require('../img/icon-star-white.png');
+exports.viewWhite = require('../img/icon-view-white.png');
+exports.calendarGray = require('../img/icon-calendar-gray.png');
+exports.traceGray = require('../img/icon-trace-gray.png');
 
 // onboarding
-
 exports.page1 = require('../img/page1.png');
 exports.page2 = require('../img/page2.png');
 exports.page3 = require('../img/page3.png');

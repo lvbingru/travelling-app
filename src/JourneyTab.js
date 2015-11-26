@@ -30,6 +30,7 @@ var deviceWidth = Dimensions.get('window').width;
 var JourneyView = require('./journey/JourneyView');
 
 var BaseRouteMapper = require('./BaseRouteMapper');
+var JourneyDetail = require('./JourneyDetail');
 
 class JourneyRoute extends BaseRouteMapper {
   get title() {
@@ -51,6 +52,10 @@ var JourneyTab = React.createClass({
 
   componentDidMount: function() {
     this._fetchData();
+  },
+
+  _gotoDetail: function() {
+    this.props.navigator.push(new JourneyDetail());
   },
 
   _navbar: function(title) {
@@ -124,7 +129,7 @@ var JourneyTab = React.createClass({
 
   _renderItem: function(data) {
       return (
-          <JourneyView style={styles.cell} key={data.id} data={data}/>
+          <JourneyView style={styles.cell} key={data.id} data={data} gotoDetail={this._gotoDetail}/>
       );
   },
 });

@@ -23,7 +23,7 @@ var RecordActivityChoosePhoto = require('./RecordActivityChoosePhoto');
 var RecordActivity = React.createClass({
 	getInitialState: function() {
 		var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {return r1 !== r2}});
-		var dataBlob = this.props.dataBlob;
+		var dataBlob = this.props.dataBlob || [];
 		var datas = [];
 		dataBlob.map(function(item, index) {
 			var photo = item.photo;
@@ -95,7 +95,7 @@ var RecordActivity = React.createClass({
 			newRowIndex: rowID
 		});
 
-		this.props.navigator.push(new RecordActivityChoosePhoto(this._addImageRow));
+		this.props.navigator.push(new RecordActivityChoosePhoto({nextStep: this._addImageRow}));
 	},	
 
 	_changeTimestampToDate: function(timestamp) {
@@ -405,7 +405,7 @@ var Cell = React.createClass({
 					<Image source={icons.markBlue} style={styles.calendarIcon} />
 					<TextInput onChangeText={(address) => this.props.setItemValue(address, this.props.rowID, 'address')}
 						value={this.state.address}
-						style={styles.textInputView} />
+						style={[styles.textInputView, {color: stylesVar('blue-light')}]} />
 				</View>
 				<View style={[styles.verticalLine, styles.verticalLine10]}></View>
 				{this._renderContent()}
@@ -444,7 +444,8 @@ var styles = StyleSheet.create({
 		flex: 1,
 		height: 24,
 		fontSize: 11,
-		color: stylesVar('dark-mid')
+		color: stylesVar('dark-mid'),
+		marginLeft: 6
 	},
 
 	contentImage: {

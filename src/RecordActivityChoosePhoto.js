@@ -37,11 +37,11 @@ var CameraRollScene = require('./LocalSeveralPhotoPicker');
 
 var BaseRouteMapper = require('./BaseRouteMapper');
 class Route extends BaseRouteMapper {
-	constructor(nextStep) {
+	constructor(datas) {
         super();
         
         this.activeTab = 0;
-        this.nextStepParent = nextStep;
+        this.nextStepParent = datas && datas.nextStep;
     }
 
     renderLeftButton() {
