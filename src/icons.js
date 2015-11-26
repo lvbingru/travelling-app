@@ -89,7 +89,7 @@ exports.checkedGreen = require('../img/checked-green.png');
 exports.checkedTrans = require('../img/checked-trans.png');
 exports.dismissBg = require('../img/icon-dismiss-bg.png');
 
-// RecordActivityEdit
+// RecordJourneyEdit
 exports.dismissMid = require('../img/icon-dismiss-mid.png');
 exports.plusBlue = require('../img/icon-plus-blue.png');
 exports.calendarGreen = require('../img/icon-calendar-green.png');

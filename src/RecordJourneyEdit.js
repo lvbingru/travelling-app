@@ -18,9 +18,9 @@ var icons = require('./icons');
 var stylesVar = require('./stylesVar');
 var MutilineInput = require('./MutilineInput');
 var deviceWidth = Dimensions.get('window').width;
-var RecordActivityChoosePhoto = require('./RecordActivityChoosePhoto');
+var RecordJourneyChoosePhoto = require('./RecordJourneyChoosePhoto');
 
-var RecordActivity = React.createClass({
+var RecordJourney = React.createClass({
 	getInitialState: function() {
 		var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {return r1 !== r2}});
 		var dataBlob = this.props.dataBlob || [];
@@ -95,7 +95,7 @@ var RecordActivity = React.createClass({
 			newRowIndex: rowID
 		});
 
-		this.props.navigator.push(new RecordActivityChoosePhoto({nextStep: this._addImageRow}));
+		this.props.navigator.push(new RecordJourneyChoosePhoto({nextStep: this._addImageRow}));
 	},	
 
 	_changeTimestampToDate: function(timestamp) {
@@ -615,7 +615,7 @@ class Route extends BaseRouteMapper {
 
     renderScene(navigator) {
     	return (
-    		<RecordActivity dataBlob={this.datas} ref={(component) => this._root = component}/>
+    		<RecordJourney dataBlob={this.datas} ref={(component) => this._root = component}/>
     	);
     }
 }

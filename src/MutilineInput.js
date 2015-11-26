@@ -10,7 +10,7 @@ var {
 
 var stylesVar = require('./stylesVar');
 
-var RecordActivityEditContent = React.createClass({
+var RecordJourneyEditContent = React.createClass({
 	getInitialState: function() {
 		return {
 			content: this.props.content
@@ -113,7 +113,7 @@ class Route extends BaseRouteMapper {
 
     renderScene(navigator) {
     	return (
-    		<RecordActivityEditContent content={this.content}
+    		<RecordJourneyEditContent content={this.content}
     			ref={(component) => this._root = component} />
     	);
     }

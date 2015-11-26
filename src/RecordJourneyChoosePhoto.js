@@ -80,8 +80,8 @@ class Route extends BaseRouteMapper {
     }
 
     nextStep(datas, navigator) {
-        var RecordActivityEdit = require('./RecordActivityEdit');
-    	navigator.push(new RecordActivityEdit(datas));
+        var RecordJourneyEdit = require('./RecordJourneyEdit');
+    	navigator.push(new RecordJourneyEdit(datas));
     }
 
     renderScene(navigator) {

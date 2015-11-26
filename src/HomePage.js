@@ -25,6 +25,7 @@ var JourneyTab = require('./JourneyTab');
 var PlusMenu = require('./PlusMenu');
 var FillActivityBrief = require('./FillActivityBrief');
 var FriendsTab = require('./FriendsTab');
+var RecordJourneyChooseActivity = require('./RecordJourneyChooseActivity');
 
 console.log(icons.tabActivity);
 
@@ -114,6 +115,8 @@ var HomePage = React.createClass({
     _onPlusResult: function(result) {
         if (result === 'activity') {
             this.props.navigator.push(new FillActivityBrief);
+        } else if (result === 'journey') {
+            this.props.navigator.push(new RecordJourneyChooseActivity());
         }
     },
 
