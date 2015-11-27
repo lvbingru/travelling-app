@@ -296,6 +296,7 @@ var ActivityDetail = React.createClass({
                                 <TouchableOpacity
                                     onPress={this.editHandle}
                                     style={styles.manageView}>
+                                    
                                     <Image source={icons.editWhite}
                                         style={styles.iconEditWhite}/>
                                     <Text style={[styles.manageText, styles.editText]}>编辑</Text>
@@ -430,11 +431,14 @@ var styles = StyleSheet.create({
         backgroundColor: 'transparent',
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
         height: 30
     },
 
     manageView: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 
     manageText: {
@@ -444,12 +448,12 @@ var styles = StyleSheet.create({
 
     iconEditWhite: {
         ...su.size(14),
-            marginRight: 5
+        marginRight: 5
     },
 
     iconManageWhite: {
         ...su.size(17),
-            marginRight: 5
+        marginRight: 5
     },
 
     editText: {
@@ -667,6 +671,7 @@ class ActivityDetailRoute extends BaseRouteMapper {
 
             navbarRight: {
                 height: 44,
+                marginRight: 5,
                 flexDirection: 'row',
                 justifyContent: 'flex-end',
                 alignItems: 'center'

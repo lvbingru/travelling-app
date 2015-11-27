@@ -16,9 +16,9 @@ var {
 
 var icons = require('./icons');
 var stylesVar = require('./stylesVar');
-var MutilineInput = require('./MutilineInput');
 var deviceWidth = Dimensions.get('window').width;
 var RecordJourneyChoosePhoto = require('./RecordJourneyChoosePhoto');
+var TextInputRoute = require('./TextInputRoute');
 
 var RecordJourney = React.createClass({
 	getInitialState: function() {
@@ -83,7 +83,11 @@ var RecordJourney = React.createClass({
 	},
 
 	editContent: function() {
-		this.props.navigator.push(new MutilineInput(this.state.content, this.setContent, '编辑'));
+		this.props.navigator.push(new TextInputRoute({
+			initValue: this.state.content, 
+			onResult: this.setContent, 
+			title: '编辑'
+		}));
 	},
 
 	setContent: function(content) {
@@ -152,7 +156,11 @@ var RecordJourney = React.createClass({
 			newRowIndex: rowID
 		});
 
-		this.props.navigator.push(new MutilineInput('', this._addTextRow, '编辑'));
+		this.props.navigator.push(new TextInputRoute({
+			initValue: '', 
+			onResult: this._addTextRow, 
+			title: '编辑'
+		}));
 	},
 
 	_addTextRow: function(content) {

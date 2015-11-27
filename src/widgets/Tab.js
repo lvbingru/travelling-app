@@ -73,6 +73,7 @@ var styles = StyleSheet.create({
 	tabRow: {
 		flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
         paddingHorizontal: 15,
         borderBottomWidth: 1 / PixelRatio.get(),
         borderBottomColor: stylesVar('dark-light'),
@@ -82,9 +83,8 @@ var styles = StyleSheet.create({
 	tabView: {
         flex: 1,
         alignItems: 'center',
-        height: 44,
-        paddingTop: 17,
-        paddingBottom: 15
+        justifyContent: 'center',
+        height: 44
     },
 
     tabText: {

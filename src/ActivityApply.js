@@ -10,7 +10,8 @@ var {
     PixelRatio,
     StyleSheet,
     TextInput,
-    SwitchIOS
+    SwitchIOS,
+    ScrollView
 } = React;
 
 var icons = require('./icons');
@@ -232,7 +233,7 @@ var ActivityApply = React.createClass({
             <View>
 				<View style={styles.separator}></View>
 				<View style={styles.itemView}>
-					<View style={styles.subItemViewLast}>
+					<View style={styles.subItemView}>
 						<Text style={styles.subItemText}>手机号码</Text>
 						<TextInput style={styles.subItemEdit} 
 							onChangeText={this._changeCommon('phone')}
@@ -252,7 +253,8 @@ var ActivityApply = React.createClass({
 							value={String(this.state.common.peopleNum || '')} 
 							keyboardType='numeric'/>
 					</View>
-					<View style={styles.subItemViewLast}>
+                    <View style={styles.lineSeparator}></View>
+					<View style={styles.subItemView}>
 						<Text style={styles.subItemText}>小孩</Text>
 						<TextInput style={styles.subItemEdit} 
 							onChangeText={this._changeCommon('childNum')}
@@ -287,7 +289,7 @@ var ActivityApply = React.createClass({
 
         if (type === 'selfRide') {
             return (
-                <View>
+                <ScrollView style={styles.scrollView}>
 					<View style={styles.titleView}>
 						<Text style={styles.titleText}>车辆信息</Text>
 					</View>
@@ -304,7 +306,8 @@ var ActivityApply = React.createClass({
 								</View>
 							</TouchableOpacity>
 						</View>
-						<View style={styles.subItemViewLast}>
+                        <View style={styles.lineSeparator}></View>
+						<View style={styles.subItemView}>
 							<Text style={styles.subItemText}>车辆牌照</Text>
 							<Text style={styles.subItemNoEdit}>{datas.carNumber}</Text>
 						</View>
@@ -325,7 +328,8 @@ var ActivityApply = React.createClass({
 								value={datas.leftSeats} 
 								keyboardType='numeric'/>
 						</View>
-						<View style={styles.subItemViewLast}>
+                        <View style={styles.lineSeparator}></View>
+						<View style={styles.subItemView}>
 							<Text style={styles.subItemText}>是否愿意搭人</Text>
 							<SwitchIOS style={styles.share}
 								onValueChange={(share) => {
@@ -336,16 +340,16 @@ var ActivityApply = React.createClass({
 								value={!!this.state.selfRideDatas.share} />
 						</View>
 					</View>
-				</View>
+				</ScrollView>
             );
         } else {
             return (
-                <View>
+                <ScrollView style={styles.scrollView}>
 					{this.renderCommon()}
 
 					<View style={styles.separator}></View>
 					<View style={styles.itemView}>
-						<View style={styles.subItemViewLast}>
+						<View style={styles.subItemView}>
 							<Text style={styles.subItemText}>能否驾驶车辆</Text>
 							<SwitchIOS style={styles.share}
 								onValueChange={(canDrive) => {
@@ -356,7 +360,7 @@ var ActivityApply = React.createClass({
 								value={!!this.state.freeRideDatas.canDrive} />
 						</View>
 					</View>
-				</View>
+				</ScrollView>
             );
         }
     },
@@ -395,6 +399,11 @@ var styles = StyleSheet.create({
         height: 45
     },
 
+    scrollView: {
+        flex: 1,
+        flexDirection: 'column'
+    },
+
     titleText: {
         flex: 1,
         color: stylesVar('dark-mid'),
@@ -413,7 +422,7 @@ var styles = StyleSheet.create({
         justifyContent: 'flex-start',
         borderColor: stylesVar('dark-light'),
         borderWidth: 1 / PixelRatio.get(),
-        paddingLeft: 15,
+        paddingLeft: 10,
         backgroundColor: '#fff'
     },
 
@@ -421,16 +430,10 @@ var styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         height: 45,
-        borderBottomWidth: 1 / PixelRatio.get(),
-        borderColor: stylesVar('dark-light'),
-        paddingRight: 15
-    },
-
-    subItemViewLast: {
-        flex: 1,
-        flexDirection: 'row',
-        height: 45,
-        paddingRight: 15
+        paddingRight: 10,
+        paddingLeft: 5,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 
     subItemText: {
@@ -438,7 +441,6 @@ var styles = StyleSheet.create({
         color: stylesVar('dark-mid'),
         fontWeight: '300',
         fontSize: 13,
-        marginTop: 16
     },
 
     subItemContentView: {
@@ -451,7 +453,6 @@ var styles = StyleSheet.create({
         color: stylesVar('dark'),
         fontWeight: '300',
         fontSize: 11,
-        marginTop: 17
     },
 
     carTypeText: {
@@ -459,7 +460,6 @@ var styles = StyleSheet.create({
         color: stylesVar('dark'),
         fontWeight: '300',
         fontSize: 11,
-        marginTop: 17
     },
 
     imageView: {
@@ -469,8 +469,7 @@ var styles = StyleSheet.create({
 
     iconArrow: {
         width: 9,
-        height: 15,
-        marginTop: 15
+        height: 15
     },
 
     subItemEdit: {
@@ -490,7 +489,13 @@ var styles = StyleSheet.create({
 
     share: {
         height: 30,
-        marginTop: 7
+        marginRight: 5
+    },
+
+    lineSeparator: {
+        flex: 1,
+        height: 1 / PixelRatio.get(),
+        backgroundColor: stylesVar('dark-light')
     },
 
     separator: {
@@ -537,7 +542,7 @@ class ActivityApplyRoute extends BaseRouteMapper {
 
     renderScene(navigator) {
         return <ActivityApply ref={(component) => this._root = component} 
-					navigator={navigator} {...this.datas}/>
+				    {...this.datas}/>
     }
 }
 
