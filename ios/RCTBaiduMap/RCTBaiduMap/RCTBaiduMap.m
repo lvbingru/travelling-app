@@ -21,7 +21,7 @@ enum {
     BMKLocationService *_locService;
     CLLocationManager *_locationManager;
     
-    NSString *_recordKey;
+    NSString *_recordName;
     NSMutableArray *_locations;
     int _state; // 0,未记录，1，记录中 2，暂停中
     
@@ -69,7 +69,7 @@ enum {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationWillTerminate) name:UIApplicationWillTerminateNotification object:nil];
         
         _locations = [NSMutableArray new];
-        _recordKey = @"0";
+        _recordName = @"0";
         _state = 0;
         
         _recordQueue = dispatch_queue_create("com.tdzl.recordQueue", DISPATCH_QUEUE_SERIAL);
@@ -120,9 +120,9 @@ const NSString *gSaveKey = @"BMPStepRecord";
             NSDictionary *dic = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
             if (dic != nil) {
                 
-                _recordKey = dic[@"key"];
-                if (_recordKey.length <= 0) {
-                    _recordKey = @"0";
+                _recordName = dic[@"name"];
+                if (_recordName.length <= 0) {
+                    _recordName = @"0";
                 }
                 _state = [dic[@"state"] intValue];
                 _locations = [dic[@"locations"] mutableCopy];
@@ -179,9 +179,9 @@ const NSString *gSaveKey = @"BMPStepRecord";
 
 - (void)startRecordLocation:(NSDictionary *)options
 {
-    _recordKey = options[@"key"];
-    if (_recordKey.length <= 0) {
-        _recordKey = @"0";
+    _recordName = options[@"name"];
+    if (_recordName.length <= 0) {
+        _recordName = @"0";
     }
     _state = RECORD_STATE_RECORDING;
     _locations = [NSMutableArray new];
@@ -219,7 +219,7 @@ const NSString *gSaveKey = @"BMPStepRecord";
 
 - (NSDictionary *)genResult
 {
-    NSDictionary *result =  @{@"key":_recordKey, @"locations":_locations, @"state":@(_state)};
+    NSDictionary *result =  @{@"name":_recordName, @"locations":_locations, @"state":@(_state)};
     return result;
 }
 

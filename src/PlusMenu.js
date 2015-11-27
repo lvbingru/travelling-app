@@ -11,7 +11,14 @@ var {
   AlertIOS,
   requireNativeComponent,
   NativeModules,
+  Animated,
+  AsyncStorage,
+
 } = React;
+
+var {
+  AV
+  } = require('./api/models');
 
 const BaiduLocation = NativeModules.BaiduLocationObserver;
 let PathMapView = require('./PathMapView');
@@ -34,7 +41,7 @@ var PlusMenu = React.createClass({
       content: 0,
       recordState: 0,
       recordName: null,
-      popRecordMenu: false,
+      popAnim: new Animated.Value(0),
     };
   },
 
@@ -99,8 +106,14 @@ var PlusMenu = React.createClass({
           </TouchableOpacity>
         </View>
         {
-          this.state.popRecordMenu ? (
-            <View style={styles.popMenu}>
+          (
+            <Animated.View
+              style={[styles.popMenu,
+               {bottom : this.state.popAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [-popMenuHeight, 0]
+                })}]}
+            >
               <TouchableOpacity
                 style={styles.popMenuRow}
                 onPress={this.stopRecord}
@@ -115,8 +128,12 @@ var PlusMenu = React.createClass({
                 <Image />
                 <Text>{this.state.recordState === 1 ? "暂停记录,稍后继续" : "继续记录"}</Text>
               </TouchableOpacity>
-            </View>
-          ) : null
+              <TouchableOpacity
+                style = {styles.popMenuDismissRow}
+                onPress={()=>{ this.animatedPopView(0)}}
+              />
+            </Animated.View>
+          )
         }
       </BlurView>
     );
@@ -135,7 +152,7 @@ var PlusMenu = React.createClass({
             text: '确认', onPress: (v) => {
 
 
-            BaiduLocation.startRecordLocation({key:"1"});
+            BaiduLocation.startRecordLocation({name:v});
 
             this.setState({
               recordState: 1,
@@ -148,38 +165,72 @@ var PlusMenu = React.createClass({
       )
     }
     else if (recordState == 1 || recordState === 2) {
-      this.setState({
-        popRecordMenu: true,
-      })
+      this.animatedPopView(1);
+      //this.setState({
+      //  popAnim : new Animated.Value(1),
+      //})
     }
   },
 
+  animatedPopView(toValue) {
+    Animated.timing(
+      this.state.popAnim,
+      {toValue: toValue, duration: 100}
+    ).start();
+  },
+
   stopRecord: function() {
-    BaiduLocation.stopRecordLocation((callBack)=>{console.log(callBack)});
+    BaiduLocation.stopRecordLocation(
+      (r)=>{
+        // 根据用户id生成记录的的key
+        const user = AV.User.current();
+        const key = "userPath"+[user&&user.id?user.id:"0"];
+
+        // 读取旧的记录
+        let unSyncPath = [];
+        AsyncStorage.getItem(key, (err, result)=>{
+          if (result) {
+            unSyncPath = JSON.parse(result)
+          }
+          // 增加一条记录并保存
+          const {locations,name} = r;
+          unSyncPath.push({
+            locations : locations,
+            name : name,
+            id : (new Date()).getTime(),
+            needSync : true,
+          })
+          AsyncStorage.setItem(key,  JSON.stringify(unSyncPath), (err)=>{
+          })
+        });
+      }
+    );
 
     this.setState({
       recordState: 0,
-      popRecordMenu: false,
     })
+    this.animatedPopView(0);
   },
 
   pauseRecord : function() {
     BaiduLocation.pauseRecordLocation();
     this.setState({
       recordState: 2,
-      popRecordMenu: false,
     })
+    this.animatedPopView(0);
   },
 
   continueRecord : function() {
     BaiduLocation.continueRecordLocation();
     this.setState({
       recordState: 1,
-      popRecordMenu: false,
     })
+    this.animatedPopView(0);
   }
 
 });
+
+const popMenuHeight = 300
 
 var styles = StyleSheet.create({
     container: {
@@ -221,7 +272,7 @@ var styles = StyleSheet.create({
       left : 0,
       bottom : 0,
       right : 0,
-      height : 500,
+      height : popMenuHeight,
       backgroundColor : 'rgba(234,234,234,0.9)',
     },
 
@@ -229,9 +280,13 @@ var styles = StyleSheet.create({
       height : 40,
       flexDirection: 'row',
       alignItems: 'center',
-      padding : 3,
+      padding : 7,
       borderBottomColor : '777777',
       borderBottomWidth : 1,
+    },
+
+    popMenuDismissRow :{
+      flex : 1,
     },
 });
 

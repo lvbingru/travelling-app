@@ -29,7 +29,6 @@ RCT_EXPORT_MODULE()
     return self;
 }
 
-
 RCT_CUSTOM_VIEW_PROPERTY(locationArray, NSArray, RCTBaiduMapView)
 {
   [view drawWalkPolyline:json];

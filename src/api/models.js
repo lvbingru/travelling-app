@@ -189,11 +189,17 @@ var Activity = AV.Object.extend("Activity", {
     TRAVELLING: 'travelling'
 });
 
+var UserPath = AV.Object.extend("UserPath", {
+
+}, {
+
+});
 
 module.exports = {
     Photo,
     Region,
     Activity,
     Partner,
-    AV
+    AV,
+  UserPath,
 };
