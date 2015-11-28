@@ -23,7 +23,12 @@ console.log('device height', deviceHeight);
 var icons = require('./icons');
 var su = require('./styleUtils');
 var BaseRouteMapper = require('./BaseRouteMapper');
-var ActivityScene = require('./ActivityScene');
+
+var MyActivity = require('./MyActivity');
+var MyJourney = require('./MyJourney');
+var MyBill = require('./MyBill');
+var MyTrace = require('./MyTrace');
+var MyGallery = require('./MyGallery');
 
 var store = require('./store');
 var {updateSession} = require('./actions');
@@ -33,6 +38,9 @@ var user = api.user
 var fetchInfo = api.userinfo;
 var debug = require('./debug');
 var log = debug('SpaceTab:log');
+
+var SystemSettings = require('./SystemSettings');
+var Profile = require('./Profile');
 
 var Entry = React.createClass({
     getInitialState: function() {
@@ -90,7 +98,15 @@ var Space = React.createClass({
     _goto: function(entry) {
         return function() {
             if (entry === 'activity') {
-                this.props.navigator.push(new ActivityScene);
+                this.props.navigator.push(new MyActivity());
+            } else if (entry === 'journey') {
+                this.props.navigator.push(new MyJourney());
+            } else if (entry === 'bill') {
+                this.props.navigator.push(new MyBill());
+            } else if (entry === 'trace') {
+                this.props.navigator.push(new MyTrace());
+            } else if (entry === 'gallery') {
+                this.props.navigator.push(new MyGallery());
             }
         }.bind(this);
     },
@@ -116,6 +132,14 @@ var Space = React.createClass({
         });
     },
 
+    _systemSettings: function() {
+        this.props.navigator.push(new SystemSettings());
+    },
+
+    _profile: function() {
+        this.props.navigator.push(new Profile());
+    },
+
     render: function() {
         var info = this.state.info;
         var avatar = info.avatar ? {
@@ -126,10 +150,12 @@ var Space = React.createClass({
             <View style={styles.container}>
               <Image style={styles.banner} source={icons.spaceHeader}>
                 <View style={styles.links}>
-                  <TouchableOpacity activeOpacity={0.8} style={styles.link}>
+                  <TouchableOpacity activeOpacity={0.8} style={styles.link}
+                    onPress={this._profile}>
                     <Text style={styles.linkText}>个人资料</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity activeOpacity={0.8} style={styles.link}>
+                  <TouchableOpacity activeOpacity={0.8} style={styles.link}
+                    onPress={this._systemSettings}>
                     <Text style={styles.linkText}>设置</Text>
                   </TouchableOpacity>
                 </View>
@@ -146,10 +172,14 @@ var Space = React.createClass({
               <View style={styles.items}>
                 <Entry label='活动' onPress={this._goto('activity')}
                     icon={icons.activity} count={info.activity || ''}/>
-                <Entry label='游记' icon={icons.journey} count={info.journey || ''}/>
-                <Entry label='轨迹' icon={icons.annotations} count={info.annotations || ''}/>
-                <Entry label='相册' icon={icons.photos} count={info.photos || ''}/>
-                <Entry label='账单' icon={icons.bills} count={info.bills || ''} style={styles.last}/>
+                <Entry label='游记' onPress={this._goto('journey')} 
+                    icon={icons.journey} count={info.journey || ''}/>
+                <Entry label='轨迹' onPress={this._goto('trace')}
+                    icon={icons.annotations} count={info.annotations || ''}/>
+                <Entry label='相册' onPress={this._goto('gallery')}
+                    icon={icons.photos} count={info.photos || ''}/>
+                <Entry label='账单' onPress={this._goto('bill')}
+                    icon={icons.bills} count={info.bills || ''} style={styles.last}/>
               </View>
 
               <TouchableOpacity style={{margin: 20}} 

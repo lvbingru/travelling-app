@@ -14,6 +14,7 @@ var {
     View,
     TouchableOpacity,
     TouchableHighlight,
+    PixelRatio
 } = React;
 
 var {
@@ -61,14 +62,15 @@ var ActivityView = React.createClass({
                   <ActivitySchedule data={_activity} style={{paddingLeft: 16}}/>
                   
                   <View style={styles.user}>
-                    <Image style={styles.avatar} source={avatar}/>
-                    <Text style={styles.username}>
-                        {creator.get('username') || ""}
-                    </Text>
-                    <Text style={[styles.publishDate]}>
-                        发布于 {moment(_activity.getCreatedAt()).format('YYYY-MM-DD HH:mm')}
-                    </Text>
-
+                    <View style={styles.usernameView}>
+                      <Image style={styles.avatar} source={avatar}/>
+                      <Text style={styles.username}>
+                          {creator.get('username') || ""}
+                      </Text>
+                      <Text style={[styles.publishDate]}>
+                          发布于 {moment(_activity.getCreatedAt()).format('YYYY-MM-DD HH:mm')}
+                      </Text>
+                    </View>
                     <View style={styles.star}>
                       <Image style={styles.iconStar} source={iconStar}/>
                       <Text style={styles.stars}>{_activity.getStars()}</Text>
@@ -131,16 +133,28 @@ var styles = StyleSheet.create({
     },
 
     user: {
-        paddingBottom: 8,
+        flex: 1,
         flexDirection: 'row',
+        borderTopWidth: 1 / PixelRatio.get(),
+        borderBottomWidth: 1 / PixelRatio.get(),
+        borderColor: stylesVar('dark-light'),
         alignItems: 'center',
-        paddingLeft: 16
+        justifyContent: 'flex-start',
+        paddingLeft: 15
+    },
+
+    usernameView: {
+      flex: 1,
+      flexDirection: 'row',
+      height: 40,
+      alignItems: 'center',
+      justifyContent: 'flex-start'
     },
 
     avatar: {
         ...su.size(25),
-            borderRadius: 12.5,
-            marginRight: 10
+        borderRadius: 12.5,
+        marginRight: 10
     },
 
     username: {
@@ -160,14 +174,19 @@ var styles = StyleSheet.create({
 
     star: {
         position: 'absolute',
-        top: 5,
         right: 15,
         flexDirection: 'row',
+        borderLeftWidth: 1 / PixelRatio.get(),
+        borderColor: stylesVar('dark-light'),
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 
     iconStar: {
         ...su.size(15, 14),
-            marginRight: 5,
+        marginRight: 5,
+        marginLeft: 15
     },
 
     stars: {

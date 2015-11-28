@@ -86,22 +86,11 @@ var ActivityChooseCar = React.createClass({
 		this.props.navigator.push(new AddOrEditCar({addCar: this.addCar}));
 	},
 
-	renderChooseImage: function(index) {
-		if (index === this.state.chooseIndex) {
-			return (
-				<View style={styles.okView}>
-					<Image style={styles.okImage}
-						source={icons.ready} />
-				</View>
-			);
-		}
-	},
-
 	render: function() {
 		var lastIndex = this.state.carArray.length - 1;
 		return (
 			<View style={styles.container}>
-				<ScrollView style={styles.content}>		
+				<ScrollView contentContainerStyle={styles.content}>		
 					<View style={styles.contentView}>	
 					{this.state.carArray.map(function(item, index) {
 						var itemStyle = lastIndex === index ?  styles.itemLast : styles.item;
@@ -109,7 +98,7 @@ var ActivityChooseCar = React.createClass({
 							<TouchableOpacity style={itemStyle} activeOpacity={1} 
 								onPress={this.changeChooseState.bind(this, index)}>
 								<Text style={styles.text}>{item.carType + ' （' + item.carNumber + '）'}</Text>
-								{this.renderChooseImage(index)}
+								{index === this.state.chooseIndex && <Image style={styles.okImage} source={icons.ready} />}
 							</TouchableOpacity>	
 						);
 					}.bind(this))}
@@ -134,7 +123,7 @@ var styles = StyleSheet.create({
 	},
 
 	content: {
-		paddingTop: 20,
+		marginTop: 20,
 		backgroundColor: '#f3f5f6',
 		borderWidth: 1 / PixelRatio.get(),
 		borderColor: stylesVar('dark-light')
@@ -148,36 +137,34 @@ var styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'row',
 		height: 45,
-		marginLeft: 15,
+		marginLeft: 10,
+		paddingLeft: 5,
 		borderBottomWidth: 1 / PixelRatio.get(),
-		borderColor: stylesVar('dark-light')
+		borderColor: stylesVar('dark-light'),
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
 
 	itemLast: {
 		flex: 1,
 		flexDirection: 'row',
 		height: 45,
-		marginLeft: 15
+		marginLeft: 15,
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
 
 	text: {
-		flex: 4,
+		flex: 1,
 		textAlign: 'left',
 		fontWeight: '300',
-		fontSize: 15,
-		paddingTop: 15
-	},
-
-	okView: {
-		flex: 1,
-		alignItems: 'flex-end',
-		marginRight: 15
+		fontSize: 15
 	},
 
 	okImage: {
 		width: 18,
 		height: 12,
-		marginVertical: 17
+		marginRight: 15
 	},
 
 	bottomView: {
@@ -186,14 +173,13 @@ var styles = StyleSheet.create({
 		right: 0,
 		bottom: 0,
 		height: 50,
-		paddingVertical: 16,
 		borderWidth: 1 / PixelRatio.get(),
-		borderColor: stylesVar('dark-light')
+		borderColor: stylesVar('dark-light'),
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
 
 	bottomText: {
-		flex: 1,
-		textAlign: 'center',
 		fontWeight: '300',
 		fontSize: 16,
 		color: stylesVar('blue')
@@ -207,14 +193,17 @@ var styles = StyleSheet.create({
 	},
 
 	rightButton: {
-		marginRight: 15
+		flex: 1,
+		marginRight: 15,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
 
 	editText: {
 		fontSize: 14,
         fontWeight: '300',
-        color: '#fff',
-        marginTop: 15
+        color: '#fff'
 	}
 });
 
@@ -240,7 +229,7 @@ class ActivityChooseCarRoute extends BaseRouteMapper {
 
 	renderRightButton(route, navigator, index, navState) {
         return (
-            <TouchableOpacity onPress={() => {this._root.editHandle()}} style={styles.rightButton}>
+            <TouchableOpacity onPress={() => this._root.editHandle()} style={styles.rightButton}>
 				<Text style={styles.editText}>编辑</Text>
 			</TouchableOpacity>
         );

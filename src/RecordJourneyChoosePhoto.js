@@ -37,11 +37,11 @@ var CameraRollScene = require('./LocalSeveralPhotoPicker');
 
 var BaseRouteMapper = require('./BaseRouteMapper');
 class Route extends BaseRouteMapper {
-	constructor(nextStep) {
+	constructor(datas) {
         super();
         
         this.activeTab = 0;
-        this.nextStepParent = nextStep;
+        this.nextStepParent = datas && datas.nextStep;
     }
 
     renderLeftButton() {
@@ -80,13 +80,13 @@ class Route extends BaseRouteMapper {
     }
 
     nextStep(datas, navigator) {
-        var RecordActivityEdit = require('./RecordActivityEdit');
-    	navigator.push(new RecordActivityEdit(datas));
+        var RecordJourneyEdit = require('./RecordJourneyEdit');
+    	navigator.push(new RecordJourneyEdit(datas));
     }
 
     renderScene(navigator) {
     	return (
-    		<CameraRollScene route={this} nextStep={this.nextStepParent || this.nextStep}/>
+    		<CameraRollScene route={this} nextStep={this.nextStepParent || this.nextStep} nextText='下一步'/>
     	);
     }
 }

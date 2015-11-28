@@ -95,7 +95,7 @@ var ChooseCarType = React.createClass({
 			rowIDstyle = [styles.subitemText, styles.activeSubitemText];
 		}
 		return (
-			<TouchableOpacity style={styles.subitemView} reactOpacity={0.9} 
+			<TouchableOpacity style={styles.subitemView} activeOpacity={0.9} 
 				onPress={this.pressRow.bind(this, sectionID, rowID)}>
 				<Text style={rowIDstyle}>{rowData}</Text>
 			</TouchableOpacity>
@@ -110,7 +110,7 @@ var ChooseCarType = React.createClass({
 
 	renderCoverCell: function(rowData, sectionID, rowID, highlightRow) {
 		return (
-			<TouchableOpacity style={styles.subitemView} reactOpacity={0.9} 
+			<TouchableOpacity style={styles.subitemView} activeOpacity={0.9} 
 				onPress={this.selectedCarType.bind(this, sectionID, rowID)}>
 				<Text style={styles.subitemText}>{rowData}</Text>
 			</TouchableOpacity>

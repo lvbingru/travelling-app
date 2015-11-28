@@ -173,9 +173,7 @@ var ActivityManage = React.createClass({
 									usernameText={styles.usernameText}
 									publishDateText={styles.publishDateText}
 									avatar={item.user && item.user.avatar ? {uri: item.user.avatar}: icons.avatarPlaceholder}/>
-								<View style={styles.status}>
-									{this.renderTag(item.status)}
-								</View>
+								{this.renderTag(item.status)}
 							</View>
 							{this.renderItemDetail(item)}
 							{this.renderBottom(item)}
@@ -231,15 +229,8 @@ var styles = StyleSheet.create({
 	},
 
 	info: {
-		flex: 2,
-		justifyContent: 'flex-start'
-	},
-
-	status: {
 		flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-end'
+		justifyContent: 'flex-start'
 	},
 
 	tagGreen: {
@@ -264,7 +255,8 @@ var styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'row',
 		borderWidth: 1 / PixelRatio.get(),
-		borderColor: stylesVar('dark-light')
+		borderColor: stylesVar('dark-light'),
+		height: 45
 	},
 
 	lineView: {
@@ -278,31 +270,28 @@ var styles = StyleSheet.create({
 		flex: 1,
 		borderRightWidth: 1 / PixelRatio.get(),
 		borderRightColor: stylesVar('dark-light'),
-		justifyContent: 'center'
+		justifyContent: 'center',
+		alignItems: 'center'
 	},
 
 	rightView: {
 		flex: 1,
 		borderRightWidth: 1 / PixelRatio.get(),
 		borderRightColor: stylesVar('dark-light'),
-		justifyContent: 'center'
+		justifyContent: 'center',
+		alignItems: 'center'
 	},
 
 	leftText: {
-		textAlign: 'center',
 		fontSize: 13,
 		color: stylesVar('red'),
-		fontWeight: '300',
-		paddingVertical: 16
+		fontWeight: '300'
 	},	
 
 	rightText: {
-		flex: 1,
-		textAlign: 'center',
 		fontSize: 13,
 		color: stylesVar('blue'),
-		fontWeight: '300',
-		paddingVertical: 16 
+		fontWeight: '300'
 	},
 
 	detailView: {

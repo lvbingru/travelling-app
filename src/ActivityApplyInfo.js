@@ -6,7 +6,8 @@ var {
     Text,
     StyleSheet,
     PixelRatio,
-    TouchableOpacity
+    TouchableOpacity,
+    ScrollView
 } = React;
 
 var stylesVar = require('./stylesVar');
@@ -112,7 +113,7 @@ var ActivityApplyInfo = React.createClass({
 
         return (
             <View style={styles.container}>
-				<View style={styles.contentView}>
+				<ScrollView contentContainerStyle={styles.contentView}>
 					<View style={styles.titleView}>
 						<Text style={styles.title}>{this.props.activity.get('title')}</Text>
 						<View style={styles.tagView}>
@@ -121,7 +122,7 @@ var ActivityApplyInfo = React.createClass({
 					</View>
 					
 					{this.renderContent()}
-				</View>
+				</ScrollView>
 
 				{!this.state.partner.isFailed() && 
 				<TouchableOpacity style={styles.bottomView}>
@@ -187,14 +188,14 @@ var styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         height: 50,
-        paddingVertical: 16,
         borderWidth: 1 / PixelRatio.get(),
         borderColor: stylesVar('dark-light'),
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 
     bottomText: {
-        flex: 1,
         textAlign: 'center',
         fontWeight: '300',
         fontSize: 16,
@@ -202,14 +203,17 @@ var styles = StyleSheet.create({
     },
 
     rightButton: {
-        marginRight: 15
+        flex: 1,
+        flexDirection: 'row', 
+        marginRight: 15,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 
     modifyText: {
         fontSize: 14,
         fontWeight: '300',
-        color: '#fff',
-        marginTop: 15
+        color: '#fff'
     }
 });
 

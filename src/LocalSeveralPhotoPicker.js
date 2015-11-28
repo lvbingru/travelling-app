@@ -118,9 +118,23 @@ var CameraRollScene = React.createClass({
 		)
 	},
 
+	getCheckedDatas: function() {
+		return this.state.checkedDataBlob
+	},
+
 	nextStep: function() {
 		var checked = this.state.checkedDataBlob;
-		this.props.nextStep(checked, this.props.navigator);
+		this.props.nextStep && this.props.nextStep(checked, this.props.navigator);
+	},
+
+	_renderSeparator: function(sectionID, rowID) {
+		if (rowID == this.state.checkedDataBlob.length - 1) {
+			return null;
+		}
+
+		return (
+			<View style={styles.previewSeparator}></View>
+		);
 	},
 
 	render: function() {
@@ -138,15 +152,16 @@ var CameraRollScene = React.createClass({
 					<View style={styles.displayView}>
 						<ListView horizontal={true}
 							dataSource={this.state.checkedDataSource}
-							renderRow={this.renderPreviewCell}/>
+							renderRow={this.renderPreviewCell}
+							renderSeparator={this._renderSeparator} />
 					</View>
 					<View style={styles.nextStepView}>
 						<View style={styles.numberView}>
 							<Text style={styles.numberText}>{this.state.checkedDataBlob.length}</Text>
 						</View>
-						<TouchableOpacity onPress={this.nextStep}>
-							<Text style={styles.nextText}>{this.props.nextText || '下一步'}</Text>
-						</TouchableOpacity>
+						{this.props.nextText && (<TouchableOpacity onPress={this.nextStep}>
+							<Text style={styles.nextText}>{this.props.nextText}</Text>
+						</TouchableOpacity>)}
 					</View>
 				</View>
 			</View>
@@ -208,7 +223,7 @@ var PreviewCell = React.createClass({
 
 	render: function() {
 		return (
-			<View style={styles.previewWrap}>
+			<View>
 				<TouchableOpacity
 					style={styles.previewCell}
 					activeOpacity={1}
@@ -242,6 +257,10 @@ var styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#f3f5f6'
+	},
+
+	previewSeparator: {
+		width: 8
 	},
 
 	content: {
@@ -291,14 +310,8 @@ var styles = StyleSheet.create({
 
 	previewCell: {
 		paddingTop: 12,
-		marginRight: 15,
 		width: 40,
 		height: 40
-	},
-
-	previewWrap: {
-		width: 55, 
-		height: 52
 	},
 
 	iconDismiss: {
@@ -311,7 +324,6 @@ var styles = StyleSheet.create({
 	},
 
 	nextStepView: {
-		width: 88,
 		flexDirection: 'row',
 		height: 64,
 		alignItems: 'center',
@@ -321,6 +333,7 @@ var styles = StyleSheet.create({
 	numberView: {
 		width: 25, 
 		height: 19,
+		marginRight: 5,
 		backgroundColor: stylesVar('dark-light'),
 		alignItems: 'center',
 		justifyContent: 'center'
@@ -334,7 +347,7 @@ var styles = StyleSheet.create({
 	nextText: {
 		color: stylesVar('blue'),
 		fontSize: 13,
-		marginLeft: 7
+		marginRight: 5
 	}
 });
 
