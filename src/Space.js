@@ -121,17 +121,6 @@ var Space = React.createClass({
             .done();
     },
 
-    _logout: function() {
-        user.logout().then(function() {
-            store.dispatch(updateSession({
-                user: null
-            }));
-        }, function(e) {
-            console.trace(e);
-            return AlertIOS.alert(e.reason);
-        });
-    },
-
     _systemSettings: function() {
         this.props.navigator.push(new SystemSettings());
     },
@@ -181,11 +170,6 @@ var Space = React.createClass({
                 <Entry label='账单' onPress={this._goto('bill')}
                     icon={icons.bills} count={info.bills || ''} style={styles.last}/>
               </View>
-
-              <TouchableOpacity style={{margin: 20}} 
-                activeOpacity={0.9} onPress={this._logout}>
-                <Text style={styles.logout}>退出</Text>
-              </TouchableOpacity>
             </View>
         );
     }
@@ -248,17 +232,6 @@ var styles = StyleSheet.create({
         textAlign: 'center',
         backgroundColor: 'transparent',
         color: '#fff'
-    },
-
-    logout: {
-        flex: 1,
-        paddingVertical: 10,
-        color: '#fff',
-        fontSize: 16,
-        textAlign: 'center',
-        overflow: 'hidden',
-        borderRadius: 6,
-        backgroundColor: '#0087fa',
     },
 
     baseText: {
