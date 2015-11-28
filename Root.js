@@ -127,10 +127,23 @@ var Home = React.createClass({
         // var Route = require('./src/FillActivityDetail');
         // var Route = require('./src/ActivityFormSummary');
         //var Route = require('./src/LocalSeveralPhotoPicker');
-        //var Route = require('./src/RecordActivityChoosePhoto');
-        //var Route = require('./src/RecordActivityEdit');
+        //var Route = require('./src/RecordJourneyChoosePhoto');
+        //var Route = require('./src/RecordJourneyEdit');
         //var Route = require('./src/SystemSettings');
-        var Route = require('./src/Profile');
+        //var Route = require('./src/Profile');
+        //var Route = require('./src/FriendSpace');
+        //var Route = require('./src/FriendSpaceGallery');
+        //var Route = require('./src/MyActivity');
+        //var Route = require('./src/MyJourney');
+        //var Route = require('./src/MyTrace');
+        //var Route = require('./src/MyBill');
+        //var Route = require('./src/MyGallery');
+        var Route = require('./src/CommentList');
+        //var Route = require('./src/MyGalleryDetail');
+        //var Route = require('./src/JourneyDetail');
+        //var Route = require('./src/RecordJourneyChooseActivity');
+        //var Route = require('./src/ActivityChooseCar');
+        //var Route = require('./src/ActivityApply');
         this.refs.navigator.replace(new Route(new AV.User()));
     },
 

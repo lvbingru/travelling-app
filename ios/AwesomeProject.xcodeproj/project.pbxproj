@@ -1258,6 +1258,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				30B5A2485A990D7716EF382A /* Copy Pods Resources */,
 				808DD12D8ADB4644DA051400 /* Embed Pods Frameworks */,
+				681A98D21C09767B00B4466B /* Bundle React Native code and images */,
 			);
 			buildRules = (
 			);
@@ -1619,6 +1620,20 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AwesomeProject/Pods-AwesomeProject-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		681A98D21C09767B00B4466B /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "../node_modules/react-native/packager/react-native-xcode.sh";
+		};
 		808DD12D8ADB4644DA051400 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1803,7 +1818,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yiguid;
+				PRODUCT_BUNDLE_IDENTIFIER = com.offcity.app;
 				PRODUCT_NAME = AwesomeProject;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1839,7 +1854,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yiguid;
+				PRODUCT_BUNDLE_IDENTIFIER = com.offcity.app;
 				PRODUCT_NAME = AwesomeProject;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;

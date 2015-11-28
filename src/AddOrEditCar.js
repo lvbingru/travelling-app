@@ -54,13 +54,11 @@ var AddOrEditCar = React.createClass({
 							<TouchableOpacity style={styles.subItemContentView} 
 								onPress={this.chooseCarType}>
 								<Text style={styles.carTypeText}>{car.carType}</Text>
-								<View style={styles.imageView}>
-									<Image source={icons.arrow} 
-										style={styles.iconArrow}/>
-								</View>
+								<Image source={icons.arrow} style={styles.iconArrow}/>
 							</TouchableOpacity>
 						</View>
-						<View style={styles.subItemViewLast}>
+						<View style={styles.separator}></View>
+						<View style={styles.subItemView}>
 							<Text style={styles.subItemText}>车辆牌照</Text>
 							<TextInput style={styles.subItemEdit} 
 								onChangeText={this.setCarNumber}
@@ -92,7 +90,7 @@ var styles = StyleSheet.create({
         justifyContent: 'flex-start',
         borderColor: stylesVar('dark-light'),
         borderWidth: 1 / PixelRatio.get(),
-        paddingLeft: 15,
+        paddingLeft: 10,
         backgroundColor: '#fff',
         marginTop: 20
 	},
@@ -100,10 +98,17 @@ var styles = StyleSheet.create({
 	subItemView: {
 		flex: 1,
         flexDirection: 'row',
+        paddingLeft: 5,
         height: 45,
-        borderBottomWidth: 1 / PixelRatio.get(),
-        borderColor: stylesVar('dark-light'),
-        paddingRight: 15
+        paddingRight: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
+	},
+
+	separator: {
+		flex: 1,
+		height: 1 / PixelRatio.get(),
+		backgroundColor: stylesVar('dark-light')
 	},
 
 	subItemContentView: {
@@ -115,34 +120,19 @@ var styles = StyleSheet.create({
 		flex: 2,
         color: stylesVar('dark-mid'),
         fontWeight: '300',
-        fontSize: 13,
-        marginTop: 16
+        fontSize: 13
 	},
 
 	carTypeText: {
 		flex: 4,
         color: stylesVar('dark'),
         fontWeight: '300',
-        fontSize: 11,
-        marginTop: 17
-	},
-
-	imageView: {
-		flex: 1,
-        alignItems: 'flex-end'
+        fontSize: 11
 	},
 
 	iconArrow: {
 		width: 9,
-        height: 15,
-        marginTop: 15
-	},
-
-	subItemViewLast: {
-		flex: 1,
-        flexDirection: 'row',
-        height: 45,
-        paddingRight: 15
+        height: 15
 	},
 
 	subItemEdit: {
@@ -158,15 +148,14 @@ var styles = StyleSheet.create({
 		right: 0,
 		bottom: 0,
 		height: 50,
-		paddingVertical: 16,
 		backgroundColor: '#fff',
 		borderWidth: 1 / PixelRatio.get(),
-		borderColor: stylesVar('dark-light')
+		borderColor: stylesVar('dark-light'),
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
 
 	bottomText: {
-		flex: 1,
-		textAlign: 'center',
 		fontWeight: '300',
 		fontSize: 16,
 		color: stylesVar('red')
@@ -175,11 +164,14 @@ var styles = StyleSheet.create({
 	editText: {
         fontSize: 14,
         fontWeight: '300',
-        color: '#fff',
-        marginTop: 15
+        color: '#fff'
     },
 
     rightButton: {
+    	flex: 1,
+    	flexDirection: 'row',
+    	alignItems: 'center',
+    	justifyContent: 'center',
         marginRight: 15
     }
 });

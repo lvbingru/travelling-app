@@ -110,13 +110,13 @@ var styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         height: 50,
-        paddingVertical: 16,
         borderWidth: 1 / PixelRatio.get(),
-        borderColor: stylesVar('dark-light')
+        borderColor: stylesVar('dark-light'),
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 
     bottomText: {
-        flex: 1,
         textAlign: 'center',
         fontWeight: '300',
         fontSize: 16,
@@ -126,12 +126,15 @@ var styles = StyleSheet.create({
     closeText: {
         fontSize: 14,
         fontWeight: '300',
-        color: '#fff',
-        marginTop: 15
+        color: '#fff'
     },
 
     rightButton: {
-        marginRight: 15
+        marginRight: 15,
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 });
 
@@ -160,7 +163,7 @@ class ActivityApplySuccessRoute extends BaseRouteMapper {
     }
 
     renderScene(navigator) {
-        return <ActivityApplySuccess/>
+        return <ActivityApplySuccess />
     }
 }
 

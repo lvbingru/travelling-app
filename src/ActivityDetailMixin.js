@@ -30,7 +30,7 @@ var Conversation = require('./friends/ConversationScene');
 
 // override default components
 var TouchableOpacity = BaseTouchableOpacity;
-var RecordActivityChoosePhoto = require('./RecordActivityChoosePhoto');
+var RecordJourneyChoosePhoto = require('./RecordJourneyChoosePhoto');
 
 var Mixin = {
     _apply: function() {
@@ -45,11 +45,11 @@ var Mixin = {
     },
 
     _contactCreator: function() {
-        this.props.navigator.push(new Conversation(this.state.activity.getCreator()));
+        // this.props.navigator.push(new Conversation(this.state.activity.getCreator()));
     },
 
     _recordActivity: function() {
-        this.props.navigator.push(new RecordActivityChoosePhoto());
+        this.props.navigator.push(new RecordJourneyChoosePhoto());
     },
 
     renderBottom: function() {

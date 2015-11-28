@@ -44,7 +44,7 @@ var LightBox = React.createClass({
 				{imagesArray && imagesArray.length !== 0 && imagesArray.map(function(item, index) {
 					return (
 						<TouchableOpacity activeOpacity={1} style={styles.iconImage} onPress={this.open.bind(this, index)}>
-							<Image style={styles.iconImage} source={{uri: item}} />
+							<Image style={styles.iconImage} source={item} resizeMode="cover"/>
 						</TouchableOpacity>
 					);
 				}.bind(this))}

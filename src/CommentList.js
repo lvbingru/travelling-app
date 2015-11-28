@@ -155,23 +155,18 @@ var CommentItem = React.createClass({
 		return (
 			<View style={styles.row}>
 				<View style={styles.user}>
-					<Image source={data.user && data.user.avatar ? {uri: data.user.avatar}: icons.avatarPlaceholder} 
+					<Image source={data.user && data.user.avatar ? data.user.avatar: icons.avatarPlaceholder} 
 						style={styles.avatar}/>
 					<View style={styles.username}>
 						<Text style={styles.usernameText}>{data.user && data.user.username}</Text>
 					</View>
-					<View style={styles.star}>
-						<Text style={styles.starText}>{data.star}</Text>
-						{this.renderLikeImage()}
-					</View>
+					<Text style={styles.starText}>{data.star}</Text>
+					{this.renderLikeImage()}
 				</View>
-				<View style={styles.info}>
-					<Text style={styles.infoText}>{data.info}</Text>	
-				</View>
+				<Text style={styles.info}>{data.info}</Text>	
 				<LightBox imagesArray={data.images} navigator={this.props.navigator}/>
-				<View style={styles.publishDate}>
-					<Text style={styles.publishDateText}>{data.publishDate}</Text>
-				</View>
+				{data.images.length !== 0 && <View style={styles.separator}></View>}
+				<Text style={styles.publishDate}>{data.publishDate}</Text>
 			</View>
 		);
 	}
@@ -184,6 +179,11 @@ var styles = StyleSheet.create({
 		marginTop: 64
 	},
 
+	separator: {
+		flex: 1,
+		height: 11
+	},
+
 	row: {
 		flex: 1,
 		marginHorizontal: 15,
@@ -194,6 +194,8 @@ var styles = StyleSheet.create({
 	user: {
 		flex: 1,
 		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
 		height: 25
 	},
 
@@ -206,7 +208,7 @@ var styles = StyleSheet.create({
 		flex: 1,
 		marginLeft: 10,
 		height: 25,
-		paddingTop: 5
+		justifyContent: 'center'
 	},
 
 	usernameText: {
@@ -214,25 +216,16 @@ var styles = StyleSheet.create({
 		fontSize: 15,
 		fontWeight: '100'
 	},
-
-	star: {
-		flex: 1,
-		height: 25,
-		flexDirection: 'row',
-		justifyContent: 'flex-end'
-	},
-
+	
 	starText: {
 		fontWeight: '100',
 		fontSize: 11,
 		color: stylesVar('dark-mid'),
-		paddingTop: 7,
 		marginRight: 5
 	},
 
 	starIcon: {
 		...su.size(12),
-		marginTop: 6
 	},
 
 	navBarLeftButton: {
@@ -244,27 +237,20 @@ var styles = StyleSheet.create({
     	flex: 1,
     	flexDirection: 'column',
     	marginLeft: 35,
-    	marginBottom: 11
+    	marginBottom: 11,
+    	color: stylesVar('dark'),
+    	fontSize: 15,
+    	lineHeight: 18
     },
 
     publishDate: {
     	flex: 1,
     	flexDirection: 'column',
-    	marginLeft: 35
-    },
-
-    infoText: {
-    	color: stylesVar('dark'),
-    	fontSize: 15,
-    	lineHeight: 18,
-    	fontWeight: '100'
-    },
-
-    publishDateText: {
+    	marginLeft: 35,
+    	justifyContent: 'center',
     	color: stylesVar('dark-mid-light'),
     	fontWeight: '100',
-    	fontSize: 11,
-    	marginTop: 11
+    	fontSize: 11
     },
 
     bottomBar: {

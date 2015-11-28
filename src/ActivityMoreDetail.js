@@ -400,6 +400,7 @@ class ActivityMoreDetailRoute extends BaseRouteMapper {
 
             navbarRight: {
                 height: 44,
+                marginRight: 5,
                 flexDirection: 'row',
                 justifyContent: 'flex-end',
                 alignItems: 'center'

@@ -101,7 +101,8 @@ var styles = StyleSheet.create({
 	infoView: {
 		flex: 1,
 		marginHorizontal: 15,
-		marginVertical: 15,
+		marginTop: 12,
+		marginBottom: 20,
 		fontSize: 11,
 		color: stylesVar('dark-mid')
 	},

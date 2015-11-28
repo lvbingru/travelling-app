@@ -17,7 +17,7 @@
     "node-emoji": "^1.0.4",
     "promise": "^7.0.4",
     "react": "^0.14.2",
-    "react-native": "^0.14.0",
+    "react-native": "git://github.com/limijiaoyin/react-native.git#offcity-stable",
     "react-native-audio": "git://github.com/jarvys/react-native-audio.git",
     "react-native-blur": "git://github.com/Kureev/react-native-blur.git",
     "react-native-emoji": "^1.1.1",

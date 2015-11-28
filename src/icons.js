@@ -72,9 +72,15 @@ exports.search = require('../img/icon-search.png');
 exports.circle = require('../img/icon-circle.png');
 exports.group = require('../img/icon-group.png');
 
+//journey
+exports.bgGray = require('../img/bg-gray.png');
+exports.starWhite = require('../img/icon-star-white.png');
+exports.viewWhite = require('../img/icon-view-white.png');
+exports.calendarGray = require('../img/icon-calendar-gray.png');
+exports.traceGray = require('../img/icon-trace-gray.png');
+exports.traceImage = require('../img/trace-image.png');
 
 // onboarding
-
 exports.page1 = require('../img/page1.png');
 exports.page2 = require('../img/page2.png');
 exports.page3 = require('../img/page3.png');
@@ -84,7 +90,7 @@ exports.checkedGreen = require('../img/checked-green.png');
 exports.checkedTrans = require('../img/checked-trans.png');
 exports.dismissBg = require('../img/icon-dismiss-bg.png');
 
-// RecordActivityEdit
+// RecordJourneyEdit
 exports.dismissMid = require('../img/icon-dismiss-mid.png');
 exports.plusBlue = require('../img/icon-plus-blue.png');
 exports.calendarGreen = require('../img/icon-calendar-green.png');
@@ -93,3 +99,6 @@ exports.markBlue = require('../img/icon-mark-blue.png');
 //profile
 exports.code = require('../img/icon-code.png');
 exports.avatar = require('../img/icon-avatar.png');
+
+//myphotos
+exports.photosDecoration = require('../img/photos-decoration.png');
