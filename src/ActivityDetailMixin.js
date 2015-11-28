@@ -45,7 +45,7 @@ var Mixin = {
     },
 
     _contactCreator: function() {
-        // this.props.navigator.push(new Conversation(this.state.activity.getCreator()));
+        this.props.navigator.push(new Conversation(this.state.activity.getCreator()));
     },
 
     _recordActivity: function() {
