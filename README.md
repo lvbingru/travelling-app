@@ -33,12 +33,6 @@ $ cd ios && pods install --verbose
 
 ## 打包开发版本 App
 
-打包 javascript 代码
-
-```js
-$ npm run-script bundle
-```
-
 修改 `AppDelegate.m` 当中的 `jsCodeLocation`，切换成使用打包好的 js 代码的加载方式。
 
 ```js

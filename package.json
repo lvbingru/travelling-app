@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node_modules/react-native/packager/packager.sh",
-    "bundle": "react-native bundle --reset-cache --dev true --entry-file index.ios.js --platform ios --bundle-output ios/main.jsbundle"
+    "start": "node_modules/react-native/packager/packager.sh"
   },
   "dependencies": {
     "async": "^1.5.0",
