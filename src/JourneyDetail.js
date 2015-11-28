@@ -89,7 +89,7 @@ var JourneyDetail = React.createClass({
 						</View>
 					</Image>
 				</Image>
-				<Image source={{uri: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg'}}
+				<Image source={icons.traceImage}
 					style={styles.traceImage} />
 				<View style={styles.traceView}>
 					<View style={styles.traceSubView}>

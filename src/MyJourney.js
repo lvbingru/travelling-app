@@ -18,6 +18,7 @@ var JourneyView = require('./journey/JourneyView');
 
 var deviceWidth = Dimensions.get('window').width;
 var journey = require('./api').journey;
+var JourneyDetail = require('./JourneyDetail');
 
 var RefreshableListView = require('react-native-refreshable-listview');
 
@@ -103,9 +104,13 @@ var MyJourney = React.createClass({
     	return this._fetchData();
   	},
 
+    _gotoDetail: function() {
+      this.props.navigator.push(new JourneyDetail());
+    },
+
   	_renderItem: function(data) {
       	return (
-          	<JourneyView style={styles.cell} key={data.id} data={data}/>
+          	<JourneyView style={styles.cell} key={data.id} data={data} gotoDetail={this._gotoDetail}/>
       	);
   	}
 });
