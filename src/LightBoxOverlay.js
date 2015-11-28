@@ -65,6 +65,10 @@ class LightBoxOverlayRoute extends BaseRouteMapper {
 		return this._renderBackButton(route, navigator, index, navState);
 	}
 
+	get style() {
+        return this.styles.navBarTransparent;
+    }
+
 	renderScene() {
 		return <LightBoxOverlay {...this.data} />
 	}
