@@ -1774,7 +1774,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yiguid;
+				PRODUCT_BUNDLE_IDENTIFIER = com.offcity.app;
 				PRODUCT_NAME = AwesomeProject;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1803,7 +1803,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yiguid;
+				PRODUCT_BUNDLE_IDENTIFIER = com.offcity.app;
 				PRODUCT_NAME = AwesomeProject;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
