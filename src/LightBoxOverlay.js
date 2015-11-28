@@ -31,7 +31,7 @@ var LightBoxOverlay = React.createClass({
 					index={index}
 					loop={false}>
 					{imagesArray && imagesArray.length !== 0 && imagesArray.map(function(item) {
-						return (<View style={styles.slide}><Image style={styles.images} source={{uri: item}} resizeMode='contain' /></View>)
+						return (<View style={styles.slide}><Image style={styles.images} source={item} resizeMode='contain' /></View>)
 					}.bind(this))}
 				</Swiper>
 		)
@@ -44,7 +44,8 @@ var styles = StyleSheet.create({
 	},
 
 	images: {
-		flex: 1
+		width: WINDOW_WIDTH,
+		height: WINDOW_HEIGHT
 	},
 
 	slide: {

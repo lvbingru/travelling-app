@@ -13,6 +13,7 @@ var mimetypes = require('../mimetypes');
 var rnfs = require('react-native-fs');
 var moment = require('moment');
 var user = require('./user');
+var icons = require('../icons');
 
 var sms = {
     requestSmsCode: function(phone) {
@@ -201,128 +202,11 @@ var activity = {
         });
     },
 
-    fetchDetail: function(id) {
-        return new Promise(function(resolve, reject) {
-            var moment = require('moment');
-
-            var detail1 = {
-                id: 5,
-                header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-                title: 'GO！一起去草原撒野',
-                status: 'preparing',
-                tags: ['3-5车同行', '行程容易'],
-                route: '北京 - 天津 - 石家庄',
-                startDate: moment('2015-09-03').toDate(),
-                endDate: moment('2015-09-10').toDate(),
-                publishDate: moment('2015-08-09'),
-                user: {
-                    username: 'Steven',
-                    avatar: 'http://localhost:8081/img/avatar-placeholder.png'
-                },
-                stars: 299,
-                remainDay: 8,
-                deadline: '9月1日12:00',
-                haveCar: 2,
-                needCar: 3,
-                remainSeat: 12,
-                photos: 2,
-                journeys: 2,
-                annotations: 3,
-                ownCar: '1'
-            }
-
-            var detail2 = {
-                id: 6,
-                header: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-                title: 'GO！一起去草原撒野',
-                status: 'preparing',
-                tags: ['3-5车同行', '行程容易'],
-                route: '北京 - 天津 - 石家庄',
-                startDate: moment('2015-09-03').toDate(),
-                endDate: moment('2015-09-10').toDate(),
-                publishDate: moment('2015-08-09'),
-                user: {
-                    username: 'Steven',
-                    avatar: 'http://localhost:8081/img/avatar-placeholder.png'
-                },
-                stars: 299,
-                remainDay: 8,
-                deadline: '9月1日12:00',
-                haveCar: 2,
-                needCar: 3,
-                remainSeat: 12,
-                photos: 2,
-                journeys: 2,
-                annotations: 3,
-                ownCar: '0'
-            }
-
-            if (id == 5) {
-                setTimeout(function() {
-                    resolve(detail1);
-                }, 0);
-            } else {
-                setTimeout(function() {
-                    resolve(detail2);
-                }, 0);
-            }
-        });
-    },
-    fetchMoreDetail: {
-        fetchRoute: function(query) {
-            return new Promise(function(resolve, reject) {
-                var datas = {
-                    routeImg: 'http://f.hiphotos.baidu.com/image/pic/item/b64543a98226cffc9b70f24dba014a90f703eaf3.jpg',
-                    info: '当离开这个荒芜的社会，进入繁华的沙漠时，一个人的思想就变了。只有在这里，你才能感受到自己的真实，而不是被社会被世俗所束缚的自己，你的思想才能变得丰富起来，同样在这里，你才能看到朋友真实的一面。'
-                }
-
-                setTimeout(function() {
-                    resolve(datas);
-                }, 1000);
-            });
-        },
-        fetchDetail: function(query) {
-            return new Promise(function(resolve, reject) {
-                var datas = {
-                    info: '当离开这个荒芜的社会，进入繁华的沙漠时，一个人的思想就变了。只有在这里，你才能感受到自己的真实，而不是被社会被世俗所束缚的自己，你的思想才能变得丰富起来，同样在这里，你才能看到朋友真实的一面。'
-                }
-
-                setTimeout(function() {
-                    resolve(datas);
-                }, 1000);
-            });
-        },
-        fetchTips: function(query) {
-            return new Promise(function(resolve, reject) {
-                var datas = {
-                    participantInfo: '当离开这个荒芜的社会，进入繁华的沙漠时，一个人的思想就变了。只有在这里，你才能感受到自己的真实，而不是被社会被世俗所束缚的自己，你的思想才能变得丰富起来，同样在这里，你才能看到朋友真实的一面。',
-                    devInfo: '车辆类型：SUV/4驱SUV\n每车必备：车台/备胎/拖车绳\n车队至少有一套：充气泵/铁锹/维修工具',
-                    moneyInfo: '本次活动费用预估1200元，包含汽油费、过路费、住宿费、门票费。'
-                }
-
-                setTimeout(function() {
-                    resolve(datas);
-                }, 1000);
-            });
-        },
-        fetchDanger: function(query) {
-            return new Promise(function(resolve, reject) {
-                var datas = {
-                    info: '当离开这个荒芜的社会，进入繁华的沙漠时，一个人的思想就变了。只有在这里，你才能感受到自己的真实，而不是被社会被世俗所束缚的自己，你的思想才能变得丰富起来，同样在这里，你才能看到朋友真实的一面。\n\n我知道不少人看完电影会问，最后他们走出沙漠了吗？'
-                }
-
-                setTimeout(function() {
-                    resolve(datas);
-                }, 1000);
-            });
-        }
-    },
     fetchComments: function() {
         return new Promise(function(resolve, reject) {
             var datas = [{
                 user: {
-                    username: '赵鑫',
-                    avatar: 'http://localhost:8081/img/avatar-placeholder.png'
+                    username: '赵鑫'
                 },
                 info: '这里的风景真是好棒哦，太美了～',
                 publishDate: '下午 22：13',
@@ -331,14 +215,13 @@ var activity = {
                 images: []
             }, {
                 user: {
-                    username: '赵鑫',
-                    avatar: 'http://localhost:8081/img/avatar-placeholder.png'
+                    username: '赵鑫'
                 },
                 info: '今天和大家一起好开心，山清水秀好风光好景色，小赵同学是个吃货，以后不想和他一起出去玩。',
                 publishDate: '下午 22：13',
                 star: 180,
                 isLike: '0',
-                images: ['http://localhost:8081/img/page1.png', 'http://localhost:8081/img/signin-bg.png', 'http://localhost:8081/img/space-header.png']
+                images: [icons.page1, icons.page2, icons.page3]
             }]
 
             setTimeout(function() {
@@ -374,7 +257,6 @@ var activity = {
                             id: item.id,
                             user: {
                                 username: user.username,
-                                avatar: user.avatar,
                                 publishDate: item.updatedAt
                             },
                             type: subItem.type,
@@ -685,8 +567,7 @@ var userinfo = {
                 journey: 8,
                 annotations: 8,
                 photos: 8,
-                bills: 8,
-                avatar: 'http://localhost:8081/img/avatar-placeholder.png'
+                bills: 8
             }
         }
     }

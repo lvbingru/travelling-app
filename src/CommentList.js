@@ -155,7 +155,7 @@ var CommentItem = React.createClass({
 		return (
 			<View style={styles.row}>
 				<View style={styles.user}>
-					<Image source={data.user && data.user.avatar ? {uri: data.user.avatar}: icons.avatarPlaceholder} 
+					<Image source={data.user && data.user.avatar ? data.user.avatar: icons.avatarPlaceholder} 
 						style={styles.avatar}/>
 					<View style={styles.username}>
 						<Text style={styles.usernameText}>{data.user && data.user.username}</Text>
