@@ -33,7 +33,7 @@
 #import <iVersion/iVersion.h>
 #import <LeanCloudSocial/AVOSCloudSNS.h>
 #import <OpenShare/OpenShareHeader.h>
-#import <RCTBaiduMap.h>
+#import "RCTBaiduMap.h"
 
 @interface AppDelegate()
 

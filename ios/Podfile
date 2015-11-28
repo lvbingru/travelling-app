@@ -20,6 +20,7 @@ target 'AwesomeProject' do
     pod 'LeanCloudSocial', '0.0.5'
     pod 'OpenShare', '0.0.1'
     pod 'PopMenu', '2.4'
+    pod 'BaiduMap-iOS-SDK', '~> 2.9.0.2'
 #    pod 'LeanCloudSocial', :path => '~/ios/leancloud-social-ios'
 #    pod 'LeanCloudFeedback', :path => '~/ios/leancloud-feedback-ios/'
 end
