@@ -30,3 +30,21 @@ $ cd ios && pods install --verbose
 ```
 
 使用 xcode 打开 `ios/AwesomeProject.xcworkspace`，编译运行。
+
+## 打包开发版本 App
+
+打包 javascript 代码
+
+```js
+$ npm run-script bundle
+```
+
+修改 `AppDelegate.m` 当中的 `jsCodeLocation`，切换成使用打包好的 js 代码的加载方式。
+
+```js
+// jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios"];
+
+jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+```
+
+接下来就是普通的打包流程了。参考官方文档 [Exporting Your App for Testing](https://developer.apple.com/library/ios/documentation/IDEs/Conceptual/AppDistributionGuide/TestingYouriOSApp/TestingYouriOSApp.html)
