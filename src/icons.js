@@ -78,6 +78,7 @@ exports.starWhite = require('../img/icon-star-white.png');
 exports.viewWhite = require('../img/icon-view-white.png');
 exports.calendarGray = require('../img/icon-calendar-gray.png');
 exports.traceGray = require('../img/icon-trace-gray.png');
+exports.traceImage = require('../img/trace-image.png');
 
 // onboarding
 exports.page1 = require('../img/page1.png');
