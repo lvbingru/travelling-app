@@ -458,7 +458,8 @@ var styles = StyleSheet.create({
 
 	contentImage: {
 		width: deviceWidth - 30,
-		height: 140 
+		height: 140,
+		resizeMode: 'cover'
 	},
 
 	descriptionText: {

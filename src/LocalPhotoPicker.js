@@ -63,11 +63,11 @@ var CameraRollScene = React.createClass({
     },
 
     _renderRow: function(photo) {
-        return <Cell source={{uri: photo.uri}} 
+        return (<Cell source={{uri: photo.uri}} 
                     onPress={() => {
                         this.props.onResult(photo);
                         this.props.navigator.pop();
-                    }}/>
+                    }}/>);
     },
 
     render: function() {
@@ -85,27 +85,16 @@ var CameraRollScene = React.createClass({
 });
 
 var Cell = React.createClass({
-    getInitialState: function() {
-        return {}
-    },
-
-    _onLayout: function(e) {
-        var layout = e.nativeEvent.layout;
-        this.setState({layout});
-    },
-
     render: function() {
         return (
             <TouchableOpacity
                 style={styles.cell}
                 onPress={this.props.onPress}
-                onLayout={this._onLayout}
                 activeOpacity={0.8}>
-                {this.state.layout &&
-                    <Image source={this.props.source} resizeMode="cover" style={{
-                        width: this.state.layout.width,
-                        height: this.state.layout.height
-                    }}/>}
+                <Image source={this.props.source} resizeMode="cover" style={{
+                    width: thumbSize,
+                    height: thumbSize
+                }}/>
             </TouchableOpacity>
         );
     }
@@ -126,6 +115,7 @@ var styles = StyleSheet.create({
     },
 
     cell: {
+        overflow: 'hidden',
         backgroundColor: stylesVar('dark-lighter'),
         ...su.size(thumbSize),
         margin: thumbMargin / 2
