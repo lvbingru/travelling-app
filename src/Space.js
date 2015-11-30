@@ -104,7 +104,10 @@ var Space = React.createClass({
             } else if (entry === 'bill') {
                 this.props.navigator.push(new MyBill());
             } else if (entry === 'trace') {
-                this.props.navigator.push(new MyTrace());
+                // this.props.navigator.push(new MyTrace());
+                
+                var PathListView = require('./PathListView');
+                this.props.navigator.push(new PathListView());
             } else if (entry === 'gallery') {
                 this.props.navigator.push(new MyGallery());
             }
