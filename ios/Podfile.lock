@@ -23,6 +23,7 @@ PODS:
   - AVOSCloud (3.1.4)
   - AVOSCloudIM (3.1.4):
     - AVOSCloud
+  - BaiduMap-iOS-SDK (2.9.0.2)
   - DateTools (1.5.0)
   - FMDB (2.5):
     - FMDB/standard (= 2.5)
@@ -58,6 +59,7 @@ DEPENDENCIES:
   - AFNetworking (= 2.5.4)
   - AVOSCloud (= 3.1.4)
   - AVOSCloudIM (= 3.1.4)
+  - BaiduMap-iOS-SDK (~> 2.9.0.2)
   - FXForms (= 1.2.13)
   - iRate (= 1.11.4)
   - iVersion (= 1.11.4)
@@ -79,6 +81,7 @@ SPEC CHECKSUMS:
   AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
   AVOSCloud: 2be1640178facaac8343d67ed4d5348f4dffecd7
   AVOSCloudIM: e2934a3128b018eeb5c9d923822ab287315b0b7f
+  BaiduMap-iOS-SDK: 707e36e67021ce92f80b56e99a3c60db38797012
   DateTools: b93a2c2017747329c6077c7d7e8a75106e23d0d7
   FMDB: 96e8f1bcc1329e269330f99770ad4285d9003e52
   FXForms: 22d5ceafd8ca44d2f2be4827afcf00aaf80184a5

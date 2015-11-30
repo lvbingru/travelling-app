@@ -171,6 +171,10 @@
 		68D2B9D91BF86FC900CB7095 /* AudioRecorderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D2B9D71BF86FC900CB7095 /* AudioRecorderManager.m */; };
 		68F501B41BFB6C26000469D5 /* TextMeasurer.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F501B31BFB6C26000469D5 /* TextMeasurer.m */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		91ED5F401C09CBFA009ABB31 /* RCTBaiduLocationObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 91ED5F391C09CBFA009ABB31 /* RCTBaiduLocationObserver.m */; };
+		91ED5F411C09CBFA009ABB31 /* RCTBaiduMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 91ED5F3B1C09CBFA009ABB31 /* RCTBaiduMap.m */; };
+		91ED5F421C09CBFA009ABB31 /* RCTBaiduMapManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 91ED5F3D1C09CBFA009ABB31 /* RCTBaiduMapManager.m */; };
+		91ED5F431C09CBFA009ABB31 /* RCTBaiduMapView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91ED5F3F1C09CBFA009ABB31 /* RCTBaiduMapView.mm */; };
 		A797834B8CAAD691A1C26BD4 /* libPods-AwesomeProject.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 375F033B6929C3810D1CC22C /* libPods-AwesomeProject.a */; };
 		E013541A1BBC081000D55854 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E01354191BBC081000D55854 /* Main.storyboard */; };
 		E01354291BBC088400D55854 /* PageContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E01354261BBC088400D55854 /* PageContentViewController.m */; };
@@ -523,6 +527,14 @@
 		68F501B31BFB6C26000469D5 /* TextMeasurer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextMeasurer.m; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		91ED5F381C09CBFA009ABB31 /* RCTBaiduLocationObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTBaiduLocationObserver.h; sourceTree = "<group>"; };
+		91ED5F391C09CBFA009ABB31 /* RCTBaiduLocationObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTBaiduLocationObserver.m; sourceTree = "<group>"; };
+		91ED5F3A1C09CBFA009ABB31 /* RCTBaiduMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTBaiduMap.h; sourceTree = "<group>"; };
+		91ED5F3B1C09CBFA009ABB31 /* RCTBaiduMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTBaiduMap.m; sourceTree = "<group>"; };
+		91ED5F3C1C09CBFA009ABB31 /* RCTBaiduMapManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTBaiduMapManager.h; sourceTree = "<group>"; };
+		91ED5F3D1C09CBFA009ABB31 /* RCTBaiduMapManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTBaiduMapManager.m; sourceTree = "<group>"; };
+		91ED5F3E1C09CBFA009ABB31 /* RCTBaiduMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTBaiduMapView.h; sourceTree = "<group>"; };
+		91ED5F3F1C09CBFA009ABB31 /* RCTBaiduMapView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTBaiduMapView.mm; sourceTree = "<group>"; };
 		B2465566877ED921032C2325 /* Pods-AwesomeProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeProject.release.xcconfig"; path = "Pods/Target Support Files/Pods-AwesomeProject/Pods-AwesomeProject.release.xcconfig"; sourceTree = "<group>"; };
 		B24D5FA2158EBD69CAB51771 /* Pods-AwesomeProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeProject.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AwesomeProject/Pods-AwesomeProject.debug.xcconfig"; sourceTree = "<group>"; };
 		E01354191BBC081000D55854 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -1108,6 +1120,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				91ED5F371C09CBFA009ABB31 /* RCTBaiduMap */,
 				6885D0AF1BE3519800FDC4D2 /* RNFS.xcodeproj */,
 				6885D0751BD9928600FDC4D2 /* RCTCameraRoll.xcodeproj */,
 				6252BFAF1BD12E2E00A7C093 /* RNBlur.xcodeproj */,
@@ -1163,6 +1176,21 @@
 				00E356EE1AD99517003FC87E /* AwesomeProjectTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		91ED5F371C09CBFA009ABB31 /* RCTBaiduMap */ = {
+			isa = PBXGroup;
+			children = (
+				91ED5F381C09CBFA009ABB31 /* RCTBaiduLocationObserver.h */,
+				91ED5F391C09CBFA009ABB31 /* RCTBaiduLocationObserver.m */,
+				91ED5F3A1C09CBFA009ABB31 /* RCTBaiduMap.h */,
+				91ED5F3B1C09CBFA009ABB31 /* RCTBaiduMap.m */,
+				91ED5F3C1C09CBFA009ABB31 /* RCTBaiduMapManager.h */,
+				91ED5F3D1C09CBFA009ABB31 /* RCTBaiduMapManager.m */,
+				91ED5F3E1C09CBFA009ABB31 /* RCTBaiduMapView.h */,
+				91ED5F3F1C09CBFA009ABB31 /* RCTBaiduMapView.mm */,
+			);
+			path = RCTBaiduMap;
 			sourceTree = "<group>";
 		};
 		E0BEA0261BC00ED500600559 /* Fonts */ = {
@@ -1256,6 +1284,11 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 84S3JUA8EN;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -1652,6 +1685,7 @@
 				6252BFAD1BCCFCEC00A7C093 /* UserApi.m in Sources */,
 				68C0D6701BB3ADDA007A6FFF /* CDEntryBaseVC.m in Sources */,
 				68C0D6751BB3ADDA007A6FFF /* CDAddFriendVC.m in Sources */,
+				91ED5F421C09CBFA009ABB31 /* RCTBaiduMapManager.m in Sources */,
 				68C0D6791BB3ADDA007A6FFF /* CDProfileNameVC.m in Sources */,
 				68D2B9D81BF86FC900CB7095 /* AudioPlayerManager.m in Sources */,
 				68C0D6771BB3ADDA007A6FFF /* CDFriendListVC.m in Sources */,
@@ -1680,12 +1714,15 @@
 				68C0D6851BB3ADDA007A6FFF /* AVIMCustomMessage.m in Sources */,
 				68C0D6821BB3ADDA007A6FFF /* CDUserManager.m in Sources */,
 				68C0D6661BB3ADDA007A6FFF /* MCMutipleSectionTC.m in Sources */,
+				91ED5F401C09CBFA009ABB31 /* RCTBaiduLocationObserver.m in Sources */,
+				91ED5F431C09CBFA009ABB31 /* RCTBaiduMapView.mm in Sources */,
 				68C0D6E61BB3ADDA007A6FFF /* CDPopMenu.m in Sources */,
 				68C0D6E81BB3ADDA007A6FFF /* CDPopMenuItemCell.m in Sources */,
 				68C0D6711BB3ADDA007A6FFF /* CDEntryVC.m in Sources */,
 				68C0D66B1BB3ADDA007A6FFF /* CDConvNameVC.m in Sources */,
 				68C0D6DD1BB3ADDA007A6FFF /* LZPushManager.m in Sources */,
 				68C0D6841BB3ADDA007A6FFF /* MCPhotographyHelper.m in Sources */,
+				91ED5F411C09CBFA009ABB31 /* RCTBaiduMap.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				68C0D6EB1BB3ADDA007A6FFF /* CDTextField.m in Sources */,
 				68C0D6601BB3ADDA007A6FFF /* CDAppDelegate.m in Sources */,
@@ -1762,6 +1799,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -1770,6 +1808,12 @@
 				INFOPLIST_FILE = AwesomeProject/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/AVOSCloud\"",
+					"$(inherited)",
+					"\"${PODS_ROOT}/AVOSCloudIM\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"$(inherited)",
@@ -1790,6 +1834,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -1798,6 +1843,12 @@
 				INFOPLIST_FILE = AwesomeProject/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/AVOSCloud\"",
+					"$(inherited)",
+					"\"${PODS_ROOT}/AVOSCloudIM\"",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-ObjC",
