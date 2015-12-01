@@ -2,7 +2,7 @@
  * Created by lvbingru on 11/27/15.
  */
 
-import React, {ActivityIndicatorIOS, AsyncStorage, NativeModules,StyleSheet, Component, PropTypes, View, Text, ListView, Image, TouchableHighlight} from 'react-native';
+import React, {InteractionManager, ActivityIndicatorIOS, AsyncStorage, NativeModules,StyleSheet, Component, PropTypes, View, Text, ListView, Image, TouchableHighlight} from 'react-native';
 const su = require('./styleUtils');
 const icons = require('./icons');
 const Tab = require('./widgets/Tab');
@@ -23,63 +23,66 @@ class PathListView extends Component {
 
       this.allPathArray = [[],[],[]];
 
-      const user = AV.User.current();
-      const userID = user&&user.id?user.id:"0";
-      const username = user&&user.username?user.username:"未登录用户";
+      AV.User.currentAsync().then(
+        (user)=>{
+          const curUserID = user&&user.id?user.id:"0";
+          const curUsername = user&&user.get("username")?user.get("username"):"未登录用户";
 
-      var query = new AV.Query(UserPath);
-      query.equalTo("userID", userID);
-      query.find({
-        success: (results)=> {
-          for (var i = 0; i < results.length; i++) {
-            const path = results[i];
-            const name = path.get("name");
-            const username = path.get("username");
-            const locations = path.get("locations");
-            const type = path.get("type");
-            const userID = path.get("userID");
+          var query = new AV.Query(UserPath);
+          query.equalTo("userID", curUserID);
+          query.find({
+            success: (results)=> {
+              for (var i = 0; i < results.length; i++) {
+                const path = results[i];
+                const name = path.get("name");
+                const username = path.get("username");
+                const locations = path.get("locations");
+                const type = path.get("type");
+                const userID = path.get("userID");
 
-            const data ={
-              name : name,
-              username: username,
-              userID : userID,
-              type : type,
-              locations : locations,
+                const data ={
+                  name : name,
+                  username: username,
+                  userID : userID,
+                  type : type,
+                  locations : locations,
+                }
+
+                if(userID === curUserID) {
+                  this.allPathArray[1].push(data);
+                }
+                else {
+                  this.allPathArray[2].push(data);
+                }
+                this.allPathArray[0].push(data);
+              }
+              this.updateView();
+            },
+            error: (error)=> {
+              alert("Error: " + error.code + " " + error.message);
+            }
+          });
+
+          // 根据用户id生成记录的的key
+          const key = "userPath"+curUserID;
+
+          // 读取记录
+          let unSyncPath = [];
+          AsyncStorage.getItem(key, (err, result)=>{
+            if (result) {
+              unSyncPath = JSON.parse(result)
             }
 
-            if (type === "me") {
-              this.allPathArray[1].push(data);
-            }
-            else if (type === "fav") {
-              this.allPathArray[2].push(data);
-            }
-            this.allPathArray[0].push(data);
-          }
-          this.updateView();
-        },
-        error: (error)=> {
-          alert("Error: " + error.code + " " + error.message);
-        }
-      });
+            unSyncPath.forEach((el)=>{
+              let path = {...el, username:curUsername, userID:curUserID, uploading: false,}
 
-      // 根据用户id生成记录的的key
-      const key = "userPath"+userID;
+              this.allPathArray[0].push(path);
+              this.allPathArray[1].push(path);
+            })
 
-      // 读取记录
-      let unSyncPath = [];
-      AsyncStorage.getItem(key, (err, result)=>{
-        if (result) {
-          unSyncPath = JSON.parse(result)
-        }
-
-        unSyncPath.forEach((el)=>{
-          let path = {...el, username:username, userID:userID, uploading: false,}
-
-          this.allPathArray[0].push(path);
-          this.allPathArray[1].push(path);
-          this.updateView();
+            this.updateView();
+          });
         })
-      });
 
         this.dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -89,9 +92,11 @@ class PathListView extends Component {
     }
 
     updateView() {
-      this.setState({
-        tabIndex: this.state.tabIndex,
-      })
+      InteractionManager.runAfterInteractions(() => {
+        this.setState({
+          tabIndex: this.state.tabIndex,
+        })
+      });
     }
 
     render() {
@@ -209,6 +214,7 @@ var styles = StyleSheet.create({
     alignSelf : 'stretch',
     backgroundColor: '#fff',
     paddingTop : 64,
+    backgroundColor: 'white',
   },
 
   listView : {
@@ -267,7 +273,7 @@ class Route extends BaseRouteMapper {
   }
 
   get title() {
-    return '轨迹';
+    return '我的轨迹';
   }
 
   renderLeftButton(route, navigator, index, navState) {
