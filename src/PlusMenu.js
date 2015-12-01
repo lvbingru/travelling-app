@@ -73,7 +73,7 @@ var PlusMenu = React.createClass({
     }
 
     return (
-      <BlurView style={styles.container} blurType="light">
+      <BlurView style={styles.container} blurType="xlight">
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={this._dismiss} style={styles.dismiss}>
