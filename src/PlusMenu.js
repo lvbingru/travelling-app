@@ -115,23 +115,33 @@ var PlusMenu = React.createClass({
                 })}]}
             >
               <TouchableOpacity
-                style={styles.popMenuRow}
-                onPress={this.stopRecord}
-              >
-                <Image />
-                <Text>停止记录 保存轨迹</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.popMenuRow}
-                onPress={this.state.recordState === 1 ? this.pauseRecord:this.continueRecord}
-              >
-                <Image />
-                <Text>{this.state.recordState === 1 ? "暂停记录,稍后继续" : "继续记录"}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
                 style = {styles.popMenuDismissRow}
                 onPress={()=>{ this.animatedPopView(0)}}
               />
+              <View style = {styles.popContent}>
+                <TouchableOpacity
+                  style={styles.popMenuRow}
+                  onPress={this.stopRecord}
+                >
+                  <Image
+                    source = {icons.stop}
+                    style = {styles.imgRecord}
+                  />
+                  <Text style = {styles.txtRecord}>停止记录 保存轨迹</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.popMenuRow}
+                  onPress={this.state.recordState === 1 ? this.pauseRecord:this.continueRecord}
+                >
+                  <Image
+                    source = {this.state.recordState === 1 ? icons.pause:icons.continue}
+                    style = {styles.imgRecord}
+                  />
+                  <Text style={styles.txtRecord}>{this.state.recordState === 1 ? "暂停记录,稍后继续" : "继续记录"}</Text>
+                </TouchableOpacity>
+
+              </View>
+
             </Animated.View>
           )
         }
@@ -183,26 +193,29 @@ var PlusMenu = React.createClass({
     BaiduLocation.stopRecordLocation(
       (r)=>{
         // 根据用户id生成记录的的key
-        const user = AV.User.current();
-        const key = "userPath"+[user&&user.id?user.id:"0"];
+        AV.User.currentAsync().then(
+          (user)=>{
+            const key = "userPath"+[user&&user.id?user.id:"0"];
 
-        // 读取旧的记录
-        let unSyncPath = [];
-        AsyncStorage.getItem(key, (err, result)=>{
-          if (result) {
-            unSyncPath = JSON.parse(result)
+            // 读取旧的记录
+            let unSyncPath = [];
+            AsyncStorage.getItem(key, (err, result)=>{
+              if (result) {
+                unSyncPath = JSON.parse(result)
+              }
+              // 增加一条记录并保存
+              const {locations,name} = r;
+              unSyncPath.push({
+                locations : locations,
+                name : name,
+                id : (new Date()).getTime(),
+                needSync : true,
+              })
+              AsyncStorage.setItem(key,  JSON.stringify(unSyncPath), (err)=>{
+              })
+            });
           }
-          // 增加一条记录并保存
-          const {locations,name} = r;
-          unSyncPath.push({
-            locations : locations,
-            name : name,
-            id : (new Date()).getTime(),
-            needSync : true,
-          })
-          AsyncStorage.setItem(key,  JSON.stringify(unSyncPath), (err)=>{
-          })
-        });
+        )
       }
     );
 
@@ -230,7 +243,7 @@ var PlusMenu = React.createClass({
 
 });
 
-const popMenuHeight = 300
+const popMenuHeight = Dimensions.get('window').height;
 
 var styles = StyleSheet.create({
     container: {
@@ -270,23 +283,46 @@ var styles = StyleSheet.create({
     popMenu : {
       position : 'absolute',
       left : 0,
-      bottom : 0,
       right : 0,
+      bottom : 0,
       height : popMenuHeight,
-      backgroundColor : 'rgba(234,234,234,0.9)',
-    },
-
-    popMenuRow: {
-      height : 40,
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding : 7,
-      borderBottomColor : '777777',
-      borderBottomWidth : 1,
+      backgroundColor : 'transparent',
+      //backgroundColor : 'rgba(234,234,234,0.9)',
     },
 
     popMenuDismissRow :{
-      flex : 1,
+      position : 'absolute',
+      left : 0,
+      bottom : 0,
+      right : 0,
+      top : 0,
+    },
+
+    popMenuRow: {
+      height : 44,
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding : 15,
+      borderBottomColor : 'd9d9d9',
+      borderBottomWidth : 1,
+      backgroundColor: 'white',
+    },
+
+    txtRecord : {
+      color : '737373',
+      fontSize : 17,
+      paddingLeft : 11
+    },
+
+    imgRecord : {
+
+    },
+
+    popContent :{
+      position : 'absolute',
+      bottom : 312,
+      left : 0,
+      right : 0,
     },
 });
 

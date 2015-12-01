@@ -71,6 +71,9 @@ exports.plusConv = require('../img/icon-conv-plus.png');
 exports.search = require('../img/icon-search.png');
 exports.circle = require('../img/icon-circle.png');
 exports.group = require('../img/icon-group.png');
+exports.stop = require('../img/icon-stop.png');
+exports.pause = require('../img/icon-pause.png');
+exports.continue = require('../img/icon-continue.png');
 
 //journey
 exports.bgGray = require('../img/bg-gray.png');
