@@ -72,7 +72,7 @@ enum {
         _recordName = @"0";
         _state = 0;
         
-        _recordQueue = dispatch_queue_create("com.tdzl.recordQueue", DISPATCH_QUEUE_SERIAL);
+        _recordQueue = dispatch_queue_create("com.offcity.app", DISPATCH_QUEUE_SERIAL);
         
         [self loadRecord];
     }

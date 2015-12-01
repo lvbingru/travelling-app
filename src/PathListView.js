@@ -212,6 +212,7 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     alignSelf : 'stretch',
+    backgroundColor: '#fff',
     paddingTop : 64,
     backgroundColor: 'white',
   },
