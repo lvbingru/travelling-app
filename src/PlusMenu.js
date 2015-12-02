@@ -17,7 +17,7 @@ var {
 } = React;
 
 var {
-  AV
+  AV, UserPath,
   } = require('./api/models');
 
 const BaiduLocation = NativeModules.BaiduLocationObserver;
@@ -161,14 +161,42 @@ var PlusMenu = React.createClass({
           {
             text: '确认', onPress: (v) => {
 
+            AV.User.currentAsync().then(
+               (user)=>{
+                const curUserID = user&&user.id?user.id:"0";
+                var query = new AV.Query(UserPath);
+                query.equalTo("userID", curUserID);
+                query.find({
+                  success: (results)=> {
+                    let exist = false;
+                    for (var i = 0; i < results.length; i++) {
+                      const path = results[i];
+                      const name = path.get("name");
+                      if (v === name) {
+                        exist = true;
+                        break;
+                      }
+                    }
 
-            BaiduLocation.startRecordLocation({name:v});
+                    if (exist) {
+                      alert("轨迹名称已存在");
+                    }
+                    else {
+                      BaiduLocation.startRecordLocation({name:v});
 
-            this.setState({
-              recordState: 1,
-              recordName: v,
-            })
-          }
+                      this.setState({
+                        recordState: 1,
+                        recordName: v,
+                      })
+                    }
+                  },
+                  error: (error)=> {
+                    alert("Error: " + error.code + " " + error.message);
+                  }
+                });
+
+              })
+            }
           },
         ],
         'plain-text'
@@ -185,7 +213,7 @@ var PlusMenu = React.createClass({
   animatedPopView(toValue) {
     Animated.timing(
       this.state.popAnim,
-      {toValue: toValue, duration: 100}
+      {toValue: toValue, duration: 800}
     ).start();
   },
 
