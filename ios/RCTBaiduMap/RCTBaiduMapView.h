@@ -7,9 +7,11 @@
 //
 
 #import <BaiduMapAPI_Map/BMKMapView.h>
+#import "RCTComponent.h"
 
 @interface RCTBaiduMapView : BMKMapView
 
+@property (nonatomic, copy) RCTBubblingEventBlock onFinishLoad;
 - (void)drawWalkPolyline:(NSArray *)locationArray;
 
 @end

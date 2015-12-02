@@ -11,7 +11,6 @@
 #import <BaiduMapAPI_Map/BMKMapComponent.h>
 
 @interface RCTBaiduMapManager()<BMKMapViewDelegate> {
-
 }
 
 @end
@@ -24,7 +23,6 @@ RCT_EXPORT_MODULE()
 {
     self = [super init];
     if (self) {
-        
     }
     return self;
 }
@@ -33,6 +31,9 @@ RCT_CUSTOM_VIEW_PROPERTY(locationArray, NSArray, RCTBaiduMapView)
 {
   [view drawWalkPolyline:json];
 }
+
+RCT_EXPORT_VIEW_PROPERTY(onFinishLoad, RCTBubblingEventBlock)
+
 
 - (UIView *)viewWithProps:(__unused NSDictionary *)props
 {
@@ -55,6 +56,13 @@ RCT_CUSTOM_VIEW_PROPERTY(locationArray, NSArray, RCTBaiduMapView)
     return polylineView;
   }
   return nil;
+}
+
+- (void)mapViewDidFinishLoading:(BMKMapView *)mapView
+{
+  if (((RCTBaiduMapView *)mapView).onFinishLoad) {
+    ((RCTBaiduMapView *)mapView).onFinishLoad(@{});
+  }
 }
 
 @end

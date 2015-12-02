@@ -2,7 +2,7 @@
  * Created by lvbingru on 11/25/15.
  */
 
-import React, {Image, Component, PropTypes, View, Text, requireNativeComponent, NativeModules,StyleSheet, TouchableOpacity} from 'react-native';
+import React, {InteractionManager, Image, Component, PropTypes, View, Text, requireNativeComponent, NativeModules,StyleSheet, TouchableOpacity} from 'react-native';
 const BaiduMap = requireNativeComponent('RCTBaiduMap');
 const BaiduLocation = NativeModules.BaiduLocationObserver;
 const su = require('./styleUtils');
@@ -16,17 +16,18 @@ class PathMapView extends Component {
     constructor(props) {
         super(props);
 
+
       //console.log(props.locationArray);
 
       // ---test---
-      if (!props.locationArray) {
-        BaiduLocation.loadRecordLocation((r)=>{
-          //console.log(r.locations);
-          this.setState({
-            locationArray : r.locations,
-          })
-        });
-      }
+      //if (!props.locationArray) {
+      //  BaiduLocation.loadRecordLocation((r)=>{
+      //    //console.log(r.locations);
+      //    this.setState({
+      //      locationArray : r.locations,
+      //    })
+      //  });
+      //}
 
       // ---test---
       this.state = {
@@ -34,18 +35,18 @@ class PathMapView extends Component {
       };
     }
 
-    componentDidMount() {
-      setTimeout(()=> {
-        this.setState({
-          locationArray : this.props.locationArray,
-        });
-      }, 0.3);
-    }
-
     render() {
         return (
             <View style={[styles.container]}>
-                <BaiduMap style={[styles.map]} locationArray = {this.state.locationArray}/>
+                <BaiduMap
+                  style={[styles.map]}
+                  locationArray = {this.state.locationArray}
+                  onFinishLoad={()=>{
+                      this.setState({
+                          locationArray : this.props.locationArray,
+                      });
+                  }}
+                />
             </View>
         );
     }
